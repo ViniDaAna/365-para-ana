@@ -2,63 +2,71 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entre Nós Dois</title>
 
 <style>
 body {
   margin: 0;
-  background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
-  color: #f5f5f5;
-  font-family: Georgia, serif;
+  background: #000;
+  color: #f2f2f2;
+  font-family: "Georgia", serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
 }
 
 .container {
-  max-width: 700px;
-  padding: 30px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 30px rgba(255,255,255,0.05);
+  max-width: 600px;
+  padding: 40px;
+}
+
+h1, h2 {
+  font-weight: normal;
+  letter-spacing: 1px;
 }
 
 input {
   padding: 12px;
-  border: none;
-  border-radius: 5px;
-  margin-top: 10px;
-  width: 200px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+  border-radius: 6px;
+  margin-top: 15px;
+  width: 220px;
 }
 
 button {
   padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  margin-top: 15px;
-  cursor: pointer;
-  background: #e63946;
+  margin-top: 20px;
+  background: #111;
   color: white;
-  font-weight: bold;
+  border: 1px solid #333;
+  border-radius: 6px;
+  cursor: pointer;
   transition: 0.3s;
 }
 
 button:hover {
-  background: #ff4d6d;
+  background: #222;
 }
 
 .hidden {
   display: none;
 }
 
-img {
+.poema {
+  margin-top: 25px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.saida {
   margin-top: 20px;
-  max-width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.6);
+  opacity: 0.7;
+  font-size: 14px;
 }
 </style>
 </head>
@@ -66,49 +74,34 @@ img {
 <body>
 
 <div class="container" id="login">
-  <h1>🔐 Um Lugar Só Nosso</h1>
-  <p>Digite a senha para entrar</p>
+  <h1>Um Lugar Só Nosso</h1>
+  <p>Digite a data que tudo começou</p>
   <input type="password" id="senha" placeholder="Senha">
   <br>
   <button onclick="verificarSenha()">Entrar</button>
 </div>
 
 <div class="container hidden" id="conteudo">
-  <h1>Dia <span id="diaAtual"></span> de 365</h1>
-  <p id="poema"></p>
+  <h2 id="tituloDia"></h2>
+  <div class="poema" id="poema"></div>
 
-  <img id="fotoDia">
-
-  <br>
   <button onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
-  <p id="saudade" class="hidden">
-    Se você clicou aqui, é porque sentiu algo.  
-    E eu sinto também. Sempre.
-  </p>
+  <div id="saudade" class="saida hidden">
+    Se você sentiu saudade, é porque o que temos é real.
+    E eu escolho você — hoje e todos os dias.
+  </div>
 </div>
 
 <script>
 const senhaCorreta = "10022024";
+const dataInicio = new Date("2026-02-24T00:00:00");
 
-// Data que começa o projeto
-const dataInicio = new Date("2026-02-24");
-
-// Lista de poemas (você pode adicionar até 365 depois)
 const poemas = [
-  "Você é o começo de tudo.",
+  "Hoje começa o nosso ano eterno.",
   "Eu te escolheria em todas as vidas.",
   "Seu sorriso reorganiza meu mundo.",
   "Você é minha calma no caos.",
   "Amar você é a coisa mais fácil que já fiz."
-];
-
-// Fotos dentro da pasta imagens
-const fotos = [
-  "imagens/foto1.jpeg",
-  "imagens/foto2.jpeg",
-  "imagens/foto3.jpeg",
-  "imagens/foto1.jpeg",
-  "imagens/foto2.jpeg"
 ];
 
 function verificarSenha() {
@@ -127,12 +120,16 @@ function carregarConteudo() {
   const diffTempo = hoje - dataInicio;
   const diffDias = Math.floor(diffTempo / (1000 * 60 * 60 * 24)) + 1;
 
-  if (diffDias > 0 && diffDias <= 365) {
-    document.getElementById("diaAtual").innerText = diffDias;
+  if (diffDias < 1) {
+    const diasRestantes = Math.abs(diffDias);
+    document.getElementById("tituloDia").innerText = "Faltam " + diasRestantes + " dias.";
+    document.getElementById("poema").innerText = "Algo está sendo preparado para você.";
+  } else if (diffDias <= 365) {
+    document.getElementById("tituloDia").innerText = "Dia " + diffDias + " de 365";
     document.getElementById("poema").innerText = poemas[diffDias - 1] || "Em breve...";
-    document.getElementById("fotoDia").src = fotos[diffDias - 1] || "";
   } else {
-    document.getElementById("poema").innerText = "Ainda não começou.";
+    document.getElementById("tituloDia").innerText = "365 dias com você.";
+    document.getElementById("poema").innerText = "E eu ainda escolheria você de novo.";
   }
 }
 
