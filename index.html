@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Entre Nós Dois</title>
+<style>
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: #f5f5f5;
+  font-family: Georgia, serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.container {
+  max-width: 600px;
+}
+
+input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="login">
+  <h1>🔐 Um Lugar Só Nosso</h1>
+  <p>Digite a senha para entrar</p>
+  <input type="password" id="senha" placeholder="Senha">
+  <br>
+  <button onclick="verificarSenha()">Entrar</button>
+</div>
+
+<div class="container hidden" id="conteudo">
+  <h1>Dia <span id="diaAtual"></span> de 365</h1>
+  <p id="poema"></p>
+  <br>
+  <button onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
+  <p id="saudade" class="hidden">Se você clicou aqui, é porque sentiu algo. E eu sinto também.</p>
+</div>
+
+<script>
+const senhaCorreta = "10022024";
+
+const dataInicio = new Date("2026-02-24"); // ALTERAR PARA A DATA QUE VOCÊ QUISER
+
+const poemas = [
+  "Poema 1: Você é o começo de tudo.",
+  "Poema 2: Eu te escolheria em todas as vidas.",
+  "Poema 3: Seu sorriso reorganiza meu mundo."
+];
+
+function verificarSenha() {
+  const senha = document.getElementById("senha").value;
+  if (senha === senhaCorreta) {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("conteudo").classList.remove("hidden");
+    carregarPoema();
+  } else {
+    alert("Senha incorreta.");
+  }
+}
+
+function carregarPoema() {
+  const hoje = new Date();
+  const diffTempo = hoje - dataInicio;
+  const diffDias = Math.floor(diffTempo / (1000 * 60 * 60 * 24)) + 1;
+
+  if (diffDias > 0 && diffDias <= 365) {
+    document.getElementById("diaAtual").innerText = diffDias;
+    document.getElementById("poema").innerText = poemas[diffDias - 1] || "Em breve...";
+  } else {
+    document.getElementById("poema").innerText = "Ainda não começou.";
+  }
+}
+
+function mostrarSaudade() {
+  document.getElementById("saudade").classList.toggle("hidden");
+}
+</script>
+
+</body>
+</html>
