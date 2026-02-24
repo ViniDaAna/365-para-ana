@@ -111,6 +111,42 @@ Porque amor adulto não é ausência de conflito.
 É decisão de permanecer.
 
 E mesmo quando dói,
-eu ainda escolho você.`
+eu ainda escolho você.`,
+
+`Entre todas as possibilidades que a vida me ofereceu,
+entre todos os caminhos que eu poderia ter seguido,
+eu fiquei.
+
+E não foi por acaso.
+Não foi por falta de opção.
+Foi escolha.
+
+Porque te amar não é só sentir o coração acelerar —
+é decidir permanecer quando o mundo desacelera.
+
+É olhar pra você nos dias comuns,
+sem música de fundo,
+sem cena cinematográfica,
+e ainda assim pensar:
+é aqui.
+
+Eu poderia ter fugido das dúvidas,
+me escondido nas minhas inseguranças,
+feito do orgulho um escudo.
+Mas eu fico.
+
+Fico porque o teu riso me desmonta.
+Fico porque teu abraço é o único lugar onde eu não preciso ser forte o tempo todo.
+Fico porque, mesmo quando tenho medo,
+eu prefiro atravessar esse medo com você do que viver seguro sem você.
+
+Te amar é um verbo diário.
+E hoje eu reafirmo:
+
+Eu não estou aqui por impulso.
+Eu estou aqui por decisão.
+
+E eu te escolho.
+De novo.`
 
 ];
