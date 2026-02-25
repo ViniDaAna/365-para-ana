@@ -44,6 +44,23 @@
         <button class="btnIntro" id="btnContinuarAto" type="button">Continuar</button>
       </div>
 
+      <!-- MEMÓRIA DESBLOQUEÁVEL -->
+      <div id="memoriaBox" class="memoriaBox hidden">
+        <div class="memoriaHeader">
+          <div class="memoriaTag">Memória desbloqueável</div>
+          <div class="memoriaDia" id="memoriaDiaLabel">—</div>
+        </div>
+
+        <div class="memoriaPreview" id="memoriaPreview"></div>
+
+        <div class="memoriaBtns">
+          <button id="btnAbrirMemoria" type="button">Ler memória</button>
+          <button id="btnFecharMemoria" class="ghostBtn hidden" type="button">Fechar</button>
+        </div>
+
+        <div id="memoriaTexto" class="memoriaTexto hidden"></div>
+      </div>
+
       <!-- POEMA -->
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
@@ -368,6 +385,7 @@ Ele renova.`
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
+      esconderMemoriaUI();
 
       document.getElementById("tituloTopo").innerText = "Arquivo";
 
@@ -385,6 +403,86 @@ Ele renova.`
       document.getElementById("botoesArquivo").classList.add("hidden");
     }
 
+    // ===== memórias =====
+
+    function memoriaKeyForDay(dia){
+      return `projeto365_memoria_vista_${dia}`;
+    }
+
+    function esconderMemoriaUI(){
+      const box = document.getElementById("memoriaBox");
+      const texto = document.getElementById("memoriaTexto");
+      const btnFechar = document.getElementById("btnFecharMemoria");
+
+      box.classList.add("hidden");
+      texto.classList.add("hidden");
+      texto.textContent = "";
+      btnFechar.classList.add("hidden");
+    }
+
+    function renderizarMemoria(dia){
+      const box = document.getElementById("memoriaBox");
+      const preview = document.getElementById("memoriaPreview");
+      const labelDia = document.getElementById("memoriaDiaLabel");
+      const btnAbrir = document.getElementById("btnAbrirMemoria");
+      const btnFechar = document.getElementById("btnFecharMemoria");
+      const textoEl = document.getElementById("memoriaTexto");
+
+      // só existe em dias de memória
+      if(typeof isMemoryDay !== "function" || !isMemoryDay(dia)){
+        esconderMemoriaUI();
+        return;
+      }
+
+      labelDia.textContent = `Dia ${dia}`;
+      box.classList.remove("hidden");
+
+      const liberada = (DIA_ATUAL >= dia);
+
+      // bloqueada até o dia certo
+      if(!liberada){
+        preview.textContent = "Bloqueada. Volte no Dia 30.";
+        btnAbrir.disabled = true;
+        btnAbrir.textContent = "Bloqueada";
+        btnFechar.classList.add("hidden");
+        textoEl.classList.add("hidden");
+        textoEl.textContent = "";
+        return;
+      }
+
+      // liberada
+      const memoria = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(dia) : "";
+      const jaVista = localStorage.getItem(memoriaKeyForDay(dia)) === "1";
+
+      preview.textContent = jaVista
+        ? "Você já leu isso uma vez. Mas pode voltar quando quiser."
+        : "Uma lembrança guardada. Clique quando estiver pronto.";
+
+      btnAbrir.disabled = false;
+      btnAbrir.textContent = "Ler memória";
+
+      btnAbrir.onclick = () => {
+        const m = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(dia) : "";
+        localStorage.setItem(memoriaKeyForDay(dia), "1");
+
+        textoEl.classList.remove("hidden");
+        btnFechar.classList.remove("hidden");
+
+        // digitação suave também na memória
+        typeText(textoEl, m, 12);
+
+        // depois de abrir, ajusta preview
+        preview.textContent = "Você pode fechar e ler de novo quando quiser.";
+      };
+
+      btnFechar.onclick = () => {
+        textoEl.classList.add("hidden");
+        textoEl.textContent = "";
+        btnFechar.classList.add("hidden");
+        preview.textContent = "Uma lembrança guardada. Clique quando estiver pronto.";
+      };
+    }
+
     // ===== render =====
 
     function carregarPoema(dia){
@@ -396,6 +494,9 @@ Ele renova.`
 
       revelarBloco();
       setTemaPorAto(dia);
+
+      // sempre recalcula memória pro dia em tela
+      renderizarMemoria(dia);
 
       // antes do início
       if(dia <= 0){
@@ -459,6 +560,7 @@ Ele renova.`
         document.getElementById("poema").textContent = "";
         document.getElementById("meta").textContent = "";
         setTemaPorAto(DIA_ATUAL);
+        esconderMemoriaUI();
         mostrarIntro(DIA_ATUAL);
         return;
       }
