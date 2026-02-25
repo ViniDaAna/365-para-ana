@@ -26,7 +26,7 @@
     <div class="meta">Dica: o dia em que a gente virou “nós”.</div>
   </div>
 
-  <!-- CONTEÚDO (mesma tela: hoje / arquivo) -->
+  <!-- CONTEÚDO -->
   <div class="container hidden" id="conteudo">
     <div class="corner-date" id="cornerDate"></div>
 
@@ -44,28 +44,11 @@
         <button class="btnIntro" id="btnContinuarAto" type="button">Continuar</button>
       </div>
 
-      <!-- MEMÓRIA DESBLOQUEÁVEL -->
-      <div id="memoriaBox" class="memoriaBox hidden">
-        <div class="memoriaHeader">
-          <div class="memoriaTag">Memória desbloqueável</div>
-          <div class="memoriaDia" id="memoriaDiaLabel">—</div>
-        </div>
-
-        <div class="memoriaPreview" id="memoriaPreview"></div>
-
-        <div class="memoriaBtns">
-          <button id="btnAbrirMemoria" type="button">Ler memória</button>
-          <button id="btnFecharMemoria" class="ghostBtn hidden" type="button">Fechar</button>
-        </div>
-
-        <div id="memoriaTexto" class="memoriaTexto hidden"></div>
-      </div>
-
-      <!-- POEMA -->
+      <!-- TEXTO PRINCIPAL (poema / prefácio / carta / etc.) -->
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
 
-      <!-- LISTA DO ARQUIVO (fica escondida no modo normal) -->
+      <!-- ARQUIVO: POEMAS -->
       <div id="arquivoBox" class="arquivoBox hidden">
         <div class="arquivoHeader">
           <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar</button>
@@ -83,15 +66,49 @@
         <div id="listaArquivo" class="arquivoLista"></div>
       </div>
 
+      <!-- ARQUIVO: MEMÓRIAS -->
+      <div id="memoriasBox" class="arquivoBox hidden">
+        <div class="arquivoHeader">
+          <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar</button>
+
+          <div class="arquivoHeaderText">
+            <div class="titleSmall">Memórias</div>
+            <div class="metaSmall" id="memoriasSub">—</div>
+          </div>
+
+          <div style="width:72px;"></div>
+        </div>
+
+        <div class="thin-line" style="margin-top:18px;"></div>
+
+        <div id="listaMemorias" class="arquivoLista"></div>
+
+        <!-- VIEWER DA MEMÓRIA -->
+        <div id="memoriaViewer" class="memoriaViewer hidden">
+          <div class="memoriaViewerHeader">
+            <div class="memoriaViewerTitle" id="memoriaViewerTitle">—</div>
+            <div class="memoriaViewerMeta" id="memoriaViewerMeta">—</div>
+          </div>
+
+          <div id="memoriaViewerTexto" class="memoriaViewerTexto"></div>
+
+          <div class="memoriaViewerBtns">
+            <button class="ghostBtn" type="button" onclick="fecharMemoriaViewer()">Fechar</button>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
     <!-- Botões (normal) -->
     <div class="btnRow" id="botoesNormal">
       <button id="btnAnteriores" type="button" onclick="abrirArquivo()">Poemas anteriores</button>
+      <button id="btnMemorias" type="button" onclick="abrirMemorias()">Memórias</button>
       <button type="button" onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
     </div>
 
-    <!-- Botões (modo arquivo) -->
+    <!-- Botões (modo arquivo/memórias) -->
     <div class="btnRow hidden" id="botoesArquivo">
       <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar para o dia de hoje</button>
     </div>
@@ -383,141 +400,174 @@ Ele renova.`
       }, 520);
     }
 
-    // ===== modo arquivo (folha) =====
+    // ===== modos =====
 
-    function entrarModoArquivo(){
+    function entrarModoLista(titulo){
       document.body.classList.add("modo-arquivo");
 
-      document.getElementById("arquivoBox").classList.remove("hidden");
       document.getElementById("botoesNormal").classList.add("hidden");
       document.getElementById("botoesArquivo").classList.remove("hidden");
       document.getElementById("saudade").classList.add("hidden");
 
+      // limpa texto principal enquanto está em lista
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
 
-      document.getElementById("tituloTopo").innerText = "Arquivo";
+      document.getElementById("tituloTopo").innerText = titulo;
       animarFolha("in");
     }
 
-    function sairModoArquivo(){
+    function sairModoLista(){
       if(document.body.classList.contains("modo-arquivo")){
         animarFolha("out");
       }
 
       document.body.classList.remove("modo-arquivo");
+
       document.getElementById("arquivoBox").classList.add("hidden");
+      document.getElementById("memoriasBox").classList.add("hidden");
+
       document.getElementById("botoesNormal").classList.remove("hidden");
       document.getElementById("botoesArquivo").classList.add("hidden");
     }
 
-    // ===== memórias =====
+    // ===== poemas: arquivo =====
 
-    function memoriaKeyForDay(dia){
-      return `projeto365_memoria_vista_${dia}`;
+    function primeiraLinha(texto){
+      if(!texto) return "Sem título";
+      const linha = String(texto).split("\n")[0].trim();
+      return linha || "Sem título";
     }
 
-    function esconderMemoriaUI(){
-      const box = document.getElementById("memoriaBox");
-      const texto = document.getElementById("memoriaTexto");
-      const btnFechar = document.getElementById("btnFecharMemoria");
-
-      box.classList.add("hidden");
-      texto.classList.add("hidden");
-      texto.textContent = "";
-      btnFechar.classList.add("hidden");
+    function tituloParaLista(dia){
+      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "";
+      let t = primeiraLinha(texto);
+      if(t.length > 52) t = t.slice(0, 52).trim() + "…";
+      return t;
     }
 
-    // ✅ AGORA: sempre mostra a caixa desde o Dia 1 (bloqueada até o Dia 30)
-    function renderizarMemoria(dia){
-      const box = document.getElementById("memoriaBox");
-      const preview = document.getElementById("memoriaPreview");
-      const labelDia = document.getElementById("memoriaDiaLabel");
-      const btnAbrir = document.getElementById("btnAbrirMemoria");
-      const btnFechar = document.getElementById("btnFecharMemoria");
-      const textoEl = document.getElementById("memoriaTexto");
+    function abrirArquivo(){
+      if(DIA_ATUAL <= 1) return;
 
-      // não mostrar antes do início (dia <= 0) e nem pós 365
-      if(dia <= 0 || dia > 365){
-        esconderMemoriaUI();
-        return;
+      const max = DIA_ATUAL - 1;
+      document.getElementById("arquivoSub").innerText = `Disponíveis: Dias 1 a ${max}`;
+
+      const lista = document.getElementById("listaArquivo");
+      lista.innerHTML = "";
+
+      for(let d = max; d >= 1; d--){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "arquivoItem";
+        btn.innerHTML =
+          `<span class="arquivoDia">Dia ${d}</span>
+           <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
+
+        btn.onclick = () => {
+          sairModoLista();
+          esconderIntro();
+          carregarPoema(d);
+        };
+
+        lista.appendChild(btn);
       }
 
-      // primeira memória planejada (hoje: dia 30)
-      const primeiroDiaMemoria = 30;
+      // tema do arquivo fica no ato do dia atual
+      setTemaPorAto(DIA_ATUAL);
 
-      // se ainda não chegou no dia 30, mostra bloqueada SEMPRE
-      if(dia < primeiroDiaMemoria){
-        box.classList.remove("hidden");
-        labelDia.textContent = `Dia ${primeiroDiaMemoria}`;
-        preview.textContent = `Bloqueada por enquanto.\nA primeira memória desbloqueia no Dia ${primeiroDiaMemoria}.`;
+      // mostra caixa de poemas e entra modo lista
+      document.getElementById("arquivoBox").classList.remove("hidden");
+      document.getElementById("memoriasBox").classList.add("hidden");
+      entrarModoLista("Arquivo");
+    }
 
-        btnAbrir.disabled = true;
-        btnAbrir.textContent = "Bloqueada";
+    // ===== memórias: arquivo separado =====
 
-        btnFechar.classList.add("hidden");
-        textoEl.classList.add("hidden");
-        textoEl.textContent = "";
-        return;
+    function getMemoryDays(){
+      const days = [];
+      for(let d = 30; d <= 330; d += 30){
+        days.push(d);
       }
+      return days;
+    }
 
-      // a partir do dia 30:
-      // mostra a memória SOMENTE quando o dia em tela for um dia de memória
-      if(typeof isMemoryDay !== "function" || !isMemoryDay(dia)){
-        box.classList.add("hidden");
-        textoEl.classList.add("hidden");
-        textoEl.textContent = "";
-        btnFechar.classList.add("hidden");
-        return;
-      }
+    function memoriaTituloPorIndice(idx){
+      return `Memória ${idx + 1}`;
+    }
 
-      // aqui é um dia de memória (30, 60, 90...)
-      box.classList.remove("hidden");
-      labelDia.textContent = `Dia ${dia}`;
+    function abrirMemorias(){
+      const days = getMemoryDays();
+      document.getElementById("memoriasSub").innerText = `Total previsto: ${days.length}`;
 
-      const liberada = (DIA_ATUAL >= dia);
+      const lista = document.getElementById("listaMemorias");
+      lista.innerHTML = "";
+
+      // fecha viewer se estiver aberto
+      fecharMemoriaViewer(true);
+
+      days.forEach((diaMem, idx) => {
+        const liberada = (DIA_ATUAL >= diaMem);
+        const icon = liberada ? "🔓" : "🔒";
+        const titulo = memoriaTituloPorIndice(idx);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "arquivoItem memoriaItem";
+        btn.innerHTML =
+          `<span class="lockIcon">${icon}</span>
+           <span class="arquivoDia">Dia ${diaMem}</span>
+           <span class="arquivoTitulo">${titulo}</span>`;
+
+        btn.onclick = () => {
+          abrirMemoriaViewer(diaMem, idx);
+        };
+
+        lista.appendChild(btn);
+      });
+
+      // tema consistente com o ato do dia atual
+      setTemaPorAto(DIA_ATUAL);
+
+      document.getElementById("arquivoBox").classList.add("hidden");
+      document.getElementById("memoriasBox").classList.remove("hidden");
+      entrarModoLista("Memórias");
+    }
+
+    function abrirMemoriaViewer(diaMem, idx){
+      const viewer = document.getElementById("memoriaViewer");
+      const titleEl = document.getElementById("memoriaViewerTitle");
+      const metaEl = document.getElementById("memoriaViewerMeta");
+      const textoEl = document.getElementById("memoriaViewerTexto");
+
+      const liberada = (DIA_ATUAL >= diaMem);
+      const titulo = memoriaTituloPorIndice(idx);
+
+      viewer.classList.remove("hidden");
+      titleEl.textContent = titulo;
 
       if(!liberada){
-        preview.textContent = `Bloqueada.\nVolte quando for o Dia ${dia}.`;
-        btnAbrir.disabled = true;
-        btnAbrir.textContent = "Bloqueada";
-
-        btnFechar.classList.add("hidden");
-        textoEl.classList.add("hidden");
-        textoEl.textContent = "";
+        metaEl.textContent = `Bloqueada até o Dia ${diaMem}.`;
+        textoEl.textContent = `Quando chegar o Dia ${diaMem}, essa memória vai abrir — e vai ficar disponível pra sempre.`;
         return;
       }
 
-      const jaVista = localStorage.getItem(memoriaKeyForDay(dia)) === "1";
-
-      preview.textContent = jaVista
-        ? "Você já leu isso uma vez. Mas pode voltar quando quiser."
-        : "Uma lembrança guardada. Clique quando estiver pronto.";
-
-      btnAbrir.disabled = false;
-      btnAbrir.textContent = "Ler memória";
-
-      btnAbrir.onclick = () => {
-        const m = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(dia) : "";
-        localStorage.setItem(memoriaKeyForDay(dia), "1");
-
-        textoEl.classList.remove("hidden");
-        btnFechar.classList.remove("hidden");
-
-        typeText(textoEl, m, 12);
-        preview.textContent = "Você pode fechar e ler de novo quando quiser.";
-      };
-
-      btnFechar.onclick = () => {
-        textoEl.classList.add("hidden");
-        textoEl.textContent = "";
-        btnFechar.classList.add("hidden");
-        preview.textContent = "Uma lembrança guardada. Clique quando estiver pronto.";
-      };
+      metaEl.textContent = `Liberada no Dia ${diaMem}.`;
+      const texto = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(diaMem) : "";
+      const conteudo = texto && texto.trim().length ? texto : "Em breve...";
+      typeText(textoEl, conteudo, 12);
     }
 
-    // ===== render =====
+    function fecharMemoriaViewer(silencioso=false){
+      const viewer = document.getElementById("memoriaViewer");
+      const textoEl = document.getElementById("memoriaViewerTexto");
+      if(!silencioso && viewer.classList.contains("hidden")) return;
+
+      viewer.classList.add("hidden");
+      textoEl.textContent = "";
+    }
+
+    // ===== render principal =====
 
     function carregarPoema(dia){
       DIA_EM_TELA = dia;
@@ -528,9 +578,6 @@ Ele renova.`
 
       revelarBloco();
       setTemaPorAto(dia);
-
-      // recalcula memória pro dia em tela
-      renderizarMemoria(dia);
 
       // antes do início
       if(dia <= 0){
@@ -578,14 +625,17 @@ Ele renova.`
       const btn = document.getElementById("btnAnteriores");
       btn.disabled = (DIA_ATUAL <= 1);
 
-      sairModoArquivo();
+      // sempre sai de listas
+      sairModoLista();
 
+      // antes do início
       if(d < 0){
         esconderIntro();
         carregarPoema(DIA_ATUAL);
         return;
       }
 
+      // intro de virada
       if(deveMostrarIntro(DIA_ATUAL)){
         document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
         document.getElementById("poema").textContent = "";
@@ -597,51 +647,6 @@ Ele renova.`
 
       esconderIntro();
       carregarPoema(DIA_ATUAL);
-    }
-
-    // ===== arquivo =====
-
-    function primeiraLinha(texto){
-      if(!texto) return "Sem título";
-      const linha = String(texto).split("\n")[0].trim();
-      return linha || "Sem título";
-    }
-
-    function tituloParaLista(dia){
-      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "";
-      let t = primeiraLinha(texto);
-      if(t.length > 52) t = t.slice(0, 52).trim() + "…";
-      return t;
-    }
-
-    function abrirArquivo(){
-      if(DIA_ATUAL <= 1) return;
-
-      const max = DIA_ATUAL - 1;
-      document.getElementById("arquivoSub").innerText = `Disponíveis: Dias 1 a ${max}`;
-
-      const lista = document.getElementById("listaArquivo");
-      lista.innerHTML = "";
-
-      for(let d = max; d >= 1; d--){
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "arquivoItem";
-        btn.innerHTML =
-          `<span class="arquivoDia">Dia ${d}</span>
-           <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
-
-        btn.onclick = () => {
-          sairModoArquivo();
-          esconderIntro();
-          carregarPoema(d);
-        };
-
-        lista.appendChild(btn);
-      }
-
-      setTemaPorAto(DIA_ATUAL);
-      entrarModoArquivo();
     }
 
     function voltarParaHoje(){
