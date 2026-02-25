@@ -293,26 +293,39 @@ Ele renova.`
     function iniciarSegredo(){
       const cooldownKey = "projeto365_toast";
       const cooldownMs = 2 * 60 * 60 * 1000; // 2h
-      let timer;
 
-      function reset(){
-        clearTimeout(timer);
-        timer = setTimeout(() => {
+      function resetInatividade(){
+        clearTimeout(window.__inatividadeTimer);
+        window.__inatividadeTimer = setTimeout(() => {
+          if(document.hidden) return;
+
           const last = Number(localStorage.getItem(cooldownKey) || 0);
           const now = Date.now();
-          if(now - last > cooldownMs){
+
+          if(now - last >= cooldownMs){
             localStorage.setItem(cooldownKey, String(now));
             mostrarToast(pickSegredo());
           }
         }, 10000);
       }
 
-      window.addEventListener("mousemove", reset, {passive:true});
-      window.addEventListener("keydown", reset);
-      window.addEventListener("touchstart", reset, {passive:true});
-      window.addEventListener("scroll", reset, {passive:true});
+      if(window.__segredoInit){
+        resetInatividade();
+        return;
+      }
+      window.__segredoInit = true;
 
-      reset();
+      window.addEventListener("mousemove", resetInatividade, {passive:true});
+      window.addEventListener("keydown", resetInatividade);
+      window.addEventListener("touchstart", resetInatividade, {passive:true});
+      window.addEventListener("scroll", resetInatividade, {passive:true});
+
+      document.addEventListener("visibilitychange", () => {
+        if(!document.hidden) resetInatividade();
+      });
+      window.addEventListener("focus", resetInatividade);
+
+      resetInatividade();
     }
 
     // ===== intro de ato =====
@@ -359,7 +372,6 @@ Ele renova.`
     // ===== animação “folhear” =====
 
     function animarFolha(direcao){
-      // direcao: "in" (entrar) ou "out" (sair)
       const c = document.getElementById("conteudo");
       c.classList.remove("pageflip-in", "pageflip-out");
       void c.offsetWidth;
@@ -381,14 +393,11 @@ Ele renova.`
       document.getElementById("botoesArquivo").classList.remove("hidden");
       document.getElementById("saudade").classList.add("hidden");
 
-      // limpa poeminha enquanto está no arquivo
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
-      esconderMemoriaUI();
 
       document.getElementById("tituloTopo").innerText = "Arquivo";
-
       animarFolha("in");
     }
 
@@ -420,6 +429,7 @@ Ele renova.`
       btnFechar.classList.add("hidden");
     }
 
+    // ✅ AGORA: sempre mostra a caixa desde o Dia 1 (bloqueada até o Dia 30)
     function renderizarMemoria(dia){
       const box = document.getElementById("memoriaBox");
       const preview = document.getElementById("memoriaPreview");
@@ -428,30 +438,57 @@ Ele renova.`
       const btnFechar = document.getElementById("btnFecharMemoria");
       const textoEl = document.getElementById("memoriaTexto");
 
-      // só existe em dias de memória
-      if(typeof isMemoryDay !== "function" || !isMemoryDay(dia)){
+      // não mostrar antes do início (dia <= 0) e nem pós 365
+      if(dia <= 0 || dia > 365){
         esconderMemoriaUI();
         return;
       }
 
-      labelDia.textContent = `Dia ${dia}`;
-      box.classList.remove("hidden");
+      // primeira memória planejada (hoje: dia 30)
+      const primeiroDiaMemoria = 30;
 
-      const liberada = (DIA_ATUAL >= dia);
+      // se ainda não chegou no dia 30, mostra bloqueada SEMPRE
+      if(dia < primeiroDiaMemoria){
+        box.classList.remove("hidden");
+        labelDia.textContent = `Dia ${primeiroDiaMemoria}`;
+        preview.textContent = `Bloqueada por enquanto.\nA primeira memória desbloqueia no Dia ${primeiroDiaMemoria}.`;
 
-      // bloqueada até o dia certo
-      if(!liberada){
-        preview.textContent = "Bloqueada. Volte no Dia 30.";
         btnAbrir.disabled = true;
         btnAbrir.textContent = "Bloqueada";
+
         btnFechar.classList.add("hidden");
         textoEl.classList.add("hidden");
         textoEl.textContent = "";
         return;
       }
 
-      // liberada
-      const memoria = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(dia) : "";
+      // a partir do dia 30:
+      // mostra a memória SOMENTE quando o dia em tela for um dia de memória
+      if(typeof isMemoryDay !== "function" || !isMemoryDay(dia)){
+        box.classList.add("hidden");
+        textoEl.classList.add("hidden");
+        textoEl.textContent = "";
+        btnFechar.classList.add("hidden");
+        return;
+      }
+
+      // aqui é um dia de memória (30, 60, 90...)
+      box.classList.remove("hidden");
+      labelDia.textContent = `Dia ${dia}`;
+
+      const liberada = (DIA_ATUAL >= dia);
+
+      if(!liberada){
+        preview.textContent = `Bloqueada.\nVolte quando for o Dia ${dia}.`;
+        btnAbrir.disabled = true;
+        btnAbrir.textContent = "Bloqueada";
+
+        btnFechar.classList.add("hidden");
+        textoEl.classList.add("hidden");
+        textoEl.textContent = "";
+        return;
+      }
+
       const jaVista = localStorage.getItem(memoriaKeyForDay(dia)) === "1";
 
       preview.textContent = jaVista
@@ -468,10 +505,7 @@ Ele renova.`
         textoEl.classList.remove("hidden");
         btnFechar.classList.remove("hidden");
 
-        // digitação suave também na memória
         typeText(textoEl, m, 12);
-
-        // depois de abrir, ajusta preview
         preview.textContent = "Você pode fechar e ler de novo quando quiser.";
       };
 
@@ -495,7 +529,7 @@ Ele renova.`
       revelarBloco();
       setTemaPorAto(dia);
 
-      // sempre recalcula memória pro dia em tela
+      // recalcula memória pro dia em tela
       renderizarMemoria(dia);
 
       // antes do início
@@ -544,23 +578,19 @@ Ele renova.`
       const btn = document.getElementById("btnAnteriores");
       btn.disabled = (DIA_ATUAL <= 1);
 
-      // garante que sai do arquivo
       sairModoArquivo();
 
-      // antes do início
       if(d < 0){
         esconderIntro();
         carregarPoema(DIA_ATUAL);
         return;
       }
 
-      // intro de virada
       if(deveMostrarIntro(DIA_ATUAL)){
         document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
         document.getElementById("poema").textContent = "";
         document.getElementById("meta").textContent = "";
         setTemaPorAto(DIA_ATUAL);
-        esconderMemoriaUI();
         mostrarIntro(DIA_ATUAL);
         return;
       }
@@ -602,7 +632,6 @@ Ele renova.`
            <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
 
         btn.onclick = () => {
-          // escolheu um poema antigo -> sai do modo arquivo e mostra o dia escolhido
           sairModoArquivo();
           esconderIntro();
           carregarPoema(d);
@@ -611,7 +640,6 @@ Ele renova.`
         lista.appendChild(btn);
       }
 
-      // tema do arquivo fica no ato do dia atual (fica consistente)
       setTemaPorAto(DIA_ATUAL);
       entrarModoArquivo();
     }
