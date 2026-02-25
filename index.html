@@ -1,333 +1,220 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entre Nós Dois</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entre Nós Dois</title>
 
-<style>
-  :root{
-    --bg:#000;
-    --panel:#0b0b0b;
-    --text:#f2f2f2;
-    --muted:rgba(242,242,242,.65);
-    --line:rgba(242,242,242,.10);
-    --btn:#111;
-    --btnHover:#1b1b1b;
-    --border:#2a2a2a;
-  }
+  <!-- Evita o 404 do favicon -->
+  <link rel="icon" href="data:," />
 
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family: "Georgia", serif;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:24px;
-  }
-
-  .container{
-    width:min(680px, 100%);
-    padding:42px 34px;
-    position:relative;
-    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    box-shadow: 0 0 40px rgba(0,0,0,.70);
-    opacity: 0;
-    transform: translateY(6px);
-    animation: enter .6s ease forwards;
-  }
-
-  @keyframes enter{
-    to { opacity:1; transform: translateY(0); }
-  }
-
-  h1,h2{
-    font-weight: normal;
-    letter-spacing: .6px;
-    margin: 0 0 10px;
-  }
-
-  p{
-    margin: 10px 0;
-    line-height: 1.6;
-    color: var(--muted);
-  }
-
-  .thin-line{
-    width: 56px;
-    height: 1px;
-    background: var(--line);
-    margin: 18px auto 14px;
-  }
-
-  .corner-date{
-    position:absolute;
-    top:14px;
-    right:16px;
-    font-size: 12px;
-    color: rgba(242,242,242,.45);
-    letter-spacing: .6px;
-    user-select:none;
-  }
-
-  input{
-    padding:12px;
-    border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--text);
-    border-radius: 10px;
-    margin-top: 14px;
-    width: 240px;
-    outline: none;
-  }
-
-  button{
-    padding:10px 18px;
-    margin-top: 18px;
-    background: var(--btn);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor:pointer;
-    transition: .25s;
-  }
-  button:hover{ background: var(--btnHover); transform: translateY(-1px); }
-
-  .hidden{ display:none; }
-
-  .title{
-    color: var(--text);
-    margin-bottom: 6px;
-  }
-
-  .subtitle{
-    margin-top: 0;
-    color: rgba(242,242,242,.55);
-  }
-
-  .poema{
-    margin-top: 22px;
-    font-size: 18px;
-    line-height: 1.75;
-    color: rgba(242,242,242,.92);
-    min-height: 92px;
-    white-space: pre-wrap;
-  }
-
-  .fade{
-    opacity: 0;
-    transform: translateY(4px);
-    transition: .35s ease;
-  }
-
-  .fade.show{
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .meta{
-    margin-top: 18px;
-    font-size: 13px;
-    color: rgba(242,242,242,.45);
-  }
-
-  .saudade{
-    margin-top: 16px;
-    font-size: 14px;
-    color: rgba(242,242,242,.70);
-    line-height: 1.6;
-  }
-</style>
+  <!-- Estilos do projeto -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<div class="container" id="login">
-  <div class="corner-date" id="cornerDateLogin"></div>
+  <div class="container" id="login">
+    <div class="corner-date" id="cornerDateLogin"></div>
 
-  <h1 class="title">Um Lugar Só Nosso</h1>
-  <div class="thin-line"></div>
-  <p class="subtitle">Digite a data que tudo começou</p>
+    <h1 class="title">Um Lugar Só Nosso</h1>
+    <div class="thin-line"></div>
+    <p class="subtitle">Digite a data que tudo começou</p>
 
-  <input type="password" id="senha" placeholder="Senha">
-  <br>
-  <button onclick="verificarSenha()">Entrar</button>
+    <input type="password" id="senha" placeholder="Senha" />
+    <br />
+    <button onclick="verificarSenha()">Entrar</button>
 
-  <div class="meta">Dica: o dia em que a gente virou “nós”.</div>
-</div>
-
-<div class="container hidden" id="conteudo">
-  <div class="corner-date" id="cornerDate"></div>
-
-  <h2 id="tituloDia" class="title"></h2>
-  <div class="thin-line"></div>
-
-  <div id="blocoTexto" class="fade">
-    <div class="poema" id="poema"></div>
-    <div class="meta" id="meta"></div>
+    <div class="meta">Dica: o dia em que a gente virou “nós”.</div>
   </div>
 
-  <button onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
-  <div id="saudade" class="saudade hidden">
-    Se você sentiu saudade, é porque o que temos é real.
-    E eu escolho você — hoje e todos os dias.
+  <div class="container hidden" id="conteudo">
+    <div class="corner-date" id="cornerDate"></div>
+
+    <h2 id="tituloDia" class="title"></h2>
+    <div class="thin-line"></div>
+
+    <div id="blocoTexto" class="fade">
+      <div class="poema" id="poema"></div>
+      <div class="meta" id="meta"></div>
+    </div>
+
+    <button onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
+    <div id="saudade" class="saudade hidden">
+      Se você sentiu saudade, é porque o que temos é real.
+      E eu escolho você — hoje e todos os dias.
+    </div>
+
+    <div class="assinatura">Entre nós dois.</div>
   </div>
-</div>
 
-<!-- 1) carrega os poemas -->
-<script src="poemas.js"></script>
+  <!-- 1) carrega os poemas -->
+  <script src="poemas.js"></script>
 
-<!-- 2) lógica do site -->
-<script>
-  const senhaCorreta = "10022024";
-  const dataInicio = new Date("2026-02-24T00:00:00");
+  <!-- 2) lógica do site -->
+  <script>
+    const senhaCorreta = "10022024";
+    const dataInicio = new Date("2026-02-24T00:00:00");
 
-  const prefacio = [
-    "Se você está lendo isso, então encontrou o nosso lugar.",
-    "",
-    "Eu quis que fosse simples.",
-    "Preto.",
-    "Silencioso.",
-    "Sem distração.",
-    "",
-    "Porque o que eu sinto por você não precisa de enfeite.",
-    "",
-    "A partir de 24 de fevereiro de 2026,",
-    "você vai encontrar aqui um poema por dia.",
-    "Não por obrigação.",
-    "Não por promessa vazia.",
-    "",
-    "Mas porque amar você,",
-    "pra mim,",
-    "é escolha diária.",
-    "",
-    "Nem todos os dias serão leves.",
-    "Nem todos serão calmos.",
-    "Alguns serão intensos.",
-    "Alguns mais profundos.",
-    "Alguns perigosamente sinceros.",
-    "",
-    "Mas todos terão uma coisa em comum:",
-    "eu.",
-    "",
-    "Escolhendo você.",
-    "De novo.",
-    "E de novo.",
-    "E de novo.",
-    "",
-    "Esse não é um site.",
-    "É um compromisso silencioso.",
-    "",
-    "365 dias.",
-    "365 escolhas.",
-    "",
-    "E se, no final desse ano,",
-    "eu tiver que começar tudo outra vez…",
-    "",
-    "eu começaria.",
-    "",
-    "Com você."
-  ].join("\n");
+    const prefacio = [
+      "Se você está lendo isso, então encontrou o nosso lugar.",
+      "",
+      "Eu quis que fosse simples.",
+      "Preto.",
+      "Silencioso.",
+      "Sem distração.",
+      "",
+      "Porque o que eu sinto por você não precisa de enfeite.",
+      "",
+      "A partir de 24 de fevereiro de 2026,",
+      "você vai encontrar aqui um poema por dia.",
+      "Não por obrigação.",
+      "Não por promessa vazia.",
+      "",
+      "Mas porque amar você,",
+      "pra mim,",
+      "é escolha diária.",
+      "",
+      "Nem todos os dias serão leves.",
+      "Nem todos serão calmos.",
+      "Alguns serão intensos.",
+      "Alguns mais profundos.",
+      "Alguns perigosamente sinceros.",
+      "",
+      "Mas todos terão uma coisa em comum:",
+      "eu.",
+      "",
+      "Escolhendo você.",
+      "De novo.",
+      "E de novo.",
+      "E de novo.",
+      "",
+      "Esse não é um site.",
+      "É um compromisso silencioso.",
+      "",
+      "365 dias.",
+      "365 escolhas.",
+      "",
+      "E se, no final desse ano,",
+      "eu tiver que começar tudo outra vez…",
+      "",
+      "eu começaria.",
+      "",
+      "Com você."
+    ].join("\n");
 
-  function formatarDataCurta(d){
-    const dd = String(d.getDate()).padStart(2,'0');
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    const yyyy = d.getFullYear();
-    return `${dd}/${mm}/${yyyy}`;
-  }
+    function formatarDataCurta(d) {
+      const dd = String(d.getDate()).padStart(2, "0");
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const yyyy = d.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    }
 
-  function diffDias(hoje, inicio){
-    const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-    const I = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate());
-    const ms = H - I;
-    return Math.floor(ms / (1000*60*60*24));
-  }
+    function diffDias(hoje, inicio) {
+      const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+      const I = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate());
+      const ms = H - I;
+      return Math.floor(ms / (1000 * 60 * 60 * 24));
+    }
 
-  function setCornerDates(){
-    const agora = new Date();
-    document.getElementById("cornerDateLogin").innerText = formatarDataCurta(agora);
-    document.getElementById("cornerDate").innerText = formatarDataCurta(agora);
-  }
+    function setCornerDates() {
+      const agora = new Date();
+      document.getElementById("cornerDateLogin").innerText = formatarDataCurta(agora);
+      document.getElementById("cornerDate").innerText = formatarDataCurta(agora);
+    }
 
-  let typingTimer = null;
-  function typeText(el, text, speed=18){
-    clearTimeout(typingTimer);
-    el.textContent = "";
-    let i = 0;
-    function step(){
-      el.textContent = text.slice(0, i);
-      i++;
-      if(i <= text.length){
-        typingTimer = setTimeout(step, speed);
+    let typingTimer = null;
+    function typeText(el, text, speed = 18) {
+      clearTimeout(typingTimer);
+      el.textContent = "";
+      let i = 0;
+      function step() {
+        el.textContent = text.slice(0, i);
+        i++;
+        if (i <= text.length) {
+          typingTimer = setTimeout(step, speed);
+        }
+      }
+      step();
+    }
+
+    function verificarSenha() {
+      const senha = document.getElementById("senha").value;
+      if (senha === senhaCorreta) {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("conteudo").classList.remove("hidden");
+        setCornerDates();
+        carregarConteudo();
+      } else {
+        alert("Senha incorreta.");
       }
     }
-    step();
-  }
 
-  function verificarSenha(){
-    const senha = document.getElementById("senha").value;
-    if(senha === senhaCorreta){
-      document.getElementById("login").classList.add("hidden");
-      document.getElementById("conteudo").classList.remove("hidden");
-      setCornerDates();
-      carregarConteudo();
-    } else {
-      alert("Senha incorreta.");
-    }
-  }
-
-  function mostrarSaudade(){
-    document.getElementById("saudade").classList.toggle("hidden");
-  }
-
-  function mostrarBlocoComTransicao(){
-    const bloco = document.getElementById("blocoTexto");
-    bloco.classList.remove("show");
-    void bloco.offsetWidth;
-    bloco.classList.add("show");
-  }
-
-  function carregarConteudo(){
-    const hoje = new Date();
-    const d = diffDias(hoje, dataInicio); // <0 antes, 0 no Dia 1, >0 depois
-    const diaAtual = d + 1;
-
-    const titulo = document.getElementById("tituloDia");
-    const poemaEl = document.getElementById("poema");
-    const metaEl = document.getElementById("meta");
-
-    mostrarBlocoComTransicao();
-
-    if(d < 0){
-      const faltam = Math.abs(d);
-      titulo.innerText = "Antes do primeiro poema";
-      metaEl.innerText = `Faltam ${faltam} dia(s) para começar — em ${formatarDataCurta(dataInicio)}.`;
-      typeText(poemaEl, prefacio, 14);
-      return;
+    function mostrarSaudade() {
+      document.getElementById("saudade").classList.toggle("hidden");
     }
 
-    if(diaAtual >= 1 && diaAtual <= 365){
-      titulo.innerText = `Dia ${diaAtual} de 365`;
-      metaEl.innerText = `Um poema por dia. Começou em ${formatarDataCurta(dataInicio)}.`;
-      const texto = (typeof poemas !== "undefined" && poemas[diaAtual - 1]) ? poemas[diaAtual - 1] : "Em breve...";
-      typeText(poemaEl, texto, 18);
-      return;
+    function mostrarBlocoComTransicao() {
+      const bloco = document.getElementById("blocoTexto");
+      bloco.classList.remove("show");
+      void bloco.offsetWidth;
+      bloco.classList.add("show");
     }
 
-    titulo.innerText = "365 dias com você";
-    metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
-    typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 18);
-  }
+    // Tema por ato (1 a 6) – você pode mudar as cores no CSS depois
+    function aplicarTemaPorAto(diaAtual) {
+      let ato = 1;
+      if (diaAtual >= 31 && diaAtual <= 90) ato = 2;
+      else if (diaAtual >= 91 && diaAtual <= 150) ato = 3;
+      else if (diaAtual >= 151 && diaAtual <= 240) ato = 4;
+      else if (diaAtual >= 241 && diaAtual <= 330) ato = 5;
+      else if (diaAtual >= 331 && diaAtual <= 365) ato = 6;
 
-  setCornerDates();
-  setInterval(setCornerDates, 60000);
-</script>
+      document.body.setAttribute("data-ato", String(ato));
+    }
+
+    function carregarConteudo() {
+      const hoje = new Date();
+      const d = diffDias(hoje, dataInicio); // <0 antes, 0 no Dia 1, >0 depois
+      const diaAtual = d + 1;
+
+      aplicarTemaPorAto(diaAtual);
+
+      const titulo = document.getElementById("tituloDia");
+      const poemaEl = document.getElementById("poema");
+      const metaEl = document.getElementById("meta");
+
+      mostrarBlocoComTransicao();
+
+      if (d < 0) {
+        const faltam = Math.abs(d);
+        titulo.innerText = "Antes do primeiro poema";
+        metaEl.innerText = `Faltam ${faltam} dia(s) para começar — em ${formatarDataCurta(dataInicio)}.`;
+        typeText(poemaEl, prefacio, 14);
+        return;
+      }
+
+      if (diaAtual >= 1 && diaAtual <= 365) {
+        titulo.innerText = `Dia ${diaAtual} de 365`;
+        metaEl.innerText = `Um poema por dia. Começou em ${formatarDataCurta(dataInicio)}.`;
+
+        const texto =
+          (typeof poemas !== "undefined" && poemas[diaAtual - 1])
+            ? poemas[diaAtual - 1]
+            : "Em breve...";
+
+        typeText(poemaEl, texto, 18);
+        return;
+      }
+
+      titulo.innerText = "365 dias com você";
+      metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
+      typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 18);
+    }
+
+    setCornerDates();
+    setInterval(setCornerDates, 60000);
+  </script>
 
 </body>
 </html>
