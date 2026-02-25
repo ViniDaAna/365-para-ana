@@ -33,6 +33,7 @@
     <h2 id="tituloDia" class="title"></h2>
     <div class="thin-line"></div>
 
+    <!-- Começa SEM show: a gente aplica show com transição -->
     <div id="blocoTexto" class="fade">
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
@@ -74,6 +75,8 @@
       "Eu guardo você nas coisas pequenas.",
       "Não precisa de nada grandioso. Só de você aqui."
     ];
+
+    // ===== UI helpers =====
 
     function verificarSenha(){
       const senha = document.getElementById("senha").value;
@@ -130,6 +133,33 @@
       localStorage.setItem(key, hoje);
     }
 
+    // Transição do bloco (sempre funciona, nunca deixa invisível)
+    function revelarBloco(){
+      const bloco = document.getElementById("blocoTexto");
+      bloco.classList.remove("show");      // some (opacity 0)
+      void bloco.offsetWidth;              // força reflow
+      bloco.classList.add("show");         // aparece com transição
+    }
+
+    // Digitação (mais elegante: um pouco mais rápida e constante)
+    let typingTimer = null;
+    function typeText(el, text, speed=12){
+      clearTimeout(typingTimer);
+      el.textContent = "";
+      let i = 0;
+
+      function step(){
+        el.textContent = text.slice(0, i);
+        i++;
+        if(i <= text.length){
+          typingTimer = setTimeout(step, speed);
+        }
+      }
+      step();
+    }
+
+    // ===== Toast =====
+
     function pickSegredo(){
       return segredos[Math.floor(Math.random() * segredos.length)];
     }
@@ -137,6 +167,7 @@
     function mostrarToast(texto){
       const toast = document.getElementById("toastSegredo");
       toast.textContent = texto;
+
       toast.classList.remove("hidden");
       toast.classList.remove("show");
       void toast.offsetWidth;
@@ -146,7 +177,7 @@
       window.__toastTimer = setTimeout(() => {
         toast.classList.remove("show");
         setTimeout(() => toast.classList.add("hidden"), 250);
-      }, 4000);
+      }, 4200);
     }
 
     function iniciarSegredo(){
@@ -160,7 +191,7 @@
           const last = Number(localStorage.getItem(cooldownKey) || 0);
           const now = Date.now();
           if(now - last > cooldownMs){
-            localStorage.setItem(cooldownKey, now);
+            localStorage.setItem(cooldownKey, String(now));
             mostrarToast(pickSegredo());
           }
         }, 10000);
@@ -173,6 +204,8 @@
 
       reset();
     }
+
+    // ===== Conteúdo =====
 
     function diffDias(){
       const hoje = new Date();
@@ -189,20 +222,31 @@
       const poemaEl = document.getElementById("poema");
       const metaEl = document.getElementById("meta");
 
+      revelarBloco();
+
       if(d < 0){
         titulo.innerText = "Antes do primeiro poema";
-        poemaEl.innerText = "Em breve.";
+        metaEl.innerText = "";
+        typeText(poemaEl, "Em breve.", 14);
         return;
       }
 
       if(diaAtual >= 1 && diaAtual <= 365){
         titulo.innerText = `Dia ${diaAtual} de 365`;
         metaEl.innerText = "Um poema por dia.";
-        poemaEl.innerText =
+
+        const texto =
           (typeof poemas !== "undefined" && poemas[diaAtual - 1])
             ? poemas[diaAtual - 1]
             : "Em breve...";
+
+        typeText(poemaEl, texto, 12);
+        return;
       }
+
+      titulo.innerText = "365 dias com você";
+      metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
+      typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
     }
 
     function iniciarExperiencia(){
