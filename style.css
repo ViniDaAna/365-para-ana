@@ -6,9 +6,15 @@
   --panel:rgba(20,20,22,.85);
   --text:#f1e9dc;
   --muted:rgba(241,233,220,.65);
+
+  /* ATO 1 (dourado suave) */
   --line:rgba(212,175,55,.18);
   --border:rgba(212,175,55,.25);
   --accent:#d4af37;
+
+  /* extras */
+  --extraBg: rgba(0,0,0,.22);
+  --extraBorder: rgba(212,175,55,.18);
 }
 
 /* Base */
@@ -167,6 +173,32 @@ button:active{
   transform:translateY(0);
 }
 
+/* ===== Extra (Memória / Carta) ===== */
+.extra{
+  margin: 18px auto 0;
+  width: min(56ch, 100%);
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--extraBorder);
+  background: var(--extraBg);
+  text-align: left;
+}
+
+.extraTag{
+  font-size: 13px;
+  letter-spacing: .8px;
+  color: rgba(241,233,220,.58);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.extraTexto{
+  font-size: 16px;
+  line-height: 1.85;
+  color: rgba(241,233,220,.90);
+  white-space: pre-wrap;
+}
+
 /* ===== Toast flutuante ===== */
 .toast{
   position: fixed;
@@ -197,9 +229,47 @@ button:active{
   transform: translateX(-50%) translateY(0);
 }
 
-/* Futuro: temas por ato */
-body[data-ato="2"]{}
-body[data-ato="3"]{}
-body[data-ato="4"]{}
-body[data-ato="5"]{}
-body[data-ato="6"]{}
+/* ============================
+   TEMAS POR ATO (auto via data-ato)
+   Ato 1 já é o default
+============================ */
+
+/* ATO 2 — Conexão (âmbar suave) */
+body[data-ato="2"]{
+  --line: rgba(224,180,90,.16);
+  --border: rgba(224,180,90,.24);
+  --accent: #e0b45a;
+  --extraBorder: rgba(224,180,90,.16);
+}
+
+/* ATO 3 — Fogo (bordô discreto) */
+body[data-ato="3"]{
+  --line: rgba(140,40,55,.20);
+  --border: rgba(140,40,55,.28);
+  --accent: #8c2837;
+  --extraBorder: rgba(140,40,55,.20);
+}
+
+/* ATO 4 — Crescimento (neutro + dourado refinado) */
+body[data-ato="4"]{
+  --line: rgba(200,180,120,.14);
+  --border: rgba(200,180,120,.22);
+  --accent: #c8b478;
+  --extraBorder: rgba(200,180,120,.14);
+}
+
+/* ATO 5 — Raiz (mais suave, casa/paz) */
+body[data-ato="5"]{
+  --line: rgba(185,175,150,.14);
+  --border: rgba(185,175,150,.22);
+  --accent: #b9af96;
+  --extraBorder: rgba(185,175,150,.14);
+}
+
+/* ATO 6 — Recomeço (dourado mais luminoso) */
+body[data-ato="6"]{
+  --line: rgba(230,200,110,.18);
+  --border: rgba(230,200,110,.26);
+  --accent: #e6c86e;
+  --extraBorder: rgba(230,200,110,.18);
+}
