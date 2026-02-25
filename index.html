@@ -11,6 +11,7 @@
 
 <body>
 
+  <!-- LOGIN -->
   <div class="container" id="login">
     <div class="corner-date" id="cornerDateLogin"></div>
 
@@ -20,11 +21,12 @@
 
     <input type="password" id="senha" placeholder="Senha" />
     <br />
-    <button onclick="verificarSenha()">Entrar</button>
+    <button type="button" onclick="verificarSenha()">Entrar</button>
 
     <div class="meta">Dica: o dia em que a gente virou “nós”.</div>
   </div>
 
+  <!-- TELA PRINCIPAL -->
   <div class="container hidden" id="conteudo">
     <div class="corner-date" id="cornerDate"></div>
 
@@ -33,19 +35,25 @@
     <h2 id="tituloDia" class="title"></h2>
     <div class="thin-line"></div>
 
-    <!-- Começa SEM show: a gente aplica show com transição -->
     <div id="blocoTexto" class="fade">
+
+      <!-- INTRODUÇÃO DE ATO (só em 31, 91, 151, 241, 331) -->
+      <div id="introAtoBox" class="extra hidden">
+        <div class="extraTag" id="introAtoTag">Novo Ato</div>
+        <div class="extraTexto" id="introAtoTexto"></div>
+        <button class="btnIntro" id="btnContinuarAto" type="button">Continuar</button>
+      </div>
+
+      <!-- POEMA -->
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
 
-      <!-- EXTRA: Memória (dia 30/60/90...) ou Carta (dia 365) -->
-      <div id="extraBox" class="extra hidden">
-        <div class="extraTag" id="extraTag"></div>
-        <div class="extraTexto" id="extraTexto"></div>
-      </div>
     </div>
 
-    <button onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
+    <div class="btnRow">
+      <button id="btnAnteriores" type="button" onclick="abrirArquivo()">Poemas anteriores</button>
+      <button type="button" onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
+    </div>
 
     <div id="saudade" class="saudade hidden">
       Se você sentiu saudade, é porque o que temos é real.
@@ -55,7 +63,29 @@
     <div class="assinatura">Entre nós dois.</div>
   </div>
 
-  <!-- Toast flutuante -->
+  <!-- TELA ARQUIVO (POEMAS ANTERIORES) -->
+  <div class="container hidden paper" id="arquivo">
+    <div class="corner-date" id="cornerDateArquivo"></div>
+
+    <div class="topBar">
+      <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar</button>
+
+      <div class="topBarTitle">
+        <div class="titleSmall">Poemas anteriores</div>
+        <div class="metaSmall" id="arquivoSub">—</div>
+      </div>
+
+      <div style="width:72px;"></div>
+    </div>
+
+    <div class="thin-line" style="margin-top:18px;"></div>
+
+    <div id="listaArquivo" class="arquivoLista"></div>
+
+    <div class="assinatura" style="margin-top:20px;">Entre nós dois.</div>
+  </div>
+
+  <!-- Toast -->
   <div id="toastSegredo" class="toast hidden" aria-live="polite"></div>
 
   <script src="poemas.js"></script>
@@ -63,6 +93,58 @@
   <script>
     const senhaCorreta = "10022024";
     const dataInicio = new Date("2026-02-24T00:00:00");
+
+    let DIA_ATUAL = 1;
+    let DIA_EM_TELA = 1;
+
+    // Introduções de virada (aparecem ANTES do poema, e só liberam após clique)
+    const INTRO_ATOS = {
+      31: {
+        tag: "Ato 2 — Conexão",
+        texto:
+`Agora a gente se permite chegar mais perto.
+Menos defesa.
+Mais verdade.
+
+Se o Ato 1 foi escolha,
+o Ato 2 é presença.`
+      },
+      91: {
+        tag: "Ato 3 — Fogo",
+        texto:
+`A intensidade não é pressa.
+É entrega consciente.
+
+Aqui, o desejo aparece
+com elegância — e coragem.`
+      },
+      151: {
+        tag: "Ato 4 — Crescimento",
+        texto:
+`O amor amadurece quando escolhe evoluir.
+
+Não é sobre sentir mais.
+É sobre cuidar melhor.`
+      },
+      241: {
+        tag: "Ato 5 — Raiz",
+        texto:
+`Agora não é só sentir.
+É pertencer.
+
+O que era promessa
+vira casa.`
+      },
+      331: {
+        tag: "Ato 6 — Recomeço",
+        texto:
+`Escolher de novo
+é a forma mais madura de amar.
+
+O fim não fecha.
+Ele renova.`
+      }
+    };
 
     const segredos = [
       "Eu ainda estou aqui.",
@@ -82,23 +164,26 @@
       "Não precisa de nada grandioso. Só de você aqui."
     ];
 
-    // ===== UI helpers =====
+    // ===== util =====
 
-    function verificarSenha(){
-      const senha = document.getElementById("senha").value;
-      if(senha === senhaCorreta){
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("conteudo").classList.remove("hidden");
-
-        setCornerDates();
-        iniciarExperiencia();
-      } else {
-        alert("Senha incorreta.");
-      }
+    function diffDias(){
+      const hoje = new Date();
+      const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+      const I = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
+      return Math.floor((H - I) / (1000*60*60*24));
     }
 
-    function mostrarSaudade(){
-      document.getElementById("saudade").classList.toggle("hidden");
+    function getAto(dia){
+      if(dia >= 1 && dia <= 30) return 1;
+      if(dia >= 31 && dia <= 90) return 2;
+      if(dia >= 91 && dia <= 150) return 3;
+      if(dia >= 151 && dia <= 240) return 4;
+      if(dia >= 241 && dia <= 330) return 5;
+      return 6;
+    }
+
+    function setTemaPorAto(dia){
+      document.body.setAttribute("data-ato", String(getAto(dia)));
     }
 
     function setCornerDates(){
@@ -107,8 +192,10 @@
       const mm = String(agora.getMonth()+1).padStart(2,'0');
       const yyyy = agora.getFullYear();
       const data = `${dd}/${mm}/${yyyy}`;
+
       document.getElementById("cornerDateLogin").innerText = data;
       document.getElementById("cornerDate").innerText = data;
+      document.getElementById("cornerDateArquivo").innerText = data;
     }
 
     function aplicarFrasePorHorario(){
@@ -139,15 +226,14 @@
       localStorage.setItem(key, hoje);
     }
 
-    // Transição do bloco (sempre funciona, nunca deixa invisível)
     function revelarBloco(){
       const bloco = document.getElementById("blocoTexto");
-      bloco.classList.remove("show");      // some (opacity 0)
-      void bloco.offsetWidth;              // força reflow
-      bloco.classList.add("show");         // aparece com transição
+      bloco.classList.remove("show");
+      void bloco.offsetWidth;
+      bloco.classList.add("show");
     }
 
-    // Digitação (mais elegante: um pouco mais rápida e constante)
+    // Digitação
     let typingTimer = null;
     function typeText(el, text, speed=12){
       clearTimeout(typingTimer);
@@ -164,7 +250,7 @@
       step();
     }
 
-    // ===== Toast =====
+    // ===== toast =====
 
     function pickSegredo(){
       return segredos[Math.floor(Math.random() * segredos.length)];
@@ -211,66 +297,73 @@
       reset();
     }
 
-    // ===== Conteúdo / Ato / Extras =====
+    // ===== telas =====
 
-    function diffDias(){
-      const hoje = new Date();
-      const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-      const I = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
-      return Math.floor((H - I) / (1000*60*60*24));
+    function mostrarTela(id){
+      document.getElementById("conteudo").classList.add("hidden");
+      document.getElementById("arquivo").classList.add("hidden");
+      document.getElementById(id).classList.remove("hidden");
     }
 
-    function getAto(dia){
-      // Ato 1: 1–30
-      // Ato 2: 31–90
-      // Ato 3: 91–150
-      // Ato 4: 151–240
-      // Ato 5: 241–330
-      // Ato 6: 331–365
-      if(dia >= 1 && dia <= 30) return 1;
-      if(dia >= 31 && dia <= 90) return 2;
-      if(dia >= 91 && dia <= 150) return 3;
-      if(dia >= 151 && dia <= 240) return 4;
-      if(dia >= 241 && dia <= 330) return 5;
-      return 6;
+    function mostrarSaudade(){
+      document.getElementById("saudade").classList.toggle("hidden");
     }
 
-    function setTemaPorAto(dia){
-      const ato = getAto(dia);
-      document.body.setAttribute("data-ato", String(ato));
+    // ===== intro de ato =====
+
+    function introKeyForDay(dia){
+      return `projeto365_intro_vista_${dia}`;
     }
 
-    function limparExtra(){
-      const box = document.getElementById("extraBox");
-      const tag = document.getElementById("extraTag");
-      const txt = document.getElementById("extraTexto");
-      tag.textContent = "";
-      txt.textContent = "";
+    function deveMostrarIntro(dia){
+      if(dia !== DIA_ATUAL) return false;
+      if(!INTRO_ATOS[dia]) return false;
+      return localStorage.getItem(introKeyForDay(dia)) !== "1";
+    }
+
+    function marcarIntroComoVista(dia){
+      localStorage.setItem(introKeyForDay(dia), "1");
+    }
+
+    function esconderIntro(){
+      const box = document.getElementById("introAtoBox");
       box.classList.add("hidden");
+      document.getElementById("introAtoTexto").textContent = "";
     }
 
-    function mostrarExtra(tagText, bodyText){
-      const box = document.getElementById("extraBox");
-      const tag = document.getElementById("extraTag");
-      const txt = document.getElementById("extraTexto");
-      tag.textContent = tagText;
-      txt.textContent = bodyText;
+    function mostrarIntro(dia){
+      const info = INTRO_ATOS[dia];
+      const box = document.getElementById("introAtoBox");
+      const tag = document.getElementById("introAtoTag");
+      const txt = document.getElementById("introAtoTexto");
+      const btn = document.getElementById("btnContinuarAto");
+
+      tag.textContent = info.tag;
+      txt.textContent = info.texto;
+
       box.classList.remove("hidden");
+
+      btn.onclick = () => {
+        marcarIntroComoVista(dia);
+        esconderIntro();
+        carregarPoemaNaTela(dia);
+      };
     }
 
-    function carregarConteudo(){
-      const d = diffDias();
-      const diaAtual = d + 1;
+    // ===== render principal =====
+
+    function carregarPoemaNaTela(dia){
+      DIA_EM_TELA = dia;
 
       const titulo = document.getElementById("tituloDia");
       const poemaEl = document.getElementById("poema");
       const metaEl = document.getElementById("meta");
 
       revelarBloco();
-      limparExtra();
+      setTemaPorAto(dia);
 
-      // Antes do início
-      if(d < 0){
+      // antes do início
+      if(dia <= 0){
         document.body.removeAttribute("data-ato");
         titulo.innerText = "Antes do primeiro poema";
         metaEl.innerText = "";
@@ -279,57 +372,127 @@
         return;
       }
 
-      // Dentro do período 1..365
-      if(diaAtual >= 1 && diaAtual <= 365){
-        setTemaPorAto(diaAtual);
-
-        // Carta final (dia 365)
-        if(typeof isFinalLetterDay === "function" && isFinalLetterDay(diaAtual)){
-          titulo.innerText = "Dia 365 de 365";
-          metaEl.innerText = "A carta que fecha — e recomeça.";
-          const carta = (typeof CARTA_FINAL !== "undefined" && CARTA_FINAL) ? CARTA_FINAL : "Em breve...";
-          typeText(poemaEl, carta, 12);
-          return;
-        }
-
-        // Poema do dia
-        titulo.innerText = `Dia ${diaAtual} de 365`;
-        metaEl.innerText = "Um poema por dia.";
-
-        const texto =
-          (typeof getPoemaDoDia === "function")
-            ? getPoemaDoDia(diaAtual)
-            : ((typeof poemas !== "undefined" && poemas[diaAtual - 1]) ? poemas[diaAtual - 1] : "Em breve...");
-
-        typeText(poemaEl, texto, 12);
-
-        // Memória (dias 30/60/90/...)
-        if(typeof isMemoryDay === "function" && isMemoryDay(diaAtual)){
-          const memoria = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(diaAtual) : "";
-          if(memoria && memoria.trim()){
-            mostrarExtra("Memória desbloqueável", memoria);
-          } else {
-            mostrarExtra("Memória desbloqueável", "Ainda não escrita.");
-          }
-        }
-
+      // pós 365
+      if(dia > 365){
+        titulo.innerText = "365 dias com você";
+        metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
+        typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
         return;
       }
 
-      // Pós 365
-      document.body.setAttribute("data-ato", "6");
-      titulo.innerText = "365 dias com você";
-      metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
-      typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
+      // carta
+      if(typeof isFinalLetterDay === "function" && isFinalLetterDay(dia)){
+        titulo.innerText = "Dia 365 de 365";
+        metaEl.innerText = "A carta que fecha — e recomeça.";
+        const carta = (typeof CARTA_FINAL !== "undefined" && CARTA_FINAL) ? CARTA_FINAL : "Em breve...";
+        typeText(poemaEl, carta, 12);
+        return;
+      }
+
+      // poema normal
+      titulo.innerText = `Dia ${dia} de 365`;
+      metaEl.innerText = "Um poema por dia.";
+
+      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "Em breve...";
+      typeText(poemaEl, texto, 12);
     }
 
-    function iniciarExperiencia(){
+    function carregarHoje(){
+      const d = diffDias();
+      DIA_ATUAL = d + 1;
+
       aplicarFrasePorHorario();
       verificarRetorno();
       iniciarSegredo();
-      carregarConteudo();
+
+      const btn = document.getElementById("btnAnteriores");
+      btn.disabled = (DIA_ATUAL <= 1);
+
+      // antes do início
+      if(d < 0){
+        esconderIntro();
+        carregarPoemaNaTela(DIA_ATUAL);
+        return;
+      }
+
+      // intro de virada (só no "hoje" e só uma vez)
+      if(deveMostrarIntro(DIA_ATUAL)){
+        document.getElementById("tituloDia").innerText = `Dia ${DIA_ATUAL} de 365`;
+        document.getElementById("poema").textContent = "";
+        document.getElementById("meta").textContent = "";
+        setTemaPorAto(DIA_ATUAL);
+        mostrarIntro(DIA_ATUAL);
+        return;
+      }
+
+      esconderIntro();
+      carregarPoemaNaTela(DIA_ATUAL);
     }
 
+    // ===== arquivo =====
+
+    function primeiraLinha(texto){
+      if(!texto) return "Sem título";
+      const linha = String(texto).split("\n")[0].trim();
+      return linha || "Sem título";
+    }
+
+    function tituloParaLista(dia){
+      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "";
+      let t = primeiraLinha(texto);
+      if(t.length > 52) t = t.slice(0, 52).trim() + "…";
+      return t;
+    }
+
+    function abrirArquivo(){
+      if(DIA_ATUAL <= 1) return;
+
+      const max = DIA_ATUAL - 1; // sempre até ontem
+      document.getElementById("arquivoSub").innerText = `Disponíveis: Dias 1 a ${max}`;
+
+      const lista = document.getElementById("listaArquivo");
+      lista.innerHTML = "";
+
+      for(let d = max; d >= 1; d--){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "arquivoItem";
+        btn.innerHTML =
+          `<span class="arquivoDia">Dia ${d}</span>
+           <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
+
+        btn.onclick = () => {
+          mostrarTela("conteudo");
+          esconderIntro(); // intro só vale no dia de hoje
+          carregarPoemaNaTela(d);
+        };
+
+        lista.appendChild(btn);
+      }
+
+      mostrarTela("arquivo");
+    }
+
+    function voltarParaHoje(){
+      mostrarTela("conteudo");
+      carregarHoje();
+    }
+
+    // ===== auth =====
+
+    function verificarSenha(){
+      const senha = document.getElementById("senha").value;
+      if(senha === senhaCorreta){
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("conteudo").classList.remove("hidden");
+        setCornerDates();
+        carregarHoje();
+      } else {
+        alert("Senha incorreta.");
+      }
+    }
+
+    // init
     setCornerDates();
     setInterval(setCornerDates, 60000);
   </script>
