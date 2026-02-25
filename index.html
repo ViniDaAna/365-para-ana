@@ -37,6 +37,12 @@
     <div id="blocoTexto" class="fade">
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
+
+      <!-- EXTRA: Memória (dia 30/60/90...) ou Carta (dia 365) -->
+      <div id="extraBox" class="extra hidden">
+        <div class="extraTag" id="extraTag"></div>
+        <div class="extraTexto" id="extraTexto"></div>
+      </div>
     </div>
 
     <button onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
@@ -205,13 +211,51 @@
       reset();
     }
 
-    // ===== Conteúdo =====
+    // ===== Conteúdo / Ato / Extras =====
 
     function diffDias(){
       const hoje = new Date();
       const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
       const I = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
       return Math.floor((H - I) / (1000*60*60*24));
+    }
+
+    function getAto(dia){
+      // Ato 1: 1–30
+      // Ato 2: 31–90
+      // Ato 3: 91–150
+      // Ato 4: 151–240
+      // Ato 5: 241–330
+      // Ato 6: 331–365
+      if(dia >= 1 && dia <= 30) return 1;
+      if(dia >= 31 && dia <= 90) return 2;
+      if(dia >= 91 && dia <= 150) return 3;
+      if(dia >= 151 && dia <= 240) return 4;
+      if(dia >= 241 && dia <= 330) return 5;
+      return 6;
+    }
+
+    function setTemaPorAto(dia){
+      const ato = getAto(dia);
+      document.body.setAttribute("data-ato", String(ato));
+    }
+
+    function limparExtra(){
+      const box = document.getElementById("extraBox");
+      const tag = document.getElementById("extraTag");
+      const txt = document.getElementById("extraTexto");
+      tag.textContent = "";
+      txt.textContent = "";
+      box.classList.add("hidden");
+    }
+
+    function mostrarExtra(tagText, bodyText){
+      const box = document.getElementById("extraBox");
+      const tag = document.getElementById("extraTag");
+      const txt = document.getElementById("extraTexto");
+      tag.textContent = tagText;
+      txt.textContent = bodyText;
+      box.classList.remove("hidden");
     }
 
     function carregarConteudo(){
@@ -223,27 +267,57 @@
       const metaEl = document.getElementById("meta");
 
       revelarBloco();
+      limparExtra();
 
+      // Antes do início
       if(d < 0){
+        document.body.removeAttribute("data-ato");
         titulo.innerText = "Antes do primeiro poema";
         metaEl.innerText = "";
-        typeText(poemaEl, "Em breve.", 14);
+        const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
+        typeText(poemaEl, textoPrefacio, 14);
         return;
       }
 
+      // Dentro do período 1..365
       if(diaAtual >= 1 && diaAtual <= 365){
+        setTemaPorAto(diaAtual);
+
+        // Carta final (dia 365)
+        if(typeof isFinalLetterDay === "function" && isFinalLetterDay(diaAtual)){
+          titulo.innerText = "Dia 365 de 365";
+          metaEl.innerText = "A carta que fecha — e recomeça.";
+          const carta = (typeof CARTA_FINAL !== "undefined" && CARTA_FINAL) ? CARTA_FINAL : "Em breve...";
+          typeText(poemaEl, carta, 12);
+          return;
+        }
+
+        // Poema do dia
         titulo.innerText = `Dia ${diaAtual} de 365`;
         metaEl.innerText = "Um poema por dia.";
 
         const texto =
-          (typeof poemas !== "undefined" && poemas[diaAtual - 1])
-            ? poemas[diaAtual - 1]
-            : "Em breve...";
+          (typeof getPoemaDoDia === "function")
+            ? getPoemaDoDia(diaAtual)
+            : ((typeof poemas !== "undefined" && poemas[diaAtual - 1]) ? poemas[diaAtual - 1] : "Em breve...");
 
         typeText(poemaEl, texto, 12);
+
+        // Memória (dias 30/60/90/...)
+        if(typeof isMemoryDay === "function" && isMemoryDay(diaAtual)){
+          const memoria = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(diaAtual) : "";
+          if(memoria && memoria.trim()){
+            mostrarExtra("Memória desbloqueável", memoria);
+          } else {
+            mostrarExtra("Memória desbloqueável", "Ainda não escrita.");
+          }
+        }
+
         return;
       }
 
+      // Pós 365
+      document.body.setAttribute("data-ato", "6");
       titulo.innerText = "365 dias com você";
       metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
       typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
