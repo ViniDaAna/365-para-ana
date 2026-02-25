@@ -1,5 +1,8 @@
 // Poemas do Projeto 365
-// Dia 1 = poemas[0], Dia 2 = poemas[1]... Dia 365 = poemas[364]
+// Dia 1 = poemas[0]
+// Dia 2 = poemas[1]
+// ...
+// Dia 365 = poemas[364]
 
 const poemas = [
 
