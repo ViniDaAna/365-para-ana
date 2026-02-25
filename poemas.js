@@ -30,7 +30,6 @@ como quem diz:
 
 // Memórias desbloqueáveis — EDITAR AQUI
 // (dias 30, 60, 90, 120, 150...)
-// Você pode já deixar TODAS escritas aqui.
 const MEMORIAS = {
   30: `// MEMÓRIA — DIA 30 (editar aqui)
 Fechamento do Ato 1 (Escolha).
