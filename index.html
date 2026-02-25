@@ -28,7 +28,6 @@
   <div class="container hidden" id="conteudo">
     <div class="corner-date" id="cornerDate"></div>
 
-    <!-- Camada viva: frase contextual -->
     <div id="fraseContexto" class="meta" style="margin-top:4px;"></div>
 
     <h2 id="tituloDia" class="title"></h2>
@@ -49,7 +48,7 @@
     <div class="assinatura">Entre nós dois.</div>
   </div>
 
-  <!-- Toast do segredo (fica fora do card, flutuando) -->
+  <!-- Toast flutuante -->
   <div id="toastSegredo" class="toast hidden" aria-live="polite"></div>
 
   <script src="poemas.js"></script>
@@ -58,107 +57,23 @@
     const senhaCorreta = "10022024";
     const dataInicio = new Date("2026-02-24T00:00:00");
 
-    const prefacio = [
-      "Se você está lendo isso, então encontrou o nosso lugar.",
-      "",
-      "Eu quis que fosse simples.",
-      "Preto.",
-      "Silencioso.",
-      "Sem distração.",
-      "",
-      "Porque o que eu sinto por você não precisa de enfeite.",
-      "",
-      "A partir de 24 de fevereiro de 2026,",
-      "você vai encontrar aqui um poema por dia.",
-      "Não por obrigação.",
-      "Não por promessa vazia.",
-      "",
-      "Mas porque amar você,",
-      "pra mim,",
-      "é escolha diária.",
-      "",
-      "Nem todos os dias serão leves.",
-      "Nem todos serão calmos.",
-      "Alguns serão intensos.",
-      "Alguns mais profundos.",
-      "Alguns perigosamente sinceros.",
-      "",
-      "Mas todos terão uma coisa em comum:",
-      "eu.",
-      "",
-      "Escolhendo você.",
-      "De novo.",
-      "E de novo.",
-      "E de novo.",
-      "",
-      "Esse não é um site.",
-      "É um compromisso silencioso.",
-      "",
-      "365 dias.",
-      "365 escolhas.",
-      "",
-      "E se, no final desse ano,",
-      "eu tiver que começar tudo outra vez…",
-      "",
-      "eu começaria.",
-      "",
-      "Com você."
-    ].join("\n");
-
-    // Segredos (variam)
     const segredos = [
       "Eu ainda estou aqui.",
-      "Se você chegou até aqui, eu já ganhei o dia.",
+      "Você chegou. Eu já respirei melhor.",
+      "Esse lugar é seu também.",
+      "Eu escolho você, mesmo nos dias comuns.",
+      "Se o mundo estiver barulhento, fica aqui um pouco.",
       "Eu gosto quando você volta.",
-      "Mesmo em silêncio, eu te escolho.",
-      "Você é a parte calma do meu mundo.",
-      "Eu pensei em você sem perceber.",
-      "Se você sentir isso também… fica.",
-      "Esse lugar é só nosso.",
+      "O que a gente tem merece cuidado.",
+      "Eu não tenho pressa. Eu tenho certeza.",
+      "Aqui é onde eu fico.",
+      "Eu penso em você com calma.",
+      "Mesmo em silêncio, eu continuo.",
+      "Você é a minha decisão tranquila.",
+      "Se você ler isso, é porque existe nós.",
       "Eu guardo você nas coisas pequenas.",
-      "Eu não disse tudo. Um dia eu digo."
+      "Não precisa de nada grandioso. Só de você aqui."
     ];
-
-    function formatarDataCurta(d){
-      const dd = String(d.getDate()).padStart(2,'0');
-      const mm = String(d.getMonth()+1).padStart(2,'0');
-      const yyyy = d.getFullYear();
-      return `${dd}/${mm}/${yyyy}`;
-    }
-
-    function diffDias(hoje, inicio){
-      const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-      const I = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate());
-      return Math.floor((H - I) / (1000*60*60*24));
-    }
-
-    function setCornerDates(){
-      const agora = new Date();
-      document.getElementById("cornerDateLogin").innerText = formatarDataCurta(agora);
-      document.getElementById("cornerDate").innerText = formatarDataCurta(agora);
-    }
-
-    let typingTimer = null;
-    function typeText(el, text, speed=18){
-      clearTimeout(typingTimer);
-      el.textContent = "";
-      let i = 0;
-      function step(){
-        el.textContent = text.slice(0, i);
-        i++;
-        if(i <= text.length){
-          typingTimer = setTimeout(step, speed);
-        }
-      }
-      step();
-    }
-
-    function mostrarBlocoComTransicao(){
-      const bloco = document.getElementById("blocoTexto");
-      bloco.classList.remove("show");
-      void bloco.offsetWidth;
-      bloco.classList.add("show");
-    }
 
     function verificarSenha(){
       const senha = document.getElementById("senha").value;
@@ -177,46 +92,51 @@
       document.getElementById("saudade").classList.toggle("hidden");
     }
 
-    // ===== Camada viva =====
+    function setCornerDates(){
+      const agora = new Date();
+      const dd = String(agora.getDate()).padStart(2,'0');
+      const mm = String(agora.getMonth()+1).padStart(2,'0');
+      const yyyy = agora.getFullYear();
+      const data = `${dd}/${mm}/${yyyy}`;
+      document.getElementById("cornerDateLogin").innerText = data;
+      document.getElementById("cornerDate").innerText = data;
+    }
 
     function aplicarFrasePorHorario(){
-      const agora = new Date();
-      const hora = agora.getHours();
-      const fraseEl = document.getElementById("fraseContexto");
+      const hora = new Date().getHours();
+      const el = document.getElementById("fraseContexto");
 
       if(hora >= 5 && hora < 12){
-        fraseEl.innerText = "Que seu dia seja leve. Eu já escolhi você hoje.";
+        el.innerText = "Que seu dia seja leve. Eu já escolhi você hoje.";
       } else if(hora >= 12 && hora < 18){
-        fraseEl.innerText = "No meio do seu dia, eu ainda penso em você.";
+        el.innerText = "No meio do seu dia, eu ainda penso em você.";
       } else if(hora >= 18 && hora < 23){
-        fraseEl.innerText = "Eu gosto quando você vem aqui no fim do dia.";
+        el.innerText = "Eu gosto quando você vem aqui no fim do dia.";
       } else {
-        fraseEl.innerText = "Eu gosto quando você aparece antes de dormir.";
+        el.innerText = "Eu gosto quando você aparece antes de dormir.";
       }
     }
 
-    function verificarRetornoNoMesmoDia(){
-      const key = "projeto365_ultimaVisita";
-      const hojeKey = new Date().toDateString();
+    function verificarRetorno(){
+      const hoje = new Date().toDateString();
+      const key = "projeto365_visita";
       const ultima = localStorage.getItem(key);
 
-      if(ultima === hojeKey){
-        const fraseEl = document.getElementById("fraseContexto");
-        fraseEl.innerText = fraseEl.innerText + " Você voltou. Eu gosto disso.";
+      if(ultima === hoje){
+        const el = document.getElementById("fraseContexto");
+        el.innerText += " Você voltou. Eu gosto disso.";
       }
 
-      localStorage.setItem(key, hojeKey);
+      localStorage.setItem(key, hoje);
     }
 
     function pickSegredo(){
-      const i = Math.floor(Math.random() * segredos.length);
-      return segredos[i];
+      return segredos[Math.floor(Math.random() * segredos.length)];
     }
 
     function mostrarToast(texto){
       const toast = document.getElementById("toastSegredo");
       toast.textContent = texto;
-
       toast.classList.remove("hidden");
       toast.classList.remove("show");
       void toast.offsetWidth;
@@ -226,78 +146,70 @@
       window.__toastTimer = setTimeout(() => {
         toast.classList.remove("show");
         setTimeout(() => toast.classList.add("hidden"), 250);
-      }, 4200);
+      }, 4000);
     }
 
-    function iniciarSegredoPorSilencio(){
-      const cooldownKey = "projeto365_toastCooldown";
-      const cooldownMs = 2 * 60 * 60 * 1000; // 2 horas
-      let timer = null;
+    function iniciarSegredo(){
+      const cooldownKey = "projeto365_toast";
+      const cooldownMs = 2 * 60 * 60 * 1000; // 2h
+      let timer;
 
       function reset(){
         clearTimeout(timer);
         timer = setTimeout(() => {
           const last = Number(localStorage.getItem(cooldownKey) || 0);
           const now = Date.now();
-
-          if(now - last >= cooldownMs){
-            localStorage.setItem(cooldownKey, String(now));
+          if(now - last > cooldownMs){
+            localStorage.setItem(cooldownKey, now);
             mostrarToast(pickSegredo());
           }
-        }, 10000); // 10s parado
+        }, 10000);
       }
 
-      // Mobile-friendly: toque/scroll também reseta
-      window.addEventListener("mousemove", reset, { passive:true });
+      window.addEventListener("mousemove", reset, {passive:true});
       window.addEventListener("keydown", reset);
-      window.addEventListener("touchstart", reset, { passive:true });
-      window.addEventListener("scroll", reset, { passive:true });
+      window.addEventListener("touchstart", reset, {passive:true});
+      window.addEventListener("scroll", reset, {passive:true});
 
       reset();
     }
 
-    function iniciarExperiencia(){
-      aplicarFrasePorHorario();
-      verificarRetornoNoMesmoDia();
-      iniciarSegredoPorSilencio();
-      carregarConteudo();
+    function diffDias(){
+      const hoje = new Date();
+      const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+      const I = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
+      return Math.floor((H - I) / (1000*60*60*24));
     }
 
     function carregarConteudo(){
-      const hoje = new Date();
-      const d = diffDias(hoje, dataInicio);
+      const d = diffDias();
       const diaAtual = d + 1;
 
       const titulo = document.getElementById("tituloDia");
       const poemaEl = document.getElementById("poema");
       const metaEl = document.getElementById("meta");
 
-      mostrarBlocoComTransicao();
-
       if(d < 0){
-        const faltam = Math.abs(d);
         titulo.innerText = "Antes do primeiro poema";
-        metaEl.innerText = `Faltam ${faltam} dia(s) para começar — em ${formatarDataCurta(dataInicio)}.`;
-        typeText(poemaEl, prefacio, 14);
+        poemaEl.innerText = "Em breve.";
         return;
       }
 
       if(diaAtual >= 1 && diaAtual <= 365){
         titulo.innerText = `Dia ${diaAtual} de 365`;
-        metaEl.innerText = `Um poema por dia. Começou em ${formatarDataCurta(dataInicio)}.`;
-
-        const texto =
+        metaEl.innerText = "Um poema por dia.";
+        poemaEl.innerText =
           (typeof poemas !== "undefined" && poemas[diaAtual - 1])
             ? poemas[diaAtual - 1]
             : "Em breve...";
-
-        typeText(poemaEl, texto, 18);
-        return;
       }
+    }
 
-      titulo.innerText = "365 dias com você";
-      metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
-      typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 18);
+    function iniciarExperiencia(){
+      aplicarFrasePorHorario();
+      verificarRetorno();
+      iniciarSegredo();
+      carregarConteudo();
     }
 
     setCornerDates();
