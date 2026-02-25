@@ -1,8 +1,55 @@
-// Poemas do Projeto 365
+// ==============================
+// Projeto 365 — Poemas / Memórias / Carta
 // Dia 1 = poemas[0]
 // Dia 2 = poemas[1]
 // ...
 // Dia 365 = poemas[364]
+// ==============================
+
+// Prefácio (antes do início)
+const PREFACIO = `Antes do primeiro dia, existe a intenção.
+Não é pressa — é constância.
+
+Um poema por dia.
+Um jeito calmo de dizer:
+“eu escolhi ficar.”`;
+
+// Config de memórias/carta
+const MEMORY_INTERVAL = 30;   // 30, 60, 90...
+const FINAL_LETTER_DAY = 365;
+
+// Carta final (Dia 365) — EDITAR AQUI
+const CARTA_FINAL = `// CARTA FINAL — DIA 365 (editar aqui)
+
+Escreve aqui a carta final.
+Ela aparece somente no dia 365.
+
+Fecha o ciclo sem parecer adeus —
+como quem diz:
+“eu escolheria de novo.”`;
+
+// Memórias desbloqueáveis — EDITAR AQUI
+// (dias 30, 60, 90, 120, 150...)
+// Você pode já deixar TODAS escritas aqui.
+const MEMORIAS = {
+  30: `// MEMÓRIA — DIA 30 (editar aqui)
+Fechamento do Ato 1 (Escolha).
+Marca a transição para a Conexão.`,
+  60: `// MEMÓRIA — DIA 60 (editar aqui)`,
+  90: `// MEMÓRIA — DIA 90 (editar aqui)`,
+  120:`// MEMÓRIA — DIA 120 (editar aqui)`,
+  150:`// MEMÓRIA — DIA 150 (editar aqui)`,
+  // 180:`...`,
+  // 210:`...`,
+  // 240:`...`,
+  // 270:`...`,
+  // 300:`...`,
+  // 330:`...`,
+};
+
+// ==============================
+// SEUS POEMAS (1–30)
+// ==============================
 
 const poemas = [
 
@@ -386,3 +433,38 @@ não é impulso.
 É decisão renovada.`
 
 ];
+
+// ==============================
+// Completa 365 (placeholders)
+// ==============================
+(function preencherAte365(){
+  for(let i = poemas.length; i < 365; i++){
+    poemas[i] =
+`Dia ${i + 1}
+
+(Em branco por enquanto)
+
+Se você está vendo isso, é porque esse poema ainda não foi escrito no poemas.js.`;
+  }
+})();
+
+// ==============================
+// Funções usadas pelo index.html
+// ==============================
+
+function isMemoryDay(dia){
+  return dia > 0 && dia % MEMORY_INTERVAL === 0 && dia !== FINAL_LETTER_DAY;
+}
+
+function isFinalLetterDay(dia){
+  return dia === FINAL_LETTER_DAY;
+}
+
+function getPoemaDoDia(dia){
+  if(dia < 1 || dia > 365) return "Em breve...";
+  return poemas[dia - 1] || "Em breve...";
+}
+
+function getMemoriaDoDia(dia){
+  return MEMORIAS[dia] || "";
+}
