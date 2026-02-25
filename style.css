@@ -61,7 +61,7 @@ body{
 
 .hidden{ display:none; }
 
-/* ===== MODO ARQUIVO: aplica folha no MESMO container (#conteudo) ===== */
+/* ===== MODO ARQUIVO (folha) ===== */
 body.modo-arquivo #conteudo{
   background: none !important;
   background-color: var(--paperBase) !important;
@@ -85,7 +85,7 @@ body.modo-arquivo #conteudo{
   background-blend-mode: screen, screen, screen, normal, normal;
 }
 
-/* ===== EFEITO “FOLHEAR” (overlay) ===== */
+/* ===== EFEITO “FOLHEAR” ===== */
 #conteudo::before{
   content:"";
   position:absolute;
@@ -123,22 +123,18 @@ body.modo-arquivo #conteudo{
   100% { transform: translateX(-105%); opacity:0; }
 }
 
-/* um micro “bump” no container (bem sutil) */
-#conteudo.pageflip-in{
-  animation: bumpIn .52s ease;
-}
-#conteudo.pageflip-out{
-  animation: bumpOut .52s ease;
-}
+/* micro bump */
+#conteudo.pageflip-in{ animation: bumpIn .52s ease; }
+#conteudo.pageflip-out{ animation: bumpOut .52s ease; }
 @keyframes bumpIn{
-  0%   { transform: translateY(0) scale(1); }
-  35%  { transform: translateY(-1px) scale(1.01); }
-  100% { transform: translateY(0) scale(1); }
+  0%{ transform: translateY(0) scale(1); }
+  35%{ transform: translateY(-1px) scale(1.01); }
+  100%{ transform: translateY(0) scale(1); }
 }
 @keyframes bumpOut{
-  0%   { transform: translateY(0) scale(1); }
-  35%  { transform: translateY(-1px) scale(1.01); }
-  100% { transform: translateY(0) scale(1); }
+  0%{ transform: translateY(0) scale(1); }
+  35%{ transform: translateY(-1px) scale(1.01); }
+  100%{ transform: translateY(0) scale(1); }
 }
 
 /* Títulos */
@@ -211,9 +207,7 @@ button:hover{
   transform:translateY(-2px);
 }
 
-button:active{
-  transform:translateY(0);
-}
+button:active{ transform:translateY(0); }
 
 button:disabled{
   opacity:.45;
@@ -301,67 +295,7 @@ button:disabled{
   width: 100%;
 }
 
-/* ===== Memória ===== */
-.memoriaBox{
-  margin: 10px auto 0;
-  width: min(56ch, 100%);
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  text-align: left;
-}
-
-.memoriaHeader{
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.memoriaTag{
-  font-size: 13px;
-  letter-spacing: .8px;
-  color: rgba(241,233,220,.62);
-  text-transform: uppercase;
-}
-
-.memoriaDia{
-  font-size: 13px;
-  letter-spacing: .6px;
-  color: rgba(241,233,220,.45);
-}
-
-.memoriaPreview{
-  font-size: 16px;
-  line-height: 1.8;
-  color: rgba(241,233,220,.92);
-  white-space: pre-wrap;
-}
-
-.memoriaBtns{
-  display:flex;
-  gap: 10px;
-  flex-wrap:wrap;
-  margin-top: 10px;
-}
-
-.memoriaBtns button{
-  margin-top: 0;
-}
-
-.memoriaTexto{
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,.10);
-  font-size: 18px;
-  line-height: 1.95;
-  color: rgba(241,233,220,.95);
-  white-space: pre-wrap;
-}
-
-/* Arquivo dentro do conteúdo */
+/* Arquivos (poemas/memórias) */
 .arquivoBox{
   margin-top: 10px;
 }
@@ -438,6 +372,59 @@ button:disabled{
   font-size: 16px;
   color: rgba(241,233,220,.94);
   letter-spacing: .4px;
+}
+
+/* Memórias: cadeado */
+.lockIcon{
+  font-size: 16px;
+  width: 22px;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  opacity: .95;
+}
+
+/* Viewer de memória */
+.memoriaViewer{
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  text-align: left;
+}
+
+.memoriaViewerHeader{
+  display:flex;
+  justify-content:space-between;
+  gap: 12px;
+  align-items:baseline;
+  margin-bottom: 10px;
+}
+
+.memoriaViewerTitle{
+  color: rgba(241,233,220,.95);
+  letter-spacing: .6px;
+  font-size: 18px;
+}
+
+.memoriaViewerMeta{
+  color: rgba(241,233,220,.55);
+  font-size: 13px;
+  letter-spacing: .4px;
+}
+
+.memoriaViewerTexto{
+  white-space: pre-wrap;
+  color: rgba(241,233,220,.95);
+  font-size: 18px;
+  line-height: 1.95;
+}
+
+.memoriaViewerBtns{
+  margin-top: 12px;
+  display:flex;
+  justify-content:flex-end;
 }
 
 /* Toast */
