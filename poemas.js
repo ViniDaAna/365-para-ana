@@ -383,5 +383,3 @@ não é impulso.
 É decisão renovada.`
 
 ];
-
-];
