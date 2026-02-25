@@ -97,7 +97,9 @@
     const dataInicio = new Date("2026-02-24T00:00:00");
 
     let DIA_ATUAL = 1;
+    let DIA_EM_TELA = 1;
 
+    // Introduções de virada (aparecem ANTES do poema, e só liberam após clique)
     const INTRO_ATOS = {
       31: {
         tag: "Ato 2 — Conexão",
@@ -337,24 +339,46 @@ Ele renova.`
       };
     }
 
+    // ===== animação “folhear” =====
+
+    function animarFolha(direcao){
+      // direcao: "in" (entrar) ou "out" (sair)
+      const c = document.getElementById("conteudo");
+      c.classList.remove("pageflip-in", "pageflip-out");
+      void c.offsetWidth;
+      c.classList.add(direcao === "in" ? "pageflip-in" : "pageflip-out");
+
+      clearTimeout(window.__flipTimer);
+      window.__flipTimer = setTimeout(() => {
+        c.classList.remove("pageflip-in", "pageflip-out");
+      }, 520);
+    }
+
     // ===== modo arquivo (folha) =====
 
     function entrarModoArquivo(){
       document.body.classList.add("modo-arquivo");
+
       document.getElementById("arquivoBox").classList.remove("hidden");
       document.getElementById("botoesNormal").classList.add("hidden");
       document.getElementById("botoesArquivo").classList.remove("hidden");
       document.getElementById("saudade").classList.add("hidden");
 
-      // limpa o poema enquanto está no arquivo (fica só lista)
+      // limpa poeminha enquanto está no arquivo
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
 
       document.getElementById("tituloTopo").innerText = "Arquivo";
+
+      animarFolha("in");
     }
 
     function sairModoArquivo(){
+      if(document.body.classList.contains("modo-arquivo")){
+        animarFolha("out");
+      }
+
       document.body.classList.remove("modo-arquivo");
       document.getElementById("arquivoBox").classList.add("hidden");
       document.getElementById("botoesNormal").classList.remove("hidden");
@@ -364,6 +388,8 @@ Ele renova.`
     // ===== render =====
 
     function carregarPoema(dia){
+      DIA_EM_TELA = dia;
+
       const tituloTopo = document.getElementById("tituloTopo");
       const poemaEl = document.getElementById("poema");
       const metaEl = document.getElementById("meta");
@@ -417,7 +443,7 @@ Ele renova.`
       const btn = document.getElementById("btnAnteriores");
       btn.disabled = (DIA_ATUAL <= 1);
 
-      // se estava no modo arquivo e voltou
+      // garante que sai do arquivo
       sairModoArquivo();
 
       // antes do início
@@ -474,11 +500,8 @@ Ele renova.`
            <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
 
         btn.onclick = () => {
-          // ao escolher, sai do modo arquivo e mostra o poema escolhido
+          // escolheu um poema antigo -> sai do modo arquivo e mostra o dia escolhido
           sairModoArquivo();
-          document.getElementById("botoesNormal").classList.remove("hidden");
-          document.getElementById("botoesArquivo").classList.add("hidden");
-          document.getElementById("tituloTopo").innerText = `Dia ${d} de 365`;
           esconderIntro();
           carregarPoema(d);
         };
@@ -486,6 +509,8 @@ Ele renova.`
         lista.appendChild(btn);
       }
 
+      // tema do arquivo fica no ato do dia atual (fica consistente)
+      setTemaPorAto(DIA_ATUAL);
       entrarModoArquivo();
     }
 
