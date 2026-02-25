@@ -301,6 +301,66 @@ button:disabled{
   width: 100%;
 }
 
+/* ===== Memória ===== */
+.memoriaBox{
+  margin: 10px auto 0;
+  width: min(56ch, 100%);
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  text-align: left;
+}
+
+.memoriaHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.memoriaTag{
+  font-size: 13px;
+  letter-spacing: .8px;
+  color: rgba(241,233,220,.62);
+  text-transform: uppercase;
+}
+
+.memoriaDia{
+  font-size: 13px;
+  letter-spacing: .6px;
+  color: rgba(241,233,220,.45);
+}
+
+.memoriaPreview{
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(241,233,220,.92);
+  white-space: pre-wrap;
+}
+
+.memoriaBtns{
+  display:flex;
+  gap: 10px;
+  flex-wrap:wrap;
+  margin-top: 10px;
+}
+
+.memoriaBtns button{
+  margin-top: 0;
+}
+
+.memoriaTexto{
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.10);
+  font-size: 18px;
+  line-height: 1.95;
+  color: rgba(241,233,220,.95);
+  white-space: pre-wrap;
+}
+
 /* Arquivo dentro do conteúdo */
 .arquivoBox{
   margin-top: 10px;
