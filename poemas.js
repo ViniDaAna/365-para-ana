@@ -1,7 +1,6 @@
 // ==============================
 // Projeto 365 — Poemas / Memórias / Carta
 // Dia 1 = poemas[0]
-// Dia 2 = poemas[1]
 // ...
 // Dia 365 = poemas[364]
 // ==============================
@@ -31,50 +30,44 @@ como quem diz:
 // Memórias desbloqueáveis — EDITAR AQUI
 // (dias 30, 60, 90, 120, 150...)
 const MEMORIAS = {
-  30: `Eu escolhi ficar.
+  30: `Naquele dia eu decidi.
 
-Trinta dias.
+Eu preciso te contar uma coisa.
 
-Poderia ter sido só uma ideia bonita.
-Mas não foi.
+O Projeto 365 não nasceu num dia perfeito.
+Nasceu num dia comum. Um daqueles dias em que a cabeça fica cheia e o peito fica meio silencioso.
 
-Foi escolha.
+Eu tava pensando em você — do jeito que a gente pensa quando a pessoa já mora na gente, sem pedir licença.
+E eu me peguei com medo.
 
-Escolha acordar e escrever.
-Escolha sentir.
-Escolha permanecer.
+Medo de deixar o tempo levar o que eu sinto.
+Medo de amar e não saber mostrar direito.
+Medo de você não enxergar o tamanho do que eu guardo.
 
-Eu poderia ter feito algo simples.
-Mas eu quis fazer algo eterno.
+Aí eu pensei: “eu preciso criar um jeito de te provar constância.”
+Não com promessa. Com presença.
 
-Porque você não é um impulso.
+E foi aí que a ideia apareceu:
+um lugar só nosso. Escuro, elegante, simples… como se fosse um arquivo secreto.
+E dentro, uma coisa que ninguém consegue fingir por muito tempo:
 
-Você é decisão.
+todo dia, eu estar aqui.
 
-E antes de qualquer conexão profunda,
-antes de qualquer entrega,
+Não pra te prender.
+Pra te lembrar.
 
-eu precisava que você soubesse disso:
-
-Eu escolhi você.
-
-Com consciência.
-Com intenção.
-Com verdade.
-
-E eu continuaria escolhendo.
-
-Mesmo se ninguém estivesse vendo.`,
-  60: `// MEMÓRIA — DIA 60 (editar aqui)`,
-  90: `// MEMÓRIA — DIA 90 (editar aqui)`,
-  120:`// MEMÓRIA — DIA 120 (editar aqui)`,
-  150:`// MEMÓRIA — DIA 150 (editar aqui)`,
-  // 180:`...`,
-  // 210:`...`,
-  // 240:`...`,
-  // 270:`...`,
-  // 300:`...`,
-  // 330:`...`,
+Que eu escolhi você.
+E que eu vou continuar escolhendo.`,
+  60: `Em breve...`,
+  90: `Em breve...`,
+  120:`Em breve...`,
+  150:`Em breve...`,
+  180:`Em breve...`,
+  210:`Em breve...`,
+  240:`Em breve...`,
+  270:`Em breve...`,
+  300:`Em breve...`,
+  330:`Em breve...`,
 };
 
 // ==============================
