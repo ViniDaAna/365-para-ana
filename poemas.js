@@ -31,9 +31,40 @@ como quem diz:
 // Memórias desbloqueáveis — EDITAR AQUI
 // (dias 30, 60, 90, 120, 150...)
 const MEMORIAS = {
-  30: `// MEMÓRIA — DIA 30 (editar aqui)
-Fechamento do Ato 1 (Escolha).
-Marca a transição para a Conexão.`,
+  30: `Eu escolhi ficar.
+
+Trinta dias.
+
+Poderia ter sido só uma ideia bonita.
+Mas não foi.
+
+Foi escolha.
+
+Escolha acordar e escrever.
+Escolha sentir.
+Escolha permanecer.
+
+Eu poderia ter feito algo simples.
+Mas eu quis fazer algo eterno.
+
+Porque você não é um impulso.
+
+Você é decisão.
+
+E antes de qualquer conexão profunda,
+antes de qualquer entrega,
+
+eu precisava que você soubesse disso:
+
+Eu escolhi você.
+
+Com consciência.
+Com intenção.
+Com verdade.
+
+E eu continuaria escolhendo.
+
+Mesmo se ninguém estivesse vendo.`,
   60: `// MEMÓRIA — DIA 60 (editar aqui)`,
   90: `// MEMÓRIA — DIA 90 (editar aqui)`,
   120:`// MEMÓRIA — DIA 120 (editar aqui)`,
