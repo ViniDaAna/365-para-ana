@@ -26,18 +26,18 @@
     <div class="meta">Dica: o dia em que a gente virou “nós”.</div>
   </div>
 
-  <!-- TELA PRINCIPAL -->
+  <!-- CONTEÚDO (mesma tela: hoje / arquivo) -->
   <div class="container hidden" id="conteudo">
     <div class="corner-date" id="cornerDate"></div>
 
     <div id="fraseContexto" class="meta" style="margin-top:4px;"></div>
 
-    <h2 id="tituloDia" class="title"></h2>
+    <h2 id="tituloTopo" class="title"></h2>
     <div class="thin-line"></div>
 
     <div id="blocoTexto" class="fade">
 
-      <!-- INTRODUÇÃO DE ATO (só em 31, 91, 151, 241, 331) -->
+      <!-- INTRODUÇÃO DE ATO -->
       <div id="introAtoBox" class="extra hidden">
         <div class="extraTag" id="introAtoTag">Novo Ato</div>
         <div class="extraTexto" id="introAtoTexto"></div>
@@ -48,11 +48,35 @@
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
 
+      <!-- LISTA DO ARQUIVO (fica escondida no modo normal) -->
+      <div id="arquivoBox" class="arquivoBox hidden">
+        <div class="arquivoHeader">
+          <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar</button>
+
+          <div class="arquivoHeaderText">
+            <div class="titleSmall">Poemas anteriores</div>
+            <div class="metaSmall" id="arquivoSub">—</div>
+          </div>
+
+          <div style="width:72px;"></div>
+        </div>
+
+        <div class="thin-line" style="margin-top:18px;"></div>
+
+        <div id="listaArquivo" class="arquivoLista"></div>
+      </div>
+
     </div>
 
-    <div class="btnRow">
+    <!-- Botões (normal) -->
+    <div class="btnRow" id="botoesNormal">
       <button id="btnAnteriores" type="button" onclick="abrirArquivo()">Poemas anteriores</button>
       <button type="button" onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
+    </div>
+
+    <!-- Botões (modo arquivo) -->
+    <div class="btnRow hidden" id="botoesArquivo">
+      <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar para o dia de hoje</button>
     </div>
 
     <div id="saudade" class="saudade hidden">
@@ -61,28 +85,6 @@
     </div>
 
     <div class="assinatura">Entre nós dois.</div>
-  </div>
-
-  <!-- TELA ARQUIVO (POEMAS ANTERIORES) -->
-  <div class="container hidden paper" id="arquivo">
-    <div class="corner-date" id="cornerDateArquivo"></div>
-
-    <div class="topBar">
-      <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar</button>
-
-      <div class="topBarTitle">
-        <div class="titleSmall">Poemas anteriores</div>
-        <div class="metaSmall" id="arquivoSub">—</div>
-      </div>
-
-      <div style="width:72px;"></div>
-    </div>
-
-    <div class="thin-line" style="margin-top:18px;"></div>
-
-    <div id="listaArquivo" class="arquivoLista"></div>
-
-    <div class="assinatura" style="margin-top:20px;">Entre nós dois.</div>
   </div>
 
   <!-- Toast -->
@@ -95,9 +97,7 @@
     const dataInicio = new Date("2026-02-24T00:00:00");
 
     let DIA_ATUAL = 1;
-    let DIA_EM_TELA = 1;
 
-    // Introduções de virada (aparecem ANTES do poema, e só liberam após clique)
     const INTRO_ATOS = {
       31: {
         tag: "Ato 2 — Conexão",
@@ -195,7 +195,6 @@ Ele renova.`
 
       document.getElementById("cornerDateLogin").innerText = data;
       document.getElementById("cornerDate").innerText = data;
-      document.getElementById("cornerDateArquivo").innerText = data;
     }
 
     function aplicarFrasePorHorario(){
@@ -297,18 +296,6 @@ Ele renova.`
       reset();
     }
 
-    // ===== telas =====
-
-    function mostrarTela(id){
-      document.getElementById("conteudo").classList.add("hidden");
-      document.getElementById("arquivo").classList.add("hidden");
-      document.getElementById(id).classList.remove("hidden");
-    }
-
-    function mostrarSaudade(){
-      document.getElementById("saudade").classList.toggle("hidden");
-    }
-
     // ===== intro de ato =====
 
     function introKeyForDay(dia){
@@ -346,16 +333,38 @@ Ele renova.`
       btn.onclick = () => {
         marcarIntroComoVista(dia);
         esconderIntro();
-        carregarPoemaNaTela(dia);
+        carregarPoema(dia);
       };
     }
 
-    // ===== render principal =====
+    // ===== modo arquivo (folha) =====
 
-    function carregarPoemaNaTela(dia){
-      DIA_EM_TELA = dia;
+    function entrarModoArquivo(){
+      document.body.classList.add("modo-arquivo");
+      document.getElementById("arquivoBox").classList.remove("hidden");
+      document.getElementById("botoesNormal").classList.add("hidden");
+      document.getElementById("botoesArquivo").classList.remove("hidden");
+      document.getElementById("saudade").classList.add("hidden");
 
-      const titulo = document.getElementById("tituloDia");
+      // limpa o poema enquanto está no arquivo (fica só lista)
+      document.getElementById("poema").textContent = "";
+      document.getElementById("meta").textContent = "";
+      esconderIntro();
+
+      document.getElementById("tituloTopo").innerText = "Arquivo";
+    }
+
+    function sairModoArquivo(){
+      document.body.classList.remove("modo-arquivo");
+      document.getElementById("arquivoBox").classList.add("hidden");
+      document.getElementById("botoesNormal").classList.remove("hidden");
+      document.getElementById("botoesArquivo").classList.add("hidden");
+    }
+
+    // ===== render =====
+
+    function carregarPoema(dia){
+      const tituloTopo = document.getElementById("tituloTopo");
       const poemaEl = document.getElementById("poema");
       const metaEl = document.getElementById("meta");
 
@@ -365,7 +374,7 @@ Ele renova.`
       // antes do início
       if(dia <= 0){
         document.body.removeAttribute("data-ato");
-        titulo.innerText = "Antes do primeiro poema";
+        tituloTopo.innerText = "Antes do primeiro poema";
         metaEl.innerText = "";
         const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
         typeText(poemaEl, textoPrefacio, 14);
@@ -374,7 +383,7 @@ Ele renova.`
 
       // pós 365
       if(dia > 365){
-        titulo.innerText = "365 dias com você";
+        tituloTopo.innerText = "365 dias com você";
         metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
         typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
         return;
@@ -382,7 +391,7 @@ Ele renova.`
 
       // carta
       if(typeof isFinalLetterDay === "function" && isFinalLetterDay(dia)){
-        titulo.innerText = "Dia 365 de 365";
+        tituloTopo.innerText = "Dia 365 de 365";
         metaEl.innerText = "A carta que fecha — e recomeça.";
         const carta = (typeof CARTA_FINAL !== "undefined" && CARTA_FINAL) ? CARTA_FINAL : "Em breve...";
         typeText(poemaEl, carta, 12);
@@ -390,7 +399,7 @@ Ele renova.`
       }
 
       // poema normal
-      titulo.innerText = `Dia ${dia} de 365`;
+      tituloTopo.innerText = `Dia ${dia} de 365`;
       metaEl.innerText = "Um poema por dia.";
 
       const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "Em breve...";
@@ -408,16 +417,19 @@ Ele renova.`
       const btn = document.getElementById("btnAnteriores");
       btn.disabled = (DIA_ATUAL <= 1);
 
+      // se estava no modo arquivo e voltou
+      sairModoArquivo();
+
       // antes do início
       if(d < 0){
         esconderIntro();
-        carregarPoemaNaTela(DIA_ATUAL);
+        carregarPoema(DIA_ATUAL);
         return;
       }
 
-      // intro de virada (só no "hoje" e só uma vez)
+      // intro de virada
       if(deveMostrarIntro(DIA_ATUAL)){
-        document.getElementById("tituloDia").innerText = `Dia ${DIA_ATUAL} de 365`;
+        document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
         document.getElementById("poema").textContent = "";
         document.getElementById("meta").textContent = "";
         setTemaPorAto(DIA_ATUAL);
@@ -426,7 +438,7 @@ Ele renova.`
       }
 
       esconderIntro();
-      carregarPoemaNaTela(DIA_ATUAL);
+      carregarPoema(DIA_ATUAL);
     }
 
     // ===== arquivo =====
@@ -447,7 +459,7 @@ Ele renova.`
     function abrirArquivo(){
       if(DIA_ATUAL <= 1) return;
 
-      const max = DIA_ATUAL - 1; // sempre até ontem
+      const max = DIA_ATUAL - 1;
       document.getElementById("arquivoSub").innerText = `Disponíveis: Dias 1 a ${max}`;
 
       const lista = document.getElementById("listaArquivo");
@@ -462,20 +474,27 @@ Ele renova.`
            <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
 
         btn.onclick = () => {
-          mostrarTela("conteudo");
-          esconderIntro(); // intro só vale no dia de hoje
-          carregarPoemaNaTela(d);
+          // ao escolher, sai do modo arquivo e mostra o poema escolhido
+          sairModoArquivo();
+          document.getElementById("botoesNormal").classList.remove("hidden");
+          document.getElementById("botoesArquivo").classList.add("hidden");
+          document.getElementById("tituloTopo").innerText = `Dia ${d} de 365`;
+          esconderIntro();
+          carregarPoema(d);
         };
 
         lista.appendChild(btn);
       }
 
-      mostrarTela("arquivo");
+      entrarModoArquivo();
     }
 
     function voltarParaHoje(){
-      mostrarTela("conteudo");
       carregarHoje();
+    }
+
+    function mostrarSaudade(){
+      document.getElementById("saudade").classList.toggle("hidden");
     }
 
     // ===== auth =====
