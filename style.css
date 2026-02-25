@@ -15,6 +15,12 @@
   /* extras */
   --extraBg: rgba(0,0,0,.22);
   --extraBorder: rgba(212,175,55,.18);
+
+  /* paper */
+  --paperBase: rgba(20,20,22,.88);
+  --paperLine: rgba(212,175,55,.07);
+  --paperMargin: rgba(210,80,90,.20);
+  --paperNoise: rgba(255,255,255,.015);
 }
 
 /* Base */
@@ -105,7 +111,7 @@ input::placeholder{
   color:rgba(241,233,220,.4);
 }
 
-/* Botão */
+/* Botões */
 button{
   padding:12px 26px;
   margin-top:28px;
@@ -127,6 +133,20 @@ button:hover{
 
 button:active{
   transform:translateY(0);
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* Linha de botões */
+.btnRow{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
 }
 
 /* Poema */
@@ -173,9 +193,9 @@ button:active{
   transform:translateY(0);
 }
 
-/* ===== Extra (Memória / Carta) ===== */
+/* Intro */
 .extra{
-  margin: 18px auto 0;
+  margin: 10px auto 0;
   width: min(56ch, 100%);
   padding: 14px 16px;
   border-radius: 16px;
@@ -199,7 +219,12 @@ button:active{
   white-space: pre-wrap;
 }
 
-/* ===== Toast flutuante ===== */
+.btnIntro{
+  margin-top: 14px;
+  width: 100%;
+}
+
+/* Toast */
 .toast{
   position: fixed;
   left: 50%;
@@ -229,47 +254,163 @@ button:active{
   transform: translateX(-50%) translateY(0);
 }
 
+/* =========================
+   TELA ARQUIVO (folha real)
+========================= */
+
+.paper{
+  /* papel: base + textura + margem + linhas */
+  background:
+    /* textura leve (noise fake) */
+    radial-gradient(1px 1px at 12% 18%, var(--paperNoise), transparent 60%),
+    radial-gradient(1px 1px at 72% 44%, var(--paperNoise), transparent 60%),
+    radial-gradient(1px 1px at 38% 78%, var(--paperNoise), transparent 60%),
+
+    /* margem vertical (vermelhinho) */
+    linear-gradient(to right,
+      transparent 0,
+      transparent 54px,
+      var(--paperMargin) 55px,
+      transparent 56px,
+      transparent 100%
+    ),
+
+    /* linhas horizontais */
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.00) 0px,
+      rgba(255,255,255,0.00) 26px,
+      var(--paperLine) 27px
+    ),
+
+    /* base */
+    var(--paperBase);
+}
+
+.topBar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+
+.ghostBtn{
+  margin-top: 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(241,233,220,.92);
+  background: rgba(255,255,255,.04);
+}
+
+.ghostBtn:hover{
+  background: rgba(255,255,255,.07);
+  transform: translateY(-2px);
+}
+
+.topBarTitle{
+  text-align:center;
+  flex: 1;
+}
+
+.titleSmall{
+  color: var(--accent);
+  letter-spacing: .8px;
+  font-size: 20px;
+}
+
+.metaSmall{
+  margin-top: 4px;
+  color: rgba(241,233,220,.55);
+  font-size: 14px;
+}
+
+.arquivoLista{
+  margin-top: 10px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+}
+
+.arquivoItem{
+  margin-top: 0;
+  width: 100%;
+  text-align:left;
+  padding: 14px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.10);
+  display:flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.arquivoItem:hover{
+  background: rgba(212,175,55,.09);
+}
+
+.arquivoDia{
+  font-size: 14px;
+  color: rgba(241,233,220,.72);
+  min-width: 70px;
+}
+
+.arquivoTitulo{
+  font-size: 16px;
+  color: rgba(241,233,220,.94);
+  letter-spacing: .4px;
+}
+
 /* ============================
-   TEMAS POR ATO (auto via data-ato)
-   Ato 1 já é o default
+   TEMAS POR ATO
 ============================ */
 
-/* ATO 2 — Conexão (âmbar suave) */
 body[data-ato="2"]{
   --line: rgba(224,180,90,.16);
   --border: rgba(224,180,90,.24);
   --accent: #e0b45a;
   --extraBorder: rgba(224,180,90,.16);
+
+  --paperLine: rgba(224,180,90,.07);
+  --paperMargin: rgba(210,80,90,.18);
 }
 
-/* ATO 3 — Fogo (bordô discreto) */
 body[data-ato="3"]{
   --line: rgba(140,40,55,.20);
   --border: rgba(140,40,55,.28);
   --accent: #8c2837;
   --extraBorder: rgba(140,40,55,.20);
+
+  --paperLine: rgba(140,40,55,.07);
+  --paperMargin: rgba(210,80,90,.20);
 }
 
-/* ATO 4 — Crescimento (neutro + dourado refinado) */
 body[data-ato="4"]{
   --line: rgba(200,180,120,.14);
   --border: rgba(200,180,120,.22);
   --accent: #c8b478;
   --extraBorder: rgba(200,180,120,.14);
+
+  --paperLine: rgba(200,180,120,.06);
+  --paperMargin: rgba(210,80,90,.16);
 }
 
-/* ATO 5 — Raiz (mais suave, casa/paz) */
 body[data-ato="5"]{
   --line: rgba(185,175,150,.14);
   --border: rgba(185,175,150,.22);
   --accent: #b9af96;
   --extraBorder: rgba(185,175,150,.14);
+
+  --paperLine: rgba(185,175,150,.06);
+  --paperMargin: rgba(210,80,90,.14);
 }
 
-/* ATO 6 — Recomeço (dourado mais luminoso) */
 body[data-ato="6"]{
   --line: rgba(230,200,110,.18);
   --border: rgba(230,200,110,.26);
   --accent: #e6c86e;
   --extraBorder: rgba(230,200,110,.18);
+
+  --paperLine: rgba(230,200,110,.07);
+  --paperMargin: rgba(210,80,90,.18);
 }
