@@ -6,8 +6,8 @@
   <title>Entre Nós Dois</title>
 
   <link rel="icon" href="data:," />
-  <!-- ✅ cache-buster: muda a string quando quiser forçar update -->
-  <link rel="stylesheet" href="style.css?v=20260226_1" />
+  <!-- cache-buster -->
+  <link rel="stylesheet" href="style.css?v=20260226_2" />
 </head>
 
 <body>
@@ -73,7 +73,7 @@
 
         <div class="thin-line" style="margin-top:18px;"></div>
 
-        <!-- ✅ botões de range -->
+        <!-- ranges -->
         <div class="rangeRow" id="rangeRow"></div>
 
         <div id="listaArquivo" class="arquivoLista"></div>
@@ -147,7 +147,7 @@
     </div>
     <!-- ===== /PÁGINA DA CÁPSULA ===== -->
 
-    <!-- ✅ OVERLAY MEMÓRIA (aba/página separada) -->
+    <!-- OVERLAY MEMÓRIA -->
     <div id="memoriaPage" class="memoriaPage hidden" aria-hidden="true">
       <div class="memoriaTopbar">
         <button class="ghostBtn memoriaBack" id="btnMemoriaVoltar" type="button">Voltar</button>
@@ -164,7 +164,7 @@
         <div id="memoriaPageTexto" class="memoriaPageTexto"></div>
       </div>
     </div>
-    <!-- ✅ /OVERLAY MEMÓRIA -->
+    <!-- /OVERLAY MEMÓRIA -->
 
   </div>
 
@@ -174,8 +174,7 @@
   <!-- Overlay de fade final (Dia 365) -->
   <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
 
-  <!-- ✅ cache-buster no JS também -->
-  <script src="poemas.js?v=20260226_1"></script>
+  <script src="poemas.js?v=20260226_2"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -286,7 +285,34 @@ Ele renova.` }
       return 6;
     }
 
-    function setTemaPorAto(dia){ document.body.setAttribute("data-ato", String(getAto(dia))); }
+    function getFaixaAto(dia){
+      const ato = getAto(dia);
+      if(ato === 1) return {start:1, end:30};
+      if(ato === 2) return {start:31, end:90};
+      if(ato === 3) return {start:91, end:150};
+      if(ato === 4) return {start:151, end:240};
+      if(ato === 5) return {start:241, end:330};
+      return {start:331, end:365};
+    }
+
+    // ✅ AURA CRESCENTE: seta --auraT de 0 → 1 dentro do ato
+    function setAuraProgress(dia){
+      // fora do range “normal”
+      if(!Number.isFinite(dia) || dia < 1) {
+        document.documentElement.style.setProperty("--auraT", "0");
+        return;
+      }
+      const {start, end} = getFaixaAto(dia);
+      const denom = Math.max(1, (end - start));
+      const t = (dia - start) / denom;
+      const clamped = Math.max(0, Math.min(1, t));
+      document.documentElement.style.setProperty("--auraT", clamped.toFixed(4));
+    }
+
+    function setTemaPorAto(dia){
+      document.body.setAttribute("data-ato", String(getAto(dia)));
+      setAuraProgress(dia);
+    }
 
     function setDayAttr(dia){
       if(dia >= 1 && dia <= 365) document.body.setAttribute("data-dia", String(dia));
@@ -551,7 +577,7 @@ Ele renova.` }
       return t;
     }
 
-    // ✅ ranges de 30 dias: 1-30, 31-60, etc
+    // ranges de 30
     function buildRanges(maxDay){
       const ranges = [];
       let start = 1;
@@ -568,49 +594,42 @@ Ele renova.` }
       row.innerHTML = "";
       const ranges = buildRanges(max);
 
-      ranges.forEach((r, idx) => {
+      function renderList(start, end){
+        const lista = document.getElementById("listaArquivo");
+        lista.innerHTML = "";
+        for(let d = end; d >= start; d--){
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "arquivoItem";
+          btn.innerHTML =
+            `<span class="arquivoDia">Dia ${d}</span>
+             <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
+          btn.onclick = () => {
+            sairModoLista();
+            esconderIntro();
+            carregarPoema(d);
+          };
+          lista.appendChild(btn);
+        }
+      }
+
+      ranges.forEach((r) => {
         const b = document.createElement("button");
         b.type = "button";
-        b.className = "rangeBtn" + (idx === 0 ? " active" : "");
+        b.className = "rangeBtn";
         b.textContent = `${r.start}–${r.end}`;
         b.onclick = () => {
           [...row.querySelectorAll(".rangeBtn")].forEach(x => x.classList.remove("active"));
           b.classList.add("active");
-          renderArquivoList(r.start, r.end);
+          renderList(r.start, r.end);
         };
         row.appendChild(b);
       });
 
-      // default: último range (mais recente)
       const last = ranges[ranges.length - 1];
       if(last){
-        [...row.querySelectorAll(".rangeBtn")].forEach(x => x.classList.remove("active"));
         row.lastChild.classList.add("active");
-        renderArquivoList(last.start, last.end);
-      } else {
-        renderArquivoList(1, max);
-      }
-    }
-
-    function renderArquivoList(start, end){
-      const lista = document.getElementById("listaArquivo");
-      lista.innerHTML = "";
-
-      for(let d = end; d >= start; d--){
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "arquivoItem";
-        btn.innerHTML =
-          `<span class="arquivoDia">Dia ${d}</span>
-           <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
-
-        btn.onclick = () => {
-          sairModoLista();
-          esconderIntro();
-          carregarPoema(d);
-        };
-
-        lista.appendChild(btn);
+        renderList(last.start, last.end);
       }
     }
 
@@ -669,7 +688,6 @@ Ele renova.` }
       entrarModoLista("Memórias");
     }
 
-    // ✅ memória abre em “aba/página” (overlay)
     function abrirMemoriaPage(diaMem, idx){
       const page = document.getElementById("memoriaPage");
       const titleEl = document.getElementById("memoriaPaperTitle");
@@ -710,7 +728,7 @@ Ele renova.` }
       document.getElementById("memoriaPageTexto").textContent = "";
     }
 
-    // ===== Dia 365 — cápsula page =====
+    // ===== Dia 365 — cápsula =====
     const CAPSULA_OPEN_KEY = "projeto365_capsula_365_aberta";
 
     function esconderCapsulaTrigger(){
@@ -821,7 +839,6 @@ Ele renova.` }
 
       revelarBloco();
 
-      // ✅ tema sempre aplicado quando muda dia
       setTemaPorAto(dia);
       setDayAttr(dia);
 
@@ -832,6 +849,7 @@ Ele renova.` }
       if(dia <= 0){
         document.body.removeAttribute("data-ato");
         document.body.removeAttribute("data-dia");
+        document.documentElement.style.setProperty("--auraT", "0");
         tituloTopo.innerText = "Antes do primeiro poema";
         metaEl.innerText = "";
         const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
@@ -868,7 +886,6 @@ Ele renova.` }
       const forced = getForcedDay();
       showModoTeste(forced);
 
-      // ✅ se tiver ?day=..., força o dia e garante o tema
       if(forced !== null){
         DIA_ATUAL = forced;
         const btn = document.getElementById("btnAnteriores");
