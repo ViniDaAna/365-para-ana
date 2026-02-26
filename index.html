@@ -48,7 +48,7 @@
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
 
-      <!-- ===== DIA 365 — GATILHO DA CÁPSULA (após o poema) ===== -->
+      <!-- ===== DIA 365 — GATILHO DA CÁPSULA ===== -->
       <div id="capsulaTrigger" class="capsulaTrigger hidden">
         <div class="capsulaTitle">Cápsula do tempo.</div>
         <div class="capsulaMeta">Escrita em 23/02/2025.</div>
@@ -175,53 +175,37 @@
     let DIA_ATUAL = 1;
     let DIA_EM_TELA = 1;
 
-    // Introduções de virada (aparecem ANTES do poema, e só liberam após clique)
     const INTRO_ATOS = {
-      31: {
-        tag: "Ato 2 — Conexão",
-        texto:
+      31: { tag: "Ato 2 — Conexão", texto:
 `Agora a gente se permite chegar mais perto.
 Menos defesa.
 Mais verdade.
 
 Se o Ato 1 foi escolha,
-o Ato 2 é presença.`
-      },
-      91: {
-        tag: "Ato 3 — Fogo",
-        texto:
+o Ato 2 é presença.` },
+      91: { tag: "Ato 3 — Fogo", texto:
 `A intensidade não é pressa.
 É entrega consciente.
 
 Aqui, o desejo aparece
-com elegância — e coragem.`
-      },
-      151: {
-        tag: "Ato 4 — Crescimento",
-        texto:
+com elegância — e coragem.` },
+      151:{ tag: "Ato 4 — Crescimento", texto:
 `O amor amadurece quando escolhe evoluir.
 
 Não é sobre sentir mais.
-É sobre cuidar melhor.`
-      },
-      241: {
-        tag: "Ato 5 — Raiz",
-        texto:
+É sobre cuidar melhor.` },
+      241:{ tag: "Ato 5 — Raiz", texto:
 `Agora não é só sentir.
 É pertencer.
 
 O que era promessa
-vira casa.`
-      },
-      331: {
-        tag: "Ato 6 — Recomeço",
-        texto:
+vira casa.` },
+      331:{ tag: "Ato 6 — Recomeço", texto:
 `Escolher de novo
 é a forma mais madura de amar.
 
 O fim não fecha.
-Ele renova.`
-      }
+Ele renova.` }
     };
 
     const segredos = [
@@ -242,8 +226,6 @@ Ele renova.`
       "Não precisa de nada grandioso. Só de você aqui."
     ];
 
-    // ===== util =====
-
     function getDataInicio(){
       const iso = localStorage.getItem(START_OVERRIDE_KEY);
       if(iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)){
@@ -254,7 +236,6 @@ Ele renova.`
 
     function diffDias(){
       const dataInicio = getDataInicio();
-
       const hoje = new Date();
       const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
       const I = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
@@ -270,9 +251,7 @@ Ele renova.`
       return 6;
     }
 
-    function setTemaPorAto(dia){
-      document.body.setAttribute("data-ato", String(getAto(dia)));
-    }
+    function setTemaPorAto(dia){ document.body.setAttribute("data-ato", String(getAto(dia))); }
 
     function setDayAttr(dia){
       if(dia >= 1 && dia <= 365){
@@ -288,7 +267,6 @@ Ele renova.`
       const mm = String(agora.getMonth()+1).padStart(2,'0');
       const yyyy = agora.getFullYear();
       const data = `${dd}/${mm}/${yyyy}`;
-
       document.getElementById("cornerDateLogin").innerText = data;
       document.getElementById("cornerDate").innerText = data;
     }
@@ -296,28 +274,20 @@ Ele renova.`
     function aplicarFrasePorHorario(){
       const hora = new Date().getHours();
       const el = document.getElementById("fraseContexto");
-
-      if(hora >= 5 && hora < 12){
-        el.innerText = "Que seu dia seja leve. Eu já escolhi você hoje.";
-      } else if(hora >= 12 && hora < 18){
-        el.innerText = "No meio do seu dia, eu ainda penso em você.";
-      } else if(hora >= 18 && hora < 23){
-        el.innerText = "Eu gosto quando você vem aqui no fim do dia.";
-      } else {
-        el.innerText = "Eu gosto quando você aparece antes de dormir.";
-      }
+      if(hora >= 5 && hora < 12) el.innerText = "Que seu dia seja leve. Eu já escolhi você hoje.";
+      else if(hora >= 12 && hora < 18) el.innerText = "No meio do seu dia, eu ainda penso em você.";
+      else if(hora >= 18 && hora < 23) el.innerText = "Eu gosto quando você vem aqui no fim do dia.";
+      else el.innerText = "Eu gosto quando você aparece antes de dormir.";
     }
 
     function verificarRetorno(){
       const hoje = new Date().toDateString();
       const key = "projeto365_visita";
       const ultima = localStorage.getItem(key);
-
       if(ultima === hoje){
         const el = document.getElementById("fraseContexto");
         el.innerText += " Você voltou. Eu gosto disso.";
       }
-
       localStorage.setItem(key, hoje);
     }
 
@@ -328,13 +298,12 @@ Ele renova.`
       bloco.classList.add("show");
     }
 
-    // Digitação padrão (com callback opcional)
+    // Digitação padrão
     let typingTimer = null;
     function typeText(el, text, speed=12, onDone=null){
       clearTimeout(typingTimer);
       el.textContent = "";
       let i = 0;
-
       function step(){
         el.textContent = text.slice(0, i);
         i++;
@@ -347,16 +316,17 @@ Ele renova.`
       step();
     }
 
-    // Digitação “humana” (lenta, com variação e apaga às vezes)
+    // Digitação humana + auto-scroll
     function typeTextHuman(el, text, opts={}){
       const {
         minDelay = 34,
         maxDelay = 68,
-        mistakeChance = 0.06,   // chance de "errar" (apagar 1-4 chars)
+        mistakeChance = 0.06,
         maxBackspace = 4,
-        pauseChance = 0.05,     // pausas curtas
+        pauseChance = 0.05,
         minPause = 220,
         maxPause = 520,
+        scrollContainer = null,
         onDone = null
       } = opts;
 
@@ -368,22 +338,26 @@ Ele renova.`
       function rand(a,b){ return a + Math.random() * (b-a); }
       function nextDelay(){ return Math.floor(rand(minDelay, maxDelay)); }
       function nextPause(){ return Math.floor(rand(minPause, maxPause)); }
+      function doScroll(){
+        if(scrollContainer && typeof scrollContainer.scrollTop === "number"){
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+      }
 
       function step(){
-        // pausas
         if(Math.random() < pauseChance){
           typingTimer = setTimeout(step, nextPause());
           return;
         }
 
-        // “erro” com backspace (só se já tiver algo escrito e ainda tiver texto pela frente)
         if(i > 6 && i < text.length - 6 && Math.random() < mistakeChance){
           const current = el.textContent;
           const n = Math.max(1, Math.floor(rand(1, maxBackspace+1)));
-          // apaga n chars com sensação
           let j = 0;
+
           function back(){
             el.textContent = el.textContent.slice(0, -1);
+            doScroll();
             j++;
             if(j < Math.min(n, current.length)){
               typingTimer = setTimeout(back, Math.floor(rand(26, 58)));
@@ -397,10 +371,12 @@ Ele renova.`
 
         el.textContent = text.slice(0, i);
         i++;
+        doScroll();
 
         if(i <= text.length){
           typingTimer = setTimeout(step, nextDelay());
         } else {
+          doScroll();
           if(typeof onDone === "function") onDone();
         }
       }
@@ -409,10 +385,7 @@ Ele renova.`
     }
 
     // ===== toast =====
-
-    function pickSegredo(){
-      return segredos[Math.floor(Math.random() * segredos.length)];
-    }
+    function pickSegredo(){ return segredos[Math.floor(Math.random() * segredos.length)]; }
 
     function mostrarToast(texto){
       const toast = document.getElementById("toastSegredo");
@@ -432,7 +405,7 @@ Ele renova.`
 
     function iniciarSegredo(){
       const cooldownKey = "projeto365_toast";
-      const cooldownMs = 2 * 60 * 60 * 1000; // 2h
+      const cooldownMs = 2 * 60 * 60 * 1000;
 
       function resetInatividade(){
         clearTimeout(window.__inatividadeTimer);
@@ -460,36 +433,25 @@ Ele renova.`
       window.addEventListener("touchstart", resetInatividade, {passive:true});
       window.addEventListener("scroll", resetInatividade, {passive:true});
 
-      document.addEventListener("visibilitychange", () => {
-        if(!document.hidden) resetInatividade();
-      });
+      document.addEventListener("visibilitychange", () => { if(!document.hidden) resetInatividade(); });
       window.addEventListener("focus", resetInatividade);
 
       resetInatividade();
     }
 
     // ===== intro de ato =====
-
-    function introKeyForDay(dia){
-      return `projeto365_intro_vista_${dia}`;
-    }
-
+    function introKeyForDay(dia){ return `projeto365_intro_vista_${dia}`; }
     function deveMostrarIntro(dia){
       if(dia !== DIA_ATUAL) return false;
       if(!INTRO_ATOS[dia]) return false;
       return localStorage.getItem(introKeyForDay(dia)) !== "1";
     }
-
-    function marcarIntroComoVista(dia){
-      localStorage.setItem(introKeyForDay(dia), "1");
-    }
-
+    function marcarIntroComoVista(dia){ localStorage.setItem(introKeyForDay(dia), "1"); }
     function esconderIntro(){
       const box = document.getElementById("introAtoBox");
       box.classList.add("hidden");
       document.getElementById("introAtoTexto").textContent = "";
     }
-
     function mostrarIntro(dia){
       const info = INTRO_ATOS[dia];
       const box = document.getElementById("introAtoBox");
@@ -509,8 +471,7 @@ Ele renova.`
       };
     }
 
-    // ===== animação “folhear” =====
-
+    // ===== animação folhear =====
     function animarFolha(direcao){
       const c = document.getElementById("conteudo");
       c.classList.remove("pageflip-in", "pageflip-out");
@@ -524,10 +485,8 @@ Ele renova.`
     }
 
     // ===== modos =====
-
     function entrarModoLista(titulo){
       document.body.classList.add("modo-arquivo");
-
       document.getElementById("botoesNormal").classList.add("hidden");
       document.getElementById("botoesArquivo").classList.remove("hidden");
       document.getElementById("saudade").classList.add("hidden");
@@ -546,18 +505,14 @@ Ele renova.`
       if(document.body.classList.contains("modo-arquivo")){
         animarFolha("out");
       }
-
       document.body.classList.remove("modo-arquivo");
-
       document.getElementById("arquivoBox").classList.add("hidden");
       document.getElementById("memoriasBox").classList.add("hidden");
-
       document.getElementById("botoesNormal").classList.remove("hidden");
       document.getElementById("botoesArquivo").classList.add("hidden");
     }
 
     // ===== poemas: arquivo =====
-
     function primeiraLinha(texto){
       if(!texto) return "Sem título";
       const linha = String(texto).split("\n")[0].trim();
@@ -605,19 +560,13 @@ Ele renova.`
       entrarModoLista("Arquivo");
     }
 
-    // ===== memórias: arquivo separado =====
-
+    // ===== memórias =====
     function getMemoryDays(){
       const days = [];
-      for(let d = 30; d <= 330; d += 30){
-        days.push(d);
-      }
+      for(let d = 30; d <= 330; d += 30) days.push(d);
       return days;
     }
-
-    function memoriaTituloPorIndice(idx){
-      return `Memória ${idx + 1}`;
-    }
+    function memoriaTituloPorIndice(idx){ return `Memória ${idx + 1}`; }
 
     function abrirMemorias(){
       const days = getMemoryDays();
@@ -641,10 +590,7 @@ Ele renova.`
            <span class="arquivoDia">Dia ${diaMem}</span>
            <span class="arquivoTitulo">${titulo}</span>`;
 
-        btn.onclick = () => {
-          abrirMemoriaViewer(diaMem, idx);
-        };
-
+        btn.onclick = () => abrirMemoriaViewer(diaMem, idx);
         lista.appendChild(btn);
       });
 
@@ -684,18 +630,15 @@ Ele renova.`
       const viewer = document.getElementById("memoriaViewer");
       const textoEl = document.getElementById("memoriaViewerTexto");
       if(!silencioso && viewer.classList.contains("hidden")) return;
-
       viewer.classList.add("hidden");
       textoEl.textContent = "";
     }
 
-    // ===== Dia 365 — cápsula em “nova página” =====
-
+    // ===== Dia 365 — cápsula page =====
     const CAPSULA_OPEN_KEY = "projeto365_capsula_365_aberta";
 
     function esconderCapsulaTrigger(){
-      const t = document.getElementById("capsulaTrigger");
-      t.classList.add("hidden");
+      document.getElementById("capsulaTrigger").classList.add("hidden");
     }
 
     function mostrarCapsulaTrigger(){
@@ -715,25 +658,23 @@ Ele renova.`
 
       localStorage.setItem(CAPSULA_OPEN_KEY, "1");
 
-      // prepara
       cartaEl.textContent = "";
       fecho.classList.add("hidden");
 
-      // mostra overlay
       page.classList.remove("hidden");
       page.setAttribute("aria-hidden", "false");
       document.body.classList.add("capsula-mode");
 
-      // reinicia animação do caderno
+      // garante scroll no topo antes de digitar
+      page.scrollTop = 0;
+
       notebook.classList.remove("open");
       void notebook.offsetWidth;
       notebook.classList.add("open");
 
-      // botões
       btnVoltar.onclick = () => fecharCapsulaPage();
       btnFinal.onclick = () => escolherDeNovo();
 
-      // após o “abrir do caderno”, começa a escrita
       clearTimeout(window.__capsulaStartTimer);
       window.__capsulaStartTimer = setTimeout(() => {
         const carta = (typeof getCartaCapsula365 === "function") ? getCartaCapsula365() : "";
@@ -745,8 +686,10 @@ Ele renova.`
           pauseChance: 0.07,
           minPause: 260,
           maxPause: 760,
+          scrollContainer: page,      // ✅ auto-scroll aqui
           onDone: () => {
             fecho.classList.remove("hidden");
+            page.scrollTop = page.scrollHeight;
           }
         });
       }, 640);
@@ -761,7 +704,6 @@ Ele renova.`
       document.body.classList.remove("capsula-mode");
 
       clearTimeout(window.__capsulaStartTimer);
-      // não limpamos CAPSULA_OPEN_KEY: se ela abriu uma vez no dia 365, ok ficar “registrado”
     }
 
     function clearProjeto365Storage(){
@@ -775,7 +717,6 @@ Ele renova.`
 
     function escolherDeNovo(){
       const overlay = document.getElementById("fadeOverlay");
-
       overlay.classList.add("show");
 
       setTimeout(() => {
@@ -797,7 +738,6 @@ Ele renova.`
     }
 
     // ===== render principal =====
-
     function carregarPoema(dia){
       DIA_EM_TELA = dia;
 
@@ -812,7 +752,6 @@ Ele renova.`
       esconderCapsulaTrigger();
       fecharCapsulaPage(true);
 
-      // antes do início
       if(dia <= 0){
         document.body.removeAttribute("data-ato");
         document.body.removeAttribute("data-dia");
@@ -823,7 +762,6 @@ Ele renova.`
         return;
       }
 
-      // pós 365
       if(dia > 365){
         tituloTopo.innerText = "365 dias com você";
         metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
@@ -831,27 +769,21 @@ Ele renova.`
         return;
       }
 
-      // ===== DIA 365 (poema + gatilho para a cápsula) =====
       if(dia === 365){
         tituloTopo.innerText = `Dia 365 de 365`;
         metaEl.innerText = "Um poema por dia.";
 
         const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
         typeText(poemaEl, poema365 || "Em breve...", 12, () => {
-          // mostra “cápsula” como botão que leva pra nova página
           mostrarCapsulaTrigger();
-
-          // se já abriu antes (e recarregou), pode abrir direto
           const jaAberta = localStorage.getItem(CAPSULA_OPEN_KEY) === "1";
           if(jaAberta){
-            // pequeno delay pra não “pular” visualmente
             setTimeout(() => abrirCapsulaPage(), 380);
           }
         });
         return;
       }
 
-      // poema normal
       tituloTopo.innerText = `Dia ${dia} de 365`;
       metaEl.innerText = "Um poema por dia.";
 
@@ -872,14 +804,12 @@ Ele renova.`
 
       sairModoLista();
 
-      // antes do início
       if(d < 0){
         esconderIntro();
         carregarPoema(DIA_ATUAL);
         return;
       }
 
-      // intro de virada
       if(deveMostrarIntro(DIA_ATUAL)){
         document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
         document.getElementById("poema").textContent = "";
@@ -896,15 +826,11 @@ Ele renova.`
       carregarPoema(DIA_ATUAL);
     }
 
-    function voltarParaHoje(){
-      carregarHoje();
-    }
+    function voltarParaHoje(){ carregarHoje(); }
 
     function mostrarSaudade(){
       document.getElementById("saudade").classList.toggle("hidden");
     }
-
-    // ===== auth =====
 
     function verificarSenha(){
       const senha = document.getElementById("senha").value;
@@ -918,7 +844,6 @@ Ele renova.`
       }
     }
 
-    // init
     setCornerDates();
     setInterval(setCornerDates, 60000);
   </script>
