@@ -48,23 +48,11 @@
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
 
-      <!-- ===== DIA 365 — CÁPSULA DO TEMPO (só aparece no 365) ===== -->
-      <div id="capsulaBox" class="capsulaBox hidden">
+      <!-- ===== DIA 365 — GATILHO DA CÁPSULA (após o poema) ===== -->
+      <div id="capsulaTrigger" class="capsulaTrigger hidden">
         <div class="capsulaTitle">Cápsula do tempo.</div>
         <div class="capsulaMeta">Escrita em 23/02/2025.</div>
-
         <button id="btnAbrirCapsula" class="btnCapsula" type="button">Abrir</button>
-
-        <div id="capsulaCartaWrap" class="capsulaCartaWrap hidden">
-          <div id="capsulaCarta" class="capsulaCarta"></div>
-
-          <div id="capsulaFecho" class="capsulaFecho hidden">
-            <div class="capsulaLine"></div>
-            <div class="capsulaDecidi">23/02/2025 — Eu decidi.</div>
-
-            <button id="btnEscolherDeNovo" class="btnEscolherDeNovo" type="button">Escolher de novo</button>
-          </div>
-        </div>
       </div>
       <!-- ===== /DIA 365 ===== -->
 
@@ -139,6 +127,36 @@
     </div>
 
     <div class="assinatura">Entre nós dois.</div>
+
+    <!-- ===== PÁGINA DA CÁPSULA (overlay) ===== -->
+    <div id="capsulaPage" class="capsulaPage hidden" aria-hidden="true">
+      <div class="capsulaTopbar">
+        <button class="ghostBtn capsulaBack" id="btnCapsulaVoltar" type="button">Voltar</button>
+        <div class="capsulaTopbarTitle">Cápsula do Tempo</div>
+        <div style="width:72px;"></div>
+      </div>
+
+      <div class="notebook" id="notebook">
+        <div class="notebookCover"></div>
+
+        <div class="notebookPaper">
+          <div class="capsulaPaperHeader">
+            <div class="capsulaPaperTitle">Carta – Cápsula do Tempo</div>
+            <div class="capsulaPaperDate">23/02/2025</div>
+          </div>
+
+          <div id="capsulaCarta" class="capsulaCarta cursiva"></div>
+
+          <div id="capsulaFecho" class="capsulaFecho hidden">
+            <div class="capsulaLine"></div>
+            <div class="capsulaDecidi">23/02/2025 — Eu decidi.</div>
+            <button id="btnEscolherDeNovo" class="btnEscolherDeNovo" type="button">Escolher de novo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ===== /PÁGINA DA CÁPSULA ===== -->
+
   </div>
 
   <!-- Toast -->
@@ -310,7 +328,7 @@ Ele renova.`
       bloco.classList.add("show");
     }
 
-    // Digitação (com callback opcional)
+    // Digitação padrão (com callback opcional)
     let typingTimer = null;
     function typeText(el, text, speed=12, onDone=null){
       clearTimeout(typingTimer);
@@ -326,6 +344,67 @@ Ele renova.`
           if(typeof onDone === "function") onDone();
         }
       }
+      step();
+    }
+
+    // Digitação “humana” (lenta, com variação e apaga às vezes)
+    function typeTextHuman(el, text, opts={}){
+      const {
+        minDelay = 34,
+        maxDelay = 68,
+        mistakeChance = 0.06,   // chance de "errar" (apagar 1-4 chars)
+        maxBackspace = 4,
+        pauseChance = 0.05,     // pausas curtas
+        minPause = 220,
+        maxPause = 520,
+        onDone = null
+      } = opts;
+
+      clearTimeout(typingTimer);
+      el.textContent = "";
+
+      let i = 0;
+
+      function rand(a,b){ return a + Math.random() * (b-a); }
+      function nextDelay(){ return Math.floor(rand(minDelay, maxDelay)); }
+      function nextPause(){ return Math.floor(rand(minPause, maxPause)); }
+
+      function step(){
+        // pausas
+        if(Math.random() < pauseChance){
+          typingTimer = setTimeout(step, nextPause());
+          return;
+        }
+
+        // “erro” com backspace (só se já tiver algo escrito e ainda tiver texto pela frente)
+        if(i > 6 && i < text.length - 6 && Math.random() < mistakeChance){
+          const current = el.textContent;
+          const n = Math.max(1, Math.floor(rand(1, maxBackspace+1)));
+          // apaga n chars com sensação
+          let j = 0;
+          function back(){
+            el.textContent = el.textContent.slice(0, -1);
+            j++;
+            if(j < Math.min(n, current.length)){
+              typingTimer = setTimeout(back, Math.floor(rand(26, 58)));
+            } else {
+              typingTimer = setTimeout(step, Math.floor(rand(90, 180)));
+            }
+          }
+          back();
+          return;
+        }
+
+        el.textContent = text.slice(0, i);
+        i++;
+
+        if(i <= text.length){
+          typingTimer = setTimeout(step, nextDelay());
+        } else {
+          if(typeof onDone === "function") onDone();
+        }
+      }
+
       step();
     }
 
@@ -456,7 +535,8 @@ Ele renova.`
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
-      esconderCapsula();
+      esconderCapsulaTrigger();
+      fecharCapsulaPage(true);
 
       document.getElementById("tituloTopo").innerText = titulo;
       animarFolha("in");
@@ -609,66 +689,82 @@ Ele renova.`
       textoEl.textContent = "";
     }
 
-    // ===== Dia 365 — cápsula =====
+    // ===== Dia 365 — cápsula em “nova página” =====
 
     const CAPSULA_OPEN_KEY = "projeto365_capsula_365_aberta";
 
-    function esconderCapsula(){
-      const box = document.getElementById("capsulaBox");
-      const wrap = document.getElementById("capsulaCartaWrap");
-      const carta = document.getElementById("capsulaCarta");
-      const fecho = document.getElementById("capsulaFecho");
-
-      box.classList.add("hidden");
-      wrap.classList.add("hidden");
-      wrap.classList.remove("softShow");
-      carta.textContent = "";
-      fecho.classList.add("hidden");
+    function esconderCapsulaTrigger(){
+      const t = document.getElementById("capsulaTrigger");
+      t.classList.add("hidden");
     }
 
-    function mostrarCapsula365DepoisDoPoema(){
-      const box = document.getElementById("capsulaBox");
-      const btnAbrir = document.getElementById("btnAbrirCapsula");
-      const wrap = document.getElementById("capsulaCartaWrap");
+    function mostrarCapsulaTrigger(){
+      const t = document.getElementById("capsulaTrigger");
+      const btn = document.getElementById("btnAbrirCapsula");
+      t.classList.remove("hidden");
+      btn.onclick = () => abrirCapsulaPage();
+    }
+
+    function abrirCapsulaPage(){
+      const page = document.getElementById("capsulaPage");
+      const notebook = document.getElementById("notebook");
       const cartaEl = document.getElementById("capsulaCarta");
       const fecho = document.getElementById("capsulaFecho");
+      const btnVoltar = document.getElementById("btnCapsulaVoltar");
       const btnFinal = document.getElementById("btnEscolherDeNovo");
 
-      box.classList.remove("hidden");
+      localStorage.setItem(CAPSULA_OPEN_KEY, "1");
 
-      // estado (se recarregar no 365 depois de abrir)
-      const jaAberta = localStorage.getItem(CAPSULA_OPEN_KEY) === "1";
+      // prepara
+      cartaEl.textContent = "";
+      fecho.classList.add("hidden");
 
-      function abrir(){
-        localStorage.setItem(CAPSULA_OPEN_KEY, "1");
+      // mostra overlay
+      page.classList.remove("hidden");
+      page.setAttribute("aria-hidden", "false");
+      document.body.classList.add("capsula-mode");
 
-        // texto da carta
-        const carta = (typeof getCartaCapsula365 === "function") ? getCartaCapsula365() : "";
-        wrap.classList.remove("hidden");
-        wrap.classList.remove("softShow");
-        void wrap.offsetWidth;
-        wrap.classList.add("softShow");
+      // reinicia animação do caderno
+      notebook.classList.remove("open");
+      void notebook.offsetWidth;
+      notebook.classList.add("open");
 
-        typeText(cartaEl, carta || "Em breve...", 12, () => {
-          fecho.classList.remove("hidden");
-        });
-      }
-
-      btnAbrir.onclick = () => abrir();
-
+      // botões
+      btnVoltar.onclick = () => fecharCapsulaPage();
       btnFinal.onclick = () => escolherDeNovo();
 
-      if(jaAberta){
-        abrir();
-      } else {
-        wrap.classList.add("hidden");
-        fecho.classList.add("hidden");
-        cartaEl.textContent = "";
-      }
+      // após o “abrir do caderno”, começa a escrita
+      clearTimeout(window.__capsulaStartTimer);
+      window.__capsulaStartTimer = setTimeout(() => {
+        const carta = (typeof getCartaCapsula365 === "function") ? getCartaCapsula365() : "";
+        typeTextHuman(cartaEl, carta || "Em breve...", {
+          minDelay: 38,
+          maxDelay: 82,
+          mistakeChance: 0.075,
+          maxBackspace: 4,
+          pauseChance: 0.07,
+          minPause: 260,
+          maxPause: 760,
+          onDone: () => {
+            fecho.classList.remove("hidden");
+          }
+        });
+      }, 640);
+    }
+
+    function fecharCapsulaPage(silencioso=false){
+      const page = document.getElementById("capsulaPage");
+      if(!silencioso && page.classList.contains("hidden")) return;
+
+      page.classList.add("hidden");
+      page.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("capsula-mode");
+
+      clearTimeout(window.__capsulaStartTimer);
+      // não limpamos CAPSULA_OPEN_KEY: se ela abriu uma vez no dia 365, ok ficar “registrado”
     }
 
     function clearProjeto365Storage(){
-      // remove tudo que começa com "projeto365_" (inclui visitas, intro, toast, capsula, etc.)
       const keys = [];
       for(let i = 0; i < localStorage.length; i++){
         const k = localStorage.key(i);
@@ -682,10 +778,8 @@ Ele renova.`
 
       overlay.classList.add("show");
 
-      // 3s fade + 1s preto
       setTimeout(() => {
         setTimeout(() => {
-          // reset: limpa progresso e define novo "início" para hoje -> Dia 1
           const now = new Date();
           const y = now.getFullYear();
           const m = String(now.getMonth()+1).padStart(2,'0');
@@ -695,8 +789,8 @@ Ele renova.`
           clearProjeto365Storage();
           localStorage.setItem(START_OVERRIDE_KEY, iso);
 
-          // volta UI
           overlay.classList.remove("show");
+          fecharCapsulaPage(true);
           carregarHoje();
         }, 1000);
       }, 3000);
@@ -715,8 +809,8 @@ Ele renova.`
       setTemaPorAto(dia);
       setDayAttr(dia);
 
-      // cápsula só existe no 365
-      esconderCapsula();
+      esconderCapsulaTrigger();
+      fecharCapsulaPage(true);
 
       // antes do início
       if(dia <= 0){
@@ -729,7 +823,7 @@ Ele renova.`
         return;
       }
 
-      // pós 365 (não deve acontecer após reset, mas mantemos)
+      // pós 365
       if(dia > 365){
         tituloTopo.innerText = "365 dias com você";
         metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
@@ -737,15 +831,22 @@ Ele renova.`
         return;
       }
 
-      // ===== DIA 365 (POEMA + CÁPSULA) =====
+      // ===== DIA 365 (poema + gatilho para a cápsula) =====
       if(dia === 365){
         tituloTopo.innerText = `Dia 365 de 365`;
         metaEl.innerText = "Um poema por dia.";
 
         const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
         typeText(poemaEl, poema365 || "Em breve...", 12, () => {
-          // ritual aparece depois do poema
-          mostrarCapsula365DepoisDoPoema();
+          // mostra “cápsula” como botão que leva pra nova página
+          mostrarCapsulaTrigger();
+
+          // se já abriu antes (e recarregou), pode abrir direto
+          const jaAberta = localStorage.getItem(CAPSULA_OPEN_KEY) === "1";
+          if(jaAberta){
+            // pequeno delay pra não “pular” visualmente
+            setTimeout(() => abrirCapsulaPage(), 380);
+          }
         });
         return;
       }
@@ -785,7 +886,8 @@ Ele renova.`
         document.getElementById("meta").textContent = "";
         setTemaPorAto(DIA_ATUAL);
         setDayAttr(DIA_ATUAL);
-        esconderCapsula();
+        esconderCapsulaTrigger();
+        fecharCapsulaPage(true);
         mostrarIntro(DIA_ATUAL);
         return;
       }
