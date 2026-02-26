@@ -6,7 +6,8 @@
   <title>Entre Nós Dois</title>
 
   <link rel="icon" href="data:," />
-  <link rel="stylesheet" href="style.css" />
+  <!-- cache-buster pra garantir tema atualizado -->
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 
 <body>
@@ -71,6 +72,9 @@
 
         <div class="thin-line" style="margin-top:18px;"></div>
 
+        <!-- ✅ ranges 1–30, 31–60, ... -->
+        <div id="arquivoRanges" class="rangeRow"></div>
+
         <div id="listaArquivo" class="arquivoLista"></div>
       </div>
 
@@ -90,21 +94,6 @@
         <div class="thin-line" style="margin-top:18px;"></div>
 
         <div id="listaMemorias" class="arquivoLista"></div>
-
-        <!-- VIEWER DA MEMÓRIA -->
-        <div id="memoriaViewer" class="memoriaViewer hidden">
-          <div class="memoriaViewerHeader">
-            <div class="memoriaViewerTitle" id="memoriaViewerTitle">—</div>
-            <div class="memoriaViewerMeta" id="memoriaViewerMeta">—</div>
-          </div>
-
-          <div id="memoriaViewerTexto" class="memoriaViewerTexto"></div>
-
-          <div class="memoriaViewerBtns">
-            <button class="ghostBtn" type="button" onclick="fecharMemoriaViewer()">Fechar</button>
-          </div>
-        </div>
-
       </div>
 
     </div>
@@ -127,6 +116,25 @@
     </div>
 
     <div class="assinatura">Entre nós dois.</div>
+
+    <!-- ===== PÁGINA DA MEMÓRIA (overlay) ===== -->
+    <div id="memoriaPage" class="memoriaPage hidden" aria-hidden="true">
+      <div class="memoriaTopbar">
+        <button class="ghostBtn memoriaBack" id="btnMemoriaVoltar" type="button">Voltar</button>
+        <div class="memoriaTopbarTitle">Memória</div>
+        <div style="width:72px;"></div>
+      </div>
+
+      <div class="memoriaPaper">
+        <div class="memoriaPaperHeader">
+          <div class="memoriaPaperTitle" id="memoriaPageTitle">—</div>
+          <div class="memoriaPaperMeta" id="memoriaPageMeta">—</div>
+        </div>
+
+        <div id="memoriaPageTexto" class="memoriaPageTexto"></div>
+      </div>
+    </div>
+    <!-- ===== /PÁGINA DA MEMÓRIA ===== -->
 
     <!-- ===== PÁGINA DA CÁPSULA (overlay) ===== -->
     <div id="capsulaPage" class="capsulaPage hidden" aria-hidden="true">
@@ -486,6 +494,7 @@ Ele renova.` }
       esconderIntro();
       esconderCapsulaTrigger();
       fecharCapsulaPage(true);
+      fecharMemoriaPage(true);
 
       document.getElementById("tituloTopo").innerText = titulo;
       animarFolha("in");
@@ -500,6 +509,7 @@ Ele renova.` }
       document.getElementById("memoriasBox").classList.add("hidden");
       document.getElementById("botoesNormal").classList.remove("hidden");
       document.getElementById("botoesArquivo").classList.add("hidden");
+      fecharMemoriaPage(true);
     }
 
     function primeiraLinha(texto){
@@ -515,31 +525,62 @@ Ele renova.` }
       return t;
     }
 
+    // ✅ Poemas anteriores por blocos de 30
     function abrirArquivo(){
       if(DIA_ATUAL <= 1) return;
 
       const max = DIA_ATUAL - 1;
       document.getElementById("arquivoSub").innerText = `Disponíveis: Dias 1 a ${max}`;
 
+      const rangesEl = document.getElementById("arquivoRanges");
       const lista = document.getElementById("listaArquivo");
+      rangesEl.innerHTML = "";
       lista.innerHTML = "";
 
-      for(let d = max; d >= 1; d--){
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "arquivoItem";
-        btn.innerHTML =
-          `<span class="arquivoDia">Dia ${d}</span>
-           <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
+      const totalRanges = Math.ceil(max / 30);
 
-        btn.onclick = () => {
-          sairModoLista();
-          esconderIntro();
-          carregarPoema(d);
-        };
+      function renderRange(r){
+        const start = (r - 1) * 30 + 1;
+        const end = Math.min(r * 30, max);
 
-        lista.appendChild(btn);
+        lista.innerHTML = "";
+        for(let d = end; d >= start; d--){
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "arquivoItem";
+          btn.innerHTML =
+            `<span class="arquivoDia">Dia ${d}</span>
+             <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
+
+          btn.onclick = () => {
+            sairModoLista();
+            esconderIntro();
+            carregarPoema(d);
+          };
+
+          lista.appendChild(btn);
+        }
+
+        [...rangesEl.querySelectorAll(".rangeBtn")].forEach(b => b.classList.remove("active"));
+        const activeBtn = rangesEl.querySelector(`[data-range="${r}"]`);
+        if(activeBtn) activeBtn.classList.add("active");
       }
+
+      for(let r = 1; r <= totalRanges; r++){
+        const start = (r - 1) * 30 + 1;
+        const end = Math.min(r * 30, max);
+
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "rangeBtn";
+        b.setAttribute("data-range", String(r));
+        b.textContent = `${start}-${end}`;
+        b.onclick = () => renderRange(r);
+
+        rangesEl.appendChild(b);
+      }
+
+      renderRange(totalRanges);
 
       setTemaPorAto(DIA_ATUAL);
       setDayAttr(DIA_ATUAL);
@@ -563,8 +604,6 @@ Ele renova.` }
       const lista = document.getElementById("listaMemorias");
       lista.innerHTML = "";
 
-      fecharMemoriaViewer(true);
-
       days.forEach((diaMem, idx) => {
         const liberada = (DIA_ATUAL >= diaMem);
         const icon = liberada ? "🔓" : "🔒";
@@ -578,7 +617,7 @@ Ele renova.` }
            <span class="arquivoDia">Dia ${diaMem}</span>
            <span class="arquivoTitulo">${titulo}</span>`;
 
-        btn.onclick = () => abrirMemoriaViewer(diaMem, idx);
+        btn.onclick = () => abrirMemoriaPage(diaMem, idx);
         lista.appendChild(btn);
       });
 
@@ -590,36 +629,45 @@ Ele renova.` }
       entrarModoLista("Memórias");
     }
 
-    function abrirMemoriaViewer(diaMem, idx){
-      const viewer = document.getElementById("memoriaViewer");
-      const titleEl = document.getElementById("memoriaViewerTitle");
-      const metaEl = document.getElementById("memoriaViewerMeta");
-      const textoEl = document.getElementById("memoriaViewerTexto");
+    // ✅ Overlay de memória (abre “outra aba”)
+    function abrirMemoriaPage(diaMem, idx){
+      const page = document.getElementById("memoriaPage");
+      const titleEl = document.getElementById("memoriaPageTitle");
+      const metaEl = document.getElementById("memoriaPageMeta");
+      const textoEl = document.getElementById("memoriaPageTexto");
+      const btnVoltar = document.getElementById("btnMemoriaVoltar");
 
       const liberada = (DIA_ATUAL >= diaMem);
       const titulo = memoriaTituloPorIndice(idx);
 
-      viewer.classList.remove("hidden");
       titleEl.textContent = titulo;
+      textoEl.textContent = "";
 
       if(!liberada){
         metaEl.textContent = `Bloqueada até o Dia ${diaMem}.`;
         textoEl.textContent = `Quando chegar o Dia ${diaMem}, essa memória vai abrir — e vai ficar disponível pra sempre.`;
-        return;
+      } else {
+        metaEl.textContent = `Liberada no Dia ${diaMem}.`;
+        const texto = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(diaMem) : "";
+        const conteudo = texto && texto.trim().length ? texto : "Em breve...";
+        typeText(textoEl, conteudo, 12);
       }
 
-      metaEl.textContent = `Liberada no Dia ${diaMem}.`;
-      const texto = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(diaMem) : "";
-      const conteudo = texto && texto.trim().length ? texto : "Em breve...";
-      typeText(textoEl, conteudo, 12);
+      page.classList.remove("hidden");
+      page.setAttribute("aria-hidden", "false");
+      document.body.classList.add("memoria-mode");
+      page.scrollTop = 0;
+
+      btnVoltar.onclick = () => fecharMemoriaPage();
     }
 
-    function fecharMemoriaViewer(silencioso=false){
-      const viewer = document.getElementById("memoriaViewer");
-      const textoEl = document.getElementById("memoriaViewerTexto");
-      if(!silencioso && viewer.classList.contains("hidden")) return;
-      viewer.classList.add("hidden");
-      textoEl.textContent = "";
+    function fecharMemoriaPage(silencioso=false){
+      const page = document.getElementById("memoriaPage");
+      if(!silencioso && page.classList.contains("hidden")) return;
+
+      page.classList.add("hidden");
+      page.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("memoria-mode");
     }
 
     // ===== Dia 365 — cápsula page =====
@@ -644,7 +692,6 @@ Ele renova.` }
       const btnVoltar = document.getElementById("btnCapsulaVoltar");
       const btnFinal = document.getElementById("btnEscolherDeNovo");
 
-      // pode manter salvo como “já abriu”, mas NÃO será usado pra autoabrir
       localStorage.setItem(CAPSULA_OPEN_KEY, "1");
 
       cartaEl.textContent = "";
@@ -720,6 +767,7 @@ Ele renova.` }
 
           overlay.classList.remove("show");
           fecharCapsulaPage(true);
+          fecharMemoriaPage(true);
           carregarHoje();
         }, 1000);
       }, 3000);
@@ -738,6 +786,7 @@ Ele renova.` }
 
       esconderCapsulaTrigger();
       fecharCapsulaPage(true);
+      fecharMemoriaPage(true);
 
       if(dia <= 0){
         document.body.removeAttribute("data-ato");
@@ -762,7 +811,6 @@ Ele renova.` }
 
         const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
         typeText(poemaEl, poema365 || "Em breve...", 12, () => {
-          // ✅ só mostra o botão. NÃO abre automático nunca.
           mostrarCapsulaTrigger();
         });
         return;
@@ -802,6 +850,7 @@ Ele renova.` }
         setDayAttr(DIA_ATUAL);
         esconderCapsulaTrigger();
         fecharCapsulaPage(true);
+        fecharMemoriaPage(true);
         mostrarIntro(DIA_ATUAL);
         return;
       }
