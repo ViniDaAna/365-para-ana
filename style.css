@@ -4,21 +4,21 @@
 :root{
   --bg:#0d0d0f;
   --bg2:#141416;
-  --panel:rgba(20,20,22,.85);
+  --panel:rgba(20,20,22,0.85);
   --text:#f1e9dc;
-  --muted:rgba(241,233,220,.65);
+  --muted:rgba(241,233,220,0.65);
 
-  --line:rgba(212,175,55,.18);
-  --border:rgba(212,175,55,.25);
+  --line:rgba(212,175,55,0.18);
+  --border:rgba(212,175,55,0.25);
   --accent:#d4af37;
 
-  --extraBg: rgba(0,0,0,.22);
-  --extraBorder: rgba(212,175,55,.18);
+  --extraBg: rgba(0,0,0,0.22);
+  --extraBorder: rgba(212,175,55,0.18);
 
-  --paperBase: rgba(24,24,28,.92);
-  --paperLine: rgba(212,175,55,.12);
-  --paperMargin: rgba(225,85,95,.30);
-  --paperNoise: rgba(255,255,255,.03);
+  --paperBase: rgba(24,24,28,0.92);
+  --paperLine: rgba(212,175,55,0.12);
+  --paperMargin: rgba(225,85,95,0.30);
+  --paperNoise: rgba(255,255,255,0.03);
 }
 
 body{
@@ -32,7 +32,7 @@ body{
   padding:24px;
 
   background:
-    radial-gradient(900px 500px at 50% 20%, rgba(255,255,255,.05), transparent 60%),
+    radial-gradient(900px 500px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
     linear-gradient(180deg, var(--bg), var(--bg2));
 
   color:var(--text);
@@ -43,10 +43,10 @@ body[data-dia="365"]::after{
   position:fixed;
   inset:0;
   pointer-events:none;
-  opacity:.18;
+  opacity:0.18;
   background:
-    radial-gradient(700px 380px at 50% 18%, rgba(230,200,110,.14), transparent 62%),
-    linear-gradient(180deg, rgba(230,200,110,.06), transparent 45%);
+    radial-gradient(700px 380px at 50% 18%, rgba(230,200,110,0.14), transparent 62%),
+    linear-gradient(180deg, rgba(230,200,110,0.06), transparent 45%);
   z-index:0;
 }
 
@@ -59,11 +59,11 @@ body[data-dia="365"]::after{
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:18px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.60);
 
   opacity:0;
   transform:translateY(6px);
-  animation:fadeIn .7s ease forwards;
+  animation:fadeIn 0.7s ease forwards;
 
   overflow:hidden;
 }
@@ -117,35 +117,35 @@ body.modo-arquivo #conteudo{
   transform: translateX(-105%);
   background:
     linear-gradient(90deg,
-      rgba(255,255,255,.00) 0%,
-      rgba(255,255,255,.03) 25%,
-      rgba(0,0,0,.18) 55%,
-      rgba(0,0,0,.00) 100%);
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.03) 25%,
+      rgba(0,0,0,0.18) 55%,
+      rgba(0,0,0,0.00) 100%);
   transition: none;
 }
 
 #conteudo.pageflip-in::before{
   opacity:1;
-  animation: pageSweepIn .52s ease forwards;
+  animation: pageSweepIn 0.52s ease forwards;
 }
 #conteudo.pageflip-out::before{
   opacity:1;
-  animation: pageSweepOut .52s ease forwards;
+  animation: pageSweepOut 0.52s ease forwards;
 }
 
 @keyframes pageSweepIn{
-  0%{ transform: translateX(-105%); opacity:.0; }
+  0%{ transform: translateX(-105%); opacity:0.0; }
   15%{ opacity:1; }
   100%{ transform: translateX(105%); opacity:0; }
 }
 @keyframes pageSweepOut{
-  0%{ transform: translateX(105%); opacity:.0; }
+  0%{ transform: translateX(105%); opacity:0.0; }
   15%{ opacity:1; }
   100%{ transform: translateX(-105%); opacity:0; }
 }
 
-#conteudo.pageflip-in{ animation: bumpIn .52s ease; }
-#conteudo.pageflip-out{ animation: bumpOut .52s ease; }
+#conteudo.pageflip-in{ animation: bumpIn 0.52s ease; }
+#conteudo.pageflip-out{ animation: bumpOut 0.52s ease; }
 @keyframes bumpIn{
   0%{ transform: translateY(0) scale(1); }
   35%{ transform: translateY(-1px) scale(1.01); }
@@ -183,7 +183,7 @@ h1,h2{
   top:18px;
   right:22px;
   font-size:13px;
-  color:rgba(241,233,220,.4);
+  color:rgba(241,233,220,0.40);
   letter-spacing:1px;
   user-select:none;
 }
@@ -191,7 +191,7 @@ h1,h2{
 input{
   padding:12px;
   border:1px solid var(--border);
-  background:rgba(0,0,0,.25);
+  background:rgba(0,0,0,0.25);
   color:var(--text);
   border-radius:12px;
   margin-top:14px;
@@ -201,7 +201,7 @@ input{
   outline:none;
 }
 
-input::placeholder{ color:rgba(241,233,220,.4); }
+input::placeholder{ color:rgba(241,233,220,0.40); }
 
 button{
   padding:12px 26px;
@@ -211,21 +211,21 @@ button{
   border:1px solid var(--border);
   border-radius:16px;
   cursor:pointer;
-  transition:.3s ease;
+  transition:0.3s ease;
   font-size:16px;
   letter-spacing:1px;
   font-family:'Cormorant Garamond', serif;
 }
 
 button:hover{
-  background:rgba(212,175,55,.08);
+  background:rgba(212,175,55,0.08);
   transform:translateY(-2px);
 }
 
 button:active{ transform:translateY(0); }
 
 button:disabled{
-  opacity:.45;
+  opacity:0.45;
   cursor:not-allowed;
   transform:none;
 }
@@ -252,13 +252,13 @@ button:disabled{
 .meta{
   margin-top:18px;
   font-size:14px;
-  color:rgba(241,233,220,.45);
+  color:rgba(241,233,220,0.45);
 }
 
 .saudade{
   margin-top:18px;
   font-size:16px;
-  color:rgba(241,233,220,.75);
+  color:rgba(241,233,220,0.75);
   line-height:1.8;
 }
 
@@ -266,13 +266,13 @@ button:disabled{
   margin-top:28px;
   font-size:15px;
   letter-spacing:1px;
-  color:rgba(241,233,220,.35);
+  color:rgba(241,233,220,0.35);
 }
 
 .fade{
   opacity:0;
   transform:translateY(4px);
-  transition:.4s ease;
+  transition:0.4s ease;
 }
 .fade.show{
   opacity:1;
@@ -292,8 +292,8 @@ button:disabled{
 
 .extraTag{
   font-size: 13px;
-  letter-spacing: .8px;
-  color: rgba(241,233,220,.58);
+  letter-spacing: 0.8px;
+  color: rgba(241,233,220,0.58);
   margin-bottom: 8px;
   text-transform: uppercase;
 }
@@ -301,7 +301,7 @@ button:disabled{
 .extraTexto{
   font-size: 16px;
   line-height: 1.85;
-  color: rgba(241,233,220,.90);
+  color: rgba(241,233,220,0.90);
   white-space: pre-wrap;
 }
 
@@ -324,13 +324,13 @@ button:disabled{
   margin-top: 0;
   padding: 10px 14px;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.12);
-  color: rgba(241,233,220,.92);
-  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(241,233,220,0.92);
+  background: rgba(255,255,255,0.04);
 }
 
 .ghostBtn:hover{
-  background: rgba(255,255,255,.07);
+  background: rgba(255,255,255,0.07);
   transform: translateY(-2px);
 }
 
@@ -341,13 +341,13 @@ button:disabled{
 
 .titleSmall{
   color: var(--accent);
-  letter-spacing: .8px;
+  letter-spacing: 0.8px;
   font-size: 20px;
 }
 
 .metaSmall{
   margin-top: 4px;
-  color: rgba(241,233,220,.55);
+  color: rgba(241,233,220,0.55);
   font-size: 14px;
 }
 
@@ -364,25 +364,25 @@ button:disabled{
   text-align:left;
   padding: 14px 14px;
   border-radius: 16px;
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.10);
   display:flex;
   align-items: baseline;
   gap: 10px;
 }
 
-.arquivoItem:hover{ background: rgba(212,175,55,.09); }
+.arquivoItem:hover{ background: rgba(212,175,55,0.09); }
 
 .arquivoDia{
   font-size: 14px;
-  color: rgba(241,233,220,.72);
+  color: rgba(241,233,220,0.72);
   min-width: 70px;
 }
 
 .arquivoTitulo{
   font-size: 16px;
-  color: rgba(241,233,220,.94);
-  letter-spacing: .4px;
+  color: rgba(241,233,220,0.94);
+  letter-spacing: 0.4px;
 }
 
 .lockIcon{
@@ -391,7 +391,7 @@ button:disabled{
   display:inline-flex;
   justify-content:center;
   align-items:center;
-  opacity: .95;
+  opacity: 0.95;
 }
 
 /* Dia 365 trigger */
@@ -400,21 +400,21 @@ button:disabled{
   width: min(56ch, 100%);
   padding: 16px 16px;
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.16);
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.16);
   text-align:center;
 }
 
 .capsulaTitle{
   font-size: 18px;
-  letter-spacing: .6px;
-  color: rgba(241,233,220,.95);
+  letter-spacing: 0.6px;
+  color: rgba(241,233,220,0.95);
 }
 
 .capsulaMeta{
   margin-top: 6px;
   font-size: 14px;
-  color: rgba(241,233,220,.60);
+  color: rgba(241,233,220,0.60);
 }
 
 .btnCapsula{
@@ -430,14 +430,14 @@ button:disabled{
   border-radius: 18px;
 
   background:
-    radial-gradient(900px 480px at 50% 14%, rgba(255,255,255,.06), transparent 62%),
-    linear-gradient(180deg, rgba(12,12,14,.96), rgba(8,8,10,.98));
+    radial-gradient(900px 480px at 50% 14%, rgba(255,255,255,0.06), transparent 62%),
+    linear-gradient(180deg, rgba(12,12,14,0.96), rgba(8,8,10,0.98));
 
   padding: 18px 16px 28px;
 
   opacity: 0;
   transform: translateY(6px);
-  transition: .45s ease;
+  transition: 0.45s ease;
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -460,13 +460,13 @@ body.capsula-mode #capsulaPage{
   z-index: 2;
   padding-top: 2px;
   padding-bottom: 10px;
-  background: linear-gradient(180deg, rgba(10,10,12,.96), rgba(10,10,12,.78), rgba(10,10,12,0));
+  background: linear-gradient(180deg, rgba(10,10,12,0.96), rgba(10,10,12,0.78), rgba(10,10,12,0));
   backdrop-filter: blur(2px);
 }
 
 .capsulaTopbarTitle{
-  color: rgba(241,233,220,.72);
-  letter-spacing: .8px;
+  color: rgba(241,233,220,0.72);
+  letter-spacing: 0.8px;
   font-size: 15px;
   text-transform: uppercase;
 }
@@ -484,9 +484,9 @@ body.capsula-mode #capsulaPage{
 .notebookCover{
   height: 34px;
   border-radius: 14px;
-  border: 1px solid rgba(230,200,110,.22);
-  background: linear-gradient(180deg, rgba(25,25,30,.92), rgba(12,12,14,.95));
-  box-shadow: 0 18px 45px rgba(0,0,0,.55);
+  border: 1px solid rgba(230,200,110,0.22);
+  background: linear-gradient(180deg, rgba(25,25,30,0.92), rgba(12,12,14,0.95));
+  box-shadow: 0 18px 45px rgba(0,0,0,0.55);
   transform-origin: left center;
   transform: rotateY(0deg);
   position:relative;
@@ -495,15 +495,15 @@ body.capsula-mode #capsulaPage{
 .notebookPaper{
   margin-top: -8px;
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,0.10);
   background:
-    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.04), transparent 60%),
-    radial-gradient(1px 1px at 72% 44%, rgba(255,255,255,.035), transparent 60%),
-    radial-gradient(1px 1px at 38% 78%, rgba(255,255,255,.03), transparent 60%),
+    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.04), transparent 60%),
+    radial-gradient(1px 1px at 72% 44%, rgba(255,255,255,0.035), transparent 60%),
+    radial-gradient(1px 1px at 38% 78%, rgba(255,255,255,0.03), transparent 60%),
     linear-gradient(to right,
       transparent 0,
       transparent 62px,
-      rgba(225,85,95,.18) 63px,
+      rgba(225,85,95,0.18) 63px,
       transparent 64px,
       transparent 100%
     ),
@@ -511,21 +511,21 @@ body.capsula-mode #capsulaPage{
       to bottom,
       rgba(255,255,255,0.00) 0px,
       rgba(255,255,255,0.00) 26px,
-      rgba(230,200,110,.10) 27px
+      rgba(230,200,110,0.10) 27px
     );
   padding: 16px 18px 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.55);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.55);
   opacity: 0;
   transform: translateY(10px);
-  transition: .55s ease;
+  transition: 0.55s ease;
 }
 
-.notebook.open .notebookCover{ animation: coverOpen .75s ease forwards; }
+.notebook.open .notebookCover{ animation: coverOpen 0.75s ease forwards; }
 
 .notebook.open .notebookPaper{
   opacity: 1;
   transform: translateY(0);
-  transition-delay: .18s;
+  transition-delay: 0.18s;
 }
 
 @keyframes coverOpen{
@@ -543,22 +543,22 @@ body.capsula-mode #capsulaPage{
 }
 
 .capsulaPaperTitle{
-  color: rgba(241,233,220,.94);
+  color: rgba(241,233,220,0.94);
   font-size: 18px;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
 }
 
 .capsulaPaperDate{
-  color: rgba(241,233,220,.58);
+  color: rgba(241,233,220,0.58);
   font-size: 13px;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
 }
 
 .cursiva{
   font-family: 'Parisienne', cursive;
   font-size: 22px;
   line-height: 1.95;
-  color: rgba(241,233,220,.96);
+  color: rgba(241,233,220,0.96);
   white-space: pre-wrap;
 }
 
@@ -569,15 +569,15 @@ body.capsula-mode #capsulaPage{
 .capsulaLine{
   height: 1px;
   width: 100%;
-  background: rgba(212,175,55,.22);
+  background: rgba(212,175,55,0.22);
   margin: 10px 0 10px;
 }
 
 .capsulaDecidi{
   text-align:center;
   font-size: 16px;
-  letter-spacing: .6px;
-  color: rgba(241,233,220,.92);
+  letter-spacing: 0.6px;
+  color: rgba(241,233,220,0.92);
 }
 
 .btnEscolherDeNovo{
@@ -594,19 +594,19 @@ body.capsula-mode #capsulaPage{
   width: min(92vw, 520px);
   padding: 14px 18px;
 
-  background: rgba(20,20,22,.95);
-  border: 1px solid rgba(212,175,55,.22);
+  background: rgba(20,20,22,0.95);
+  border: 1px solid rgba(212,175,55,0.22);
   border-radius: 18px;
 
-  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
 
-  color: rgba(241,233,220,.92);
+  color: rgba(241,233,220,0.92);
   text-align: center;
-  letter-spacing: .6px;
+  letter-spacing: 0.6px;
   font-size: 16px;
 
   opacity: 0;
-  transition:.28s ease;
+  transition: 0.28s ease;
   z-index: 999;
 }
 
@@ -642,20 +642,20 @@ body.capsula-mode #capsulaPage{
   margin-top: 0;
   padding: 10px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  color: rgba(241,233,220,.90);
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: rgba(241,233,220,0.90);
   font-size: 14px;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
 }
 
 .rangeBtn:hover{
-  background: rgba(255,255,255,.07);
+  background: rgba(255,255,255,0.07);
 }
 
 .rangeBtn.active{
   border-color: var(--border);
-  background: rgba(212,175,55,.10);
+  background: rgba(212,175,55,0.10);
   color: var(--accent);
 }
 
@@ -667,14 +667,14 @@ body.capsula-mode #capsulaPage{
   border-radius: 18px;
 
   background:
-    radial-gradient(900px 480px at 50% 14%, rgba(255,255,255,.06), transparent 62%),
-    linear-gradient(180deg, rgba(12,12,14,.96), rgba(8,8,10,.98));
+    radial-gradient(900px 480px at 50% 14%, rgba(255,255,255,0.06), transparent 62%),
+    linear-gradient(180deg, rgba(12,12,14,0.96), rgba(8,8,10,0.98));
 
   padding: 18px 16px 28px;
 
   opacity: 0;
   transform: translateY(6px);
-  transition: .45s ease;
+  transition: 0.45s ease;
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -697,13 +697,13 @@ body.memoria-mode #memoriaPage{
   z-index: 2;
   padding-top: 2px;
   padding-bottom: 10px;
-  background: linear-gradient(180deg, rgba(10,10,12,.96), rgba(10,10,12,.78), rgba(10,10,12,0));
+  background: linear-gradient(180deg, rgba(10,10,12,0.96), rgba(10,10,12,0.78), rgba(10,10,12,0));
   backdrop-filter: blur(2px);
 }
 
 .memoriaTopbarTitle{
-  color: rgba(241,233,220,.72);
-  letter-spacing: .8px;
+  color: rgba(241,233,220,0.72);
+  letter-spacing: 0.8px;
   font-size: 15px;
   text-transform: uppercase;
 }
@@ -715,9 +715,9 @@ body.memoria-mode #memoriaPage{
   margin: 10px auto 0;
   padding: 16px 18px 18px;
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.18);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.45);
   text-align:left;
 }
 
@@ -730,71 +730,71 @@ body.memoria-mode #memoriaPage{
 }
 
 .memoriaPaperTitle{
-  color: rgba(241,233,220,.94);
+  color: rgba(241,233,220,0.94);
   font-size: 18px;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
 }
 
 .memoriaPaperMeta{
-  color: rgba(241,233,220,.58);
+  color: rgba(241,233,220,0.58);
   font-size: 13px;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
 }
 
 .memoriaPageTexto{
   white-space: pre-wrap;
-  color: rgba(241,233,220,.96);
+  color: rgba(241,233,220,0.96);
   font-size: 18px;
   line-height: 1.95;
 }
 
 /* Temas por ato */
 body[data-ato="2"]{
-  --line: rgba(224,180,90,.16);
-  --border: rgba(224,180,90,.24);
+  --line: rgba(224,180,90,0.16);
+  --border: rgba(224,180,90,0.24);
   --accent: #e0b45a;
-  --extraBorder: rgba(224,180,90,.16);
+  --extraBorder: rgba(224,180,90,0.16);
 
-  --paperLine: rgba(224,180,90,.11);
-  --paperMargin: rgba(225,85,95,.26);
+  --paperLine: rgba(224,180,90,0.11);
+  --paperMargin: rgba(225,85,95,0.26);
 }
 
 body[data-ato="3"]{
-  --line: rgba(140,40,55,.20);
-  --border: rgba(140,40,55,.28);
+  --line: rgba(140,40,55,0.20);
+  --border: rgba(140,40,55,0.28);
   --accent: #8c2837;
-  --extraBorder: rgba(140,40,55,.20);
+  --extraBorder: rgba(140,40,55,0.20);
 
-  --paperLine: rgba(140,40,55,.12);
-  --paperMargin: rgba(225,85,95,.28);
+  --paperLine: rgba(140,40,55,0.12);
+  --paperMargin: rgba(225,85,95,0.28);
 }
 
 body[data-ato="4"]{
-  --line: rgba(200,180,120,.14);
-  --border: rgba(200,180,120,.22);
+  --line: rgba(200,180,120,0.14);
+  --border: rgba(200,180,120,0.22);
   --accent: #c8b478;
-  --extraBorder: rgba(200,180,120,.14);
+  --extraBorder: rgba(200,180,120,0.14);
 
-  --paperLine: rgba(200,180,120,.10);
-  --paperMargin: rgba(225,85,95,.22);
+  --paperLine: rgba(200,180,120,0.10);
+  --paperMargin: rgba(225,85,95,0.22);
 }
 
 body[data-ato="5"]{
-  --line: rgba(185,175,150,.14);
-  --border: rgba(185,175,150,.22);
+  --line: rgba(185,175,150,0.14);
+  --border: rgba(185,175,150,0.22);
   --accent: #b9af96;
-  --extraBorder: rgba(185,175,150,.14);
+  --extraBorder: rgba(185,175,150,0.14);
 
-  --paperLine: rgba(185,175,150,.10);
-  --paperMargin: rgba(225,85,95,.18);
+  --paperLine: rgba(185,175,150,0.10);
+  --paperMargin: rgba(225,85,95,0.18);
 }
 
 body[data-ato="6"]{
-  --line: rgba(230,200,110,.18);
-  --border: rgba(230,200,110,.26);
+  --line: rgba(230,200,110,0.18);
+  --border: rgba(230,200,110,0.26);
   --accent: #e6c86e;
-  --extraBorder: rgba(230,200,110,.18);
+  --extraBorder: rgba(230,200,110,0.18);
 
-  --paperLine: rgba(230,200,110,.11);
-  --paperMargin: rgba(225,85,95,.26);
+  --paperLine: rgba(230,200,110,0.11);
+  --paperMargin: rgba(225,85,95,0.26);
 }
