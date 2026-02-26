@@ -21,7 +21,7 @@ const FINAL_LETTER_DAY = 365; // mantido por compatibilidade
 const CARTA_FINAL = `// CARTA FINAL — DIA 365 (não usado agora)
 `;
 
-// ===== DIA 365 (NOVO) =====
+// ===== DIA 365 =====
 const POEMA_365 = `Não foi sobre escrever.
 
 Foi sobre ficar.
