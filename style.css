@@ -294,6 +294,99 @@ button:disabled{ opacity:0.45; cursor:not-allowed; transform:none; }
 }
 .btnIntro{ margin-top: 14px; width: 100%; }
 
+/* ===== ATO 1 — PALAVRA + MONTAGEM ===== */
+.ato1Chave{
+  margin: 18px auto 0;
+  width: min(56ch, 100%);
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(212,175,55,0.18);
+  background: rgba(0,0,0,0.14);
+  text-align: center;
+}
+
+.ato1Label{
+  font-size: 12px;
+  letter-spacing: 0.90px;
+  text-transform: uppercase;
+  color: rgba(241,233,220,0.55);
+}
+
+.ato1PalavraWrap{
+  margin-top: 10px;
+}
+
+.ato1Palavra{
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,55,0.22);
+  background: rgba(212,175,55,0.06);
+  color: var(--accent);
+  letter-spacing: 0.80px;
+  font-size: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,0.20);
+}
+
+.ato1Montagem{
+  margin: 18px auto 0;
+  width: min(56ch, 100%);
+  padding: 18px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(212,175,55,0.16);
+  background: rgba(0,0,0,0.12);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.ato1Montagem.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ato1Word{
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,55,0.18);
+  background: rgba(212,175,55,0.05);
+  color: rgba(241,233,220,0.92);
+  letter-spacing: 0.40px;
+  font-size: 16px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.45s ease, transform 0.45s ease, background 0.65s ease, color 0.65s ease;
+}
+
+.ato1Montagem.show .ato1Word{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ato1Montagem.assemble{
+  max-width: 52ch;
+  gap: 6px;
+  padding: 22px 16px;
+  background: rgba(0,0,0,0.16);
+  border-color: rgba(212,175,55,0.22);
+}
+
+.ato1Montagem.assemble .ato1Word{
+  border-color: transparent;
+  background: transparent;
+  color: rgba(241,233,220,0.96);
+  padding: 0;
+  border-radius: 0;
+  letter-spacing: 0.35px;
+  font-size: 18px;
+}
+/* ===== /ATO 1 ===== */
+
 /* Arquivos */
 .arquivoBox{ margin-top: 10px; }
 .arquivoHeader{ display:flex; align-items:center; justify-content:space-between; gap: 12px; }
