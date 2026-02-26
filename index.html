@@ -170,7 +170,7 @@
   <script>
     const senhaCorreta = "10022024";
     const dataInicioPadrao = new Date("2026-02-24T00:00:00");
-    const START_OVERRIDE_KEY = "projeto365_start_override"; // ISO YYYY-MM-DD
+    const START_OVERRIDE_KEY = "projeto365_start_override";
 
     let DIA_ATUAL = 1;
     let DIA_EM_TELA = 1;
@@ -254,11 +254,8 @@ Ele renova.` }
     function setTemaPorAto(dia){ document.body.setAttribute("data-ato", String(getAto(dia))); }
 
     function setDayAttr(dia){
-      if(dia >= 1 && dia <= 365){
-        document.body.setAttribute("data-dia", String(dia));
-      } else {
-        document.body.removeAttribute("data-dia");
-      }
+      if(dia >= 1 && dia <= 365) document.body.setAttribute("data-dia", String(dia));
+      else document.body.removeAttribute("data-dia");
     }
 
     function setCornerDates(){
@@ -298,7 +295,6 @@ Ele renova.` }
       bloco.classList.add("show");
     }
 
-    // Digitação padrão
     let typingTimer = null;
     function typeText(el, text, speed=12, onDone=null){
       clearTimeout(typingTimer);
@@ -316,7 +312,6 @@ Ele renova.` }
       step();
     }
 
-    // Digitação humana + auto-scroll
     function typeTextHuman(el, text, opts={}){
       const {
         minDelay = 34,
@@ -332,7 +327,6 @@ Ele renova.` }
 
       clearTimeout(typingTimer);
       el.textContent = "";
-
       let i = 0;
 
       function rand(a,b){ return a + Math.random() * (b-a); }
@@ -384,7 +378,6 @@ Ele renova.` }
       step();
     }
 
-    // ===== toast =====
     function pickSegredo(){ return segredos[Math.floor(Math.random() * segredos.length)]; }
 
     function mostrarToast(texto){
@@ -439,7 +432,6 @@ Ele renova.` }
       resetInatividade();
     }
 
-    // ===== intro de ato =====
     function introKeyForDay(dia){ return `projeto365_intro_vista_${dia}`; }
     function deveMostrarIntro(dia){
       if(dia !== DIA_ATUAL) return false;
@@ -471,7 +463,6 @@ Ele renova.` }
       };
     }
 
-    // ===== animação folhear =====
     function animarFolha(direcao){
       const c = document.getElementById("conteudo");
       c.classList.remove("pageflip-in", "pageflip-out");
@@ -484,7 +475,6 @@ Ele renova.` }
       }, 520);
     }
 
-    // ===== modos =====
     function entrarModoLista(titulo){
       document.body.classList.add("modo-arquivo");
       document.getElementById("botoesNormal").classList.add("hidden");
@@ -512,7 +502,6 @@ Ele renova.` }
       document.getElementById("botoesArquivo").classList.add("hidden");
     }
 
-    // ===== poemas: arquivo =====
     function primeiraLinha(texto){
       if(!texto) return "Sem título";
       const linha = String(texto).split("\n")[0].trim();
@@ -560,7 +549,6 @@ Ele renova.` }
       entrarModoLista("Arquivo");
     }
 
-    // ===== memórias =====
     function getMemoryDays(){
       const days = [];
       for(let d = 30; d <= 330; d += 30) days.push(d);
@@ -656,6 +644,7 @@ Ele renova.` }
       const btnVoltar = document.getElementById("btnCapsulaVoltar");
       const btnFinal = document.getElementById("btnEscolherDeNovo");
 
+      // pode manter salvo como “já abriu”, mas NÃO será usado pra autoabrir
       localStorage.setItem(CAPSULA_OPEN_KEY, "1");
 
       cartaEl.textContent = "";
@@ -665,7 +654,6 @@ Ele renova.` }
       page.setAttribute("aria-hidden", "false");
       document.body.classList.add("capsula-mode");
 
-      // garante scroll no topo antes de digitar
       page.scrollTop = 0;
 
       notebook.classList.remove("open");
@@ -686,7 +674,7 @@ Ele renova.` }
           pauseChance: 0.07,
           minPause: 260,
           maxPause: 760,
-          scrollContainer: page,      // ✅ auto-scroll aqui
+          scrollContainer: page,
           onDone: () => {
             fecho.classList.remove("hidden");
             page.scrollTop = page.scrollHeight;
@@ -737,7 +725,6 @@ Ele renova.` }
       }, 3000);
     }
 
-    // ===== render principal =====
     function carregarPoema(dia){
       DIA_EM_TELA = dia;
 
@@ -775,11 +762,8 @@ Ele renova.` }
 
         const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
         typeText(poemaEl, poema365 || "Em breve...", 12, () => {
+          // ✅ só mostra o botão. NÃO abre automático nunca.
           mostrarCapsulaTrigger();
-          const jaAberta = localStorage.getItem(CAPSULA_OPEN_KEY) === "1";
-          if(jaAberta){
-            setTimeout(() => abrirCapsulaPage(), 380);
-          }
         });
         return;
       }
