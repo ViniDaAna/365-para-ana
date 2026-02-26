@@ -151,7 +151,26 @@ Pra te lembrar.
 
 Que eu escolhi você.
 E que eu vou continuar escolhendo.`,
-  60: `Em breve...`,
+  60: `Eu lembro como se eu estivesse te contando agora.
+
+Era 19:00.
+A gente no shopping, indo pro cinema com aquela mistura de empolgação e nervoso que dá vontade de fingir que não existe.
+
+A gente foi assistir Aquaman…
+e eu juro que tentei prestar atenção.
+Mas eu tava muito mais preocupado em parecer tranquilo do que em entender o filme.
+
+Eu lembro de pensar: “não estraga isso”.
+Lembro do meu coração acelerado tentando disfarçar.
+Lembro de você ali do meu lado, e de como aquilo já parecia diferente.
+
+No fim, a gente nem assistiu direito.
+
+Mas eu saí daquele cinema com um sorriso bobo,
+daquele tipo que você tenta esconder e não consegue.
+
+Talvez o filme tenha sido qualquer coisa.
+Mas você… já tava ficando.`,
   90: `Em breve...`,
   120:`Em breve...`,
   150:`Em breve...`,
@@ -164,7 +183,7 @@ E que eu vou continuar escolhendo.`,
 };
 
 // ==============================
-// SEUS POEMAS (1–30)
+// SEUS POEMAS (1–60)
 // ==============================
 
 const poemas = [
@@ -546,7 +565,244 @@ E vou escolher ficar.
 Porque amar você
 não é impulso.
 
-É decisão renovada.`
+É decisão renovada.`,
+
+/* ===== 31–60 (Ato 2 — Conexão) ===== */
+
+`Hoje eu não pensei em grandes promessas.
+Pensei no detalhe.
+No jeito que você fica quando esquece do mundo.
+
+Eu comecei a te amar também por essas coisas pequenas.
+Sem barulho.
+Só presença.
+
+E eu gosto de estar perto.`,
+
+`Tem um tipo de paz que só existe
+quando eu sei que você tá do outro lado.
+
+Não é sobre falar o tempo todo.
+É sobre o silêncio não assustar.
+
+É só eu…
+ficando.`,
+
+`Eu tenho reparado no “entre”.
+Entre uma frase e outra.
+Entre uma risada e outra.
+
+É ali que eu vejo você de verdade.
+E é ali que eu vou ficando mais manso.`,
+
+`Eu gosto do seu cotidiano.
+Do jeito simples.
+De como você existe sem tentar.
+
+Sem perceber,
+eu comecei a querer os dias comuns também.
+Os dias nossos.`,
+
+`Eu não quero te arrancar do mundo.
+Eu só quero caber nele com você.
+
+Na pressa.
+Na volta pra casa.
+No meio do nada.
+
+Eu quero ser presença,
+não urgência.`,
+
+`Às vezes eu olho pra você
+e dá vontade de agradecer
+por coisas que você nem fez “pra mim”.
+
+Só por ser você.
+Por existir assim.
+
+Você me deixa mais calmo
+sem perceber.`,
+
+`Eu treino na minha cabeça
+como eu vou te olhar quando te ver.
+
+Como se desse pra preparar o peito.
+Como se eu tivesse controle.
+
+Aí você aparece
+e eu esqueço tudo.`,
+
+`Amar você não é só sentir.
+É escolher o cuidado antes da resposta.
+É respirar antes do orgulho.
+
+É decidir
+não perder o que é importante
+por pouca coisa.`,
+
+`Eu gosto de você
+do jeito que se gosta de casa.
+
+Sem espetáculo.
+Sem pressa.
+
+Só vontade de voltar.`,
+
+`Eu fui ficando…
+e quando eu percebi,
+já não era intensidade.
+
+Era verdade.`,
+
+`Eu não sou simples o tempo todo.
+Tenho minhas inseguranças quietas.
+
+Mas com você
+eu sinto que posso ser honesto
+sem virar fraqueza.`,
+
+`Às vezes eu tenho medo
+de não ser suficiente.
+
+Mas amor não é perfeição.
+É constância.
+
+E eu tenho isso.`,
+
+`Eu penso demais.
+Crio cenários que não existem.
+
+Mas quando você me olha
+como quem diz “fica”,
+eu respiro.`,
+
+`Eu sinto muito.
+Mais do que eu demonstro.
+
+E ainda assim,
+eu fico.`,
+
+`Eu tô aprendendo
+a não te amar com a mão fechada.
+
+Amar é abrir espaço.
+É confiar.
+
+E eu quero fazer isso direito.`,
+
+`O que eu tenho de mais íntimo
+não é meu corpo.
+
+É meu pensamento quando ninguém vê.
+E eu quero dividir isso com você.`,
+
+`Se eu errar o tom,
+me chama de volta.
+
+Eu volto.
+Eu aprendo.
+
+Eu não quero te amar pela metade.`,
+
+`Tem uma versão minha
+que aparece quando eu amo.
+
+Mais atento.
+Mais paciente.
+Mais humano.
+
+Eu gosto desse cara.
+E é você que chama ele.`,
+
+`Você importa
+num nível que me assusta um pouco.
+
+Mas eu prefiro esse susto
+do que a vida sem você.`,
+
+`Eu não quero prometer mundo.
+Quero prometer presença.
+
+Quando for fácil.
+Quando for difícil.
+
+Eu sei ficar.`,
+
+`Não é sobre intensidade.
+É sobre clareza.
+
+Eu não quero te viver como incêndio.
+Eu quero te viver como luz.`,
+
+`Pensar no futuro com você
+não me assusta.
+
+Me acalma.`,
+
+`Com você
+eu não preciso performar.
+
+Eu posso ser simples.
+
+E isso muda alguém.`,
+
+`Eu já confundi amor com pressa.
+Com urgência.
+Com falta.
+
+Mas com você foi diferente.
+Foi ficando claro.
+Sem alarde.
+
+Eu sei que é você.`,
+
+`Depois da certeza,
+o coração não acelera.
+
+Ele assenta.`,
+
+`Você melhora meus dias
+sem tentar melhorá-los.
+
+Você só entra.
+E o mundo fica menos pesado.`,
+
+`Eu penso em você
+como quem pensa em caminho.
+Em direção.
+Em retorno.`,
+
+`Com você,
+o comum é bom.
+
+E isso é raro.`,
+
+`Eu não preciso de grandes cenas.
+Eu preciso de continuidade.
+
+E você…
+é constância.`,
+
+`Coisas grandes
+começam pequenas.
+
+Sem anúncio.
+Sem certeza.
+
+Só dois corações
+tentando parecer tranquilos
+às sete da noite
+num cinema qualquer.
+
+É estranho pensar
+que algo tão importante
+nasceu assim.
+
+Quase silencioso.
+Quase desajeitado.
+
+E ainda assim,
+inesquecível.`
 
 ];
 
