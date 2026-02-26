@@ -40,19 +40,35 @@ body{
   color:var(--text);
 }
 
-/* Container */
+/* Amanhecer sutil (somente no Dia 365) */
+body[data-dia="365"]::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background:
+    radial-gradient(700px 380px at 50% 18%, rgba(230,200,110,.14), transparent 62%),
+    linear-gradient(180deg, rgba(230,200,110,.06), transparent 45%);
+  z-index:0;
+}
+
 .container{
   width:min(680px, 100%);
   padding:52px 42px;
   position:relative;
+  z-index:1;
+
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:18px;
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
+
   opacity:0;
   transform:translateY(6px);
   animation:fadeIn .7s ease forwards;
-  overflow:hidden; /* importante pro efeito de folhear */
+
+  overflow:hidden;
 }
 
 @keyframes fadeIn{
@@ -123,7 +139,6 @@ body.modo-arquivo #conteudo{
   100% { transform: translateX(-105%); opacity:0; }
 }
 
-/* micro bump */
 #conteudo.pageflip-in{ animation: bumpIn .52s ease; }
 #conteudo.pageflip-out{ animation: bumpOut .52s ease; }
 @keyframes bumpIn{
@@ -295,7 +310,7 @@ button:disabled{
   width: 100%;
 }
 
-/* Arquivos (poemas/memórias) */
+/* Arquivos */
 .arquivoBox{
   margin-top: 10px;
 }
@@ -374,7 +389,6 @@ button:disabled{
   letter-spacing: .4px;
 }
 
-/* Memórias: cadeado */
 .lockIcon{
   font-size: 16px;
   width: 22px;
@@ -384,7 +398,7 @@ button:disabled{
   opacity: .95;
 }
 
-/* Viewer de memória */
+/* Viewer memória */
 .memoriaViewer{
   margin-top: 14px;
   padding: 14px 16px;
@@ -427,6 +441,76 @@ button:disabled{
   justify-content:flex-end;
 }
 
+/* ===== DIA 365 — Cápsula ===== */
+.capsulaBox{
+  margin: 18px auto 0;
+  width: min(56ch, 100%);
+  padding: 16px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.16);
+}
+
+.capsulaTitle{
+  font-size: 18px;
+  letter-spacing: .6px;
+  color: rgba(241,233,220,.95);
+}
+
+.capsulaMeta{
+  margin-top: 6px;
+  font-size: 14px;
+  color: rgba(241,233,220,.60);
+}
+
+.btnCapsula{
+  margin-top: 14px;
+  width: 100%;
+}
+
+.capsulaCartaWrap{
+  margin-top: 14px;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: .6s ease;
+}
+
+.capsulaCartaWrap.softShow{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.capsulaCarta{
+  white-space: pre-wrap;
+  font-size: 18px;
+  line-height: 1.95;
+  color: rgba(241,233,220,.95);
+}
+
+.capsulaFecho{
+  margin-top: 14px;
+}
+
+.capsulaLine{
+  height: 1px;
+  width: 100%;
+  background: rgba(212,175,55,.22);
+  margin: 10px 0 10px;
+}
+
+.capsulaDecidi{
+  text-align:center;
+  font-size: 16px;
+  letter-spacing: .6px;
+  color: rgba(241,233,220,.92);
+}
+
+.btnEscolherDeNovo{
+  margin-top: 14px;
+  width: 100%;
+}
+
 /* Toast */
 .toast{
   position: fixed;
@@ -455,6 +539,21 @@ button:disabled{
 .toast.show{
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Overlay de fade-out final */
+.fadeOverlay{
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 3s ease;
+  z-index: 2000;
+}
+.fadeOverlay.show{
+  opacity: 1;
+  pointer-events: all;
 }
 
 /* Temas por ato */
