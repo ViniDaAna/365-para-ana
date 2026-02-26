@@ -44,9 +44,29 @@
         <button class="btnIntro" id="btnContinuarAto" type="button">Continuar</button>
       </div>
 
-      <!-- TEXTO PRINCIPAL (poema / prefácio / carta / etc.) -->
+      <!-- POEMA / TEXTO PRINCIPAL -->
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
+
+      <!-- ===== DIA 365 — CÁPSULA DO TEMPO (só aparece no 365) ===== -->
+      <div id="capsulaBox" class="capsulaBox hidden">
+        <div class="capsulaTitle">Cápsula do tempo.</div>
+        <div class="capsulaMeta">Escrita em 23/02/2025.</div>
+
+        <button id="btnAbrirCapsula" class="btnCapsula" type="button">Abrir</button>
+
+        <div id="capsulaCartaWrap" class="capsulaCartaWrap hidden">
+          <div id="capsulaCarta" class="capsulaCarta"></div>
+
+          <div id="capsulaFecho" class="capsulaFecho hidden">
+            <div class="capsulaLine"></div>
+            <div class="capsulaDecidi">23/02/2025 — Eu decidi.</div>
+
+            <button id="btnEscolherDeNovo" class="btnEscolherDeNovo" type="button">Escolher de novo</button>
+          </div>
+        </div>
+      </div>
+      <!-- ===== /DIA 365 ===== -->
 
       <!-- ARQUIVO: POEMAS -->
       <div id="arquivoBox" class="arquivoBox hidden">
@@ -124,11 +144,15 @@
   <!-- Toast -->
   <div id="toastSegredo" class="toast hidden" aria-live="polite"></div>
 
+  <!-- Overlay de fade final (Dia 365) -->
+  <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
+
   <script src="poemas.js"></script>
 
   <script>
     const senhaCorreta = "10022024";
-    const dataInicio = new Date("2026-02-24T00:00:00");
+    const dataInicioPadrao = new Date("2026-02-24T00:00:00");
+    const START_OVERRIDE_KEY = "projeto365_start_override"; // ISO YYYY-MM-DD
 
     let DIA_ATUAL = 1;
     let DIA_EM_TELA = 1;
@@ -202,7 +226,17 @@ Ele renova.`
 
     // ===== util =====
 
+    function getDataInicio(){
+      const iso = localStorage.getItem(START_OVERRIDE_KEY);
+      if(iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)){
+        return new Date(iso + "T00:00:00");
+      }
+      return dataInicioPadrao;
+    }
+
     function diffDias(){
+      const dataInicio = getDataInicio();
+
       const hoje = new Date();
       const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
       const I = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
@@ -220,6 +254,14 @@ Ele renova.`
 
     function setTemaPorAto(dia){
       document.body.setAttribute("data-ato", String(getAto(dia)));
+    }
+
+    function setDayAttr(dia){
+      if(dia >= 1 && dia <= 365){
+        document.body.setAttribute("data-dia", String(dia));
+      } else {
+        document.body.removeAttribute("data-dia");
+      }
     }
 
     function setCornerDates(){
@@ -268,9 +310,9 @@ Ele renova.`
       bloco.classList.add("show");
     }
 
-    // Digitação
+    // Digitação (com callback opcional)
     let typingTimer = null;
-    function typeText(el, text, speed=12){
+    function typeText(el, text, speed=12, onDone=null){
       clearTimeout(typingTimer);
       el.textContent = "";
       let i = 0;
@@ -280,6 +322,8 @@ Ele renova.`
         i++;
         if(i <= text.length){
           typingTimer = setTimeout(step, speed);
+        } else {
+          if(typeof onDone === "function") onDone();
         }
       }
       step();
@@ -409,10 +453,10 @@ Ele renova.`
       document.getElementById("botoesArquivo").classList.remove("hidden");
       document.getElementById("saudade").classList.add("hidden");
 
-      // limpa texto principal enquanto está em lista
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
+      esconderCapsula();
 
       document.getElementById("tituloTopo").innerText = titulo;
       animarFolha("in");
@@ -473,10 +517,9 @@ Ele renova.`
         lista.appendChild(btn);
       }
 
-      // tema do arquivo fica no ato do dia atual
       setTemaPorAto(DIA_ATUAL);
+      setDayAttr(DIA_ATUAL);
 
-      // mostra caixa de poemas e entra modo lista
       document.getElementById("arquivoBox").classList.remove("hidden");
       document.getElementById("memoriasBox").classList.add("hidden");
       entrarModoLista("Arquivo");
@@ -503,7 +546,6 @@ Ele renova.`
       const lista = document.getElementById("listaMemorias");
       lista.innerHTML = "";
 
-      // fecha viewer se estiver aberto
       fecharMemoriaViewer(true);
 
       days.forEach((diaMem, idx) => {
@@ -526,8 +568,8 @@ Ele renova.`
         lista.appendChild(btn);
       });
 
-      // tema consistente com o ato do dia atual
       setTemaPorAto(DIA_ATUAL);
+      setDayAttr(DIA_ATUAL);
 
       document.getElementById("arquivoBox").classList.add("hidden");
       document.getElementById("memoriasBox").classList.remove("hidden");
@@ -567,6 +609,99 @@ Ele renova.`
       textoEl.textContent = "";
     }
 
+    // ===== Dia 365 — cápsula =====
+
+    const CAPSULA_OPEN_KEY = "projeto365_capsula_365_aberta";
+
+    function esconderCapsula(){
+      const box = document.getElementById("capsulaBox");
+      const wrap = document.getElementById("capsulaCartaWrap");
+      const carta = document.getElementById("capsulaCarta");
+      const fecho = document.getElementById("capsulaFecho");
+
+      box.classList.add("hidden");
+      wrap.classList.add("hidden");
+      wrap.classList.remove("softShow");
+      carta.textContent = "";
+      fecho.classList.add("hidden");
+    }
+
+    function mostrarCapsula365DepoisDoPoema(){
+      const box = document.getElementById("capsulaBox");
+      const btnAbrir = document.getElementById("btnAbrirCapsula");
+      const wrap = document.getElementById("capsulaCartaWrap");
+      const cartaEl = document.getElementById("capsulaCarta");
+      const fecho = document.getElementById("capsulaFecho");
+      const btnFinal = document.getElementById("btnEscolherDeNovo");
+
+      box.classList.remove("hidden");
+
+      // estado (se recarregar no 365 depois de abrir)
+      const jaAberta = localStorage.getItem(CAPSULA_OPEN_KEY) === "1";
+
+      function abrir(){
+        localStorage.setItem(CAPSULA_OPEN_KEY, "1");
+
+        // texto da carta
+        const carta = (typeof getCartaCapsula365 === "function") ? getCartaCapsula365() : "";
+        wrap.classList.remove("hidden");
+        wrap.classList.remove("softShow");
+        void wrap.offsetWidth;
+        wrap.classList.add("softShow");
+
+        typeText(cartaEl, carta || "Em breve...", 12, () => {
+          fecho.classList.remove("hidden");
+        });
+      }
+
+      btnAbrir.onclick = () => abrir();
+
+      btnFinal.onclick = () => escolherDeNovo();
+
+      if(jaAberta){
+        abrir();
+      } else {
+        wrap.classList.add("hidden");
+        fecho.classList.add("hidden");
+        cartaEl.textContent = "";
+      }
+    }
+
+    function clearProjeto365Storage(){
+      // remove tudo que começa com "projeto365_" (inclui visitas, intro, toast, capsula, etc.)
+      const keys = [];
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith("projeto365_")) keys.push(k);
+      }
+      keys.forEach(k => localStorage.removeItem(k));
+    }
+
+    function escolherDeNovo(){
+      const overlay = document.getElementById("fadeOverlay");
+
+      overlay.classList.add("show");
+
+      // 3s fade + 1s preto
+      setTimeout(() => {
+        setTimeout(() => {
+          // reset: limpa progresso e define novo "início" para hoje -> Dia 1
+          const now = new Date();
+          const y = now.getFullYear();
+          const m = String(now.getMonth()+1).padStart(2,'0');
+          const d = String(now.getDate()).padStart(2,'0');
+          const iso = `${y}-${m}-${d}`;
+
+          clearProjeto365Storage();
+          localStorage.setItem(START_OVERRIDE_KEY, iso);
+
+          // volta UI
+          overlay.classList.remove("show");
+          carregarHoje();
+        }, 1000);
+      }, 3000);
+    }
+
     // ===== render principal =====
 
     function carregarPoema(dia){
@@ -578,10 +713,15 @@ Ele renova.`
 
       revelarBloco();
       setTemaPorAto(dia);
+      setDayAttr(dia);
+
+      // cápsula só existe no 365
+      esconderCapsula();
 
       // antes do início
       if(dia <= 0){
         document.body.removeAttribute("data-ato");
+        document.body.removeAttribute("data-dia");
         tituloTopo.innerText = "Antes do primeiro poema";
         metaEl.innerText = "";
         const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
@@ -589,7 +729,7 @@ Ele renova.`
         return;
       }
 
-      // pós 365
+      // pós 365 (não deve acontecer após reset, mas mantemos)
       if(dia > 365){
         tituloTopo.innerText = "365 dias com você";
         metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
@@ -597,12 +737,16 @@ Ele renova.`
         return;
       }
 
-      // carta
-      if(typeof isFinalLetterDay === "function" && isFinalLetterDay(dia)){
-        tituloTopo.innerText = "Dia 365 de 365";
-        metaEl.innerText = "A carta que fecha — e recomeça.";
-        const carta = (typeof CARTA_FINAL !== "undefined" && CARTA_FINAL) ? CARTA_FINAL : "Em breve...";
-        typeText(poemaEl, carta, 12);
+      // ===== DIA 365 (POEMA + CÁPSULA) =====
+      if(dia === 365){
+        tituloTopo.innerText = `Dia 365 de 365`;
+        metaEl.innerText = "Um poema por dia.";
+
+        const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
+        typeText(poemaEl, poema365 || "Em breve...", 12, () => {
+          // ritual aparece depois do poema
+          mostrarCapsula365DepoisDoPoema();
+        });
         return;
       }
 
@@ -625,7 +769,6 @@ Ele renova.`
       const btn = document.getElementById("btnAnteriores");
       btn.disabled = (DIA_ATUAL <= 1);
 
-      // sempre sai de listas
       sairModoLista();
 
       // antes do início
@@ -641,6 +784,8 @@ Ele renova.`
         document.getElementById("poema").textContent = "";
         document.getElementById("meta").textContent = "";
         setTemaPorAto(DIA_ATUAL);
+        setDayAttr(DIA_ATUAL);
+        esconderCapsula();
         mostrarIntro(DIA_ATUAL);
         return;
       }
