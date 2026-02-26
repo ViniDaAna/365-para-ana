@@ -803,7 +803,6 @@ Quase desajeitado.
 
 E ainda assim,
 inesquecível.`
-
 ];
 
 // ==============================
@@ -819,6 +818,28 @@ inesquecível.`
 Se você está vendo isso, é porque esse poema ainda não foi escrito no poemas.js.`;
   }
 })();
+
+// ✅ FIX GARANTIDO: força o poema do dia 60 no índice certo (poemas[59])
+poemas[59] = `Coisas grandes
+começam pequenas.
+
+Sem anúncio.
+Sem certeza.
+
+Só dois corações
+tentando parecer tranquilos
+às sete da noite
+num cinema qualquer.
+
+É estranho pensar
+que algo tão importante
+nasceu assim.
+
+Quase silencioso.
+Quase desajeitado.
+
+E ainda assim,
+inesquecível.`;
 
 // ==============================
 // Funções usadas pelo index.html
