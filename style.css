@@ -1,9 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
 
+/* =========================================================
+   PROJETO 365 — BASE
+   ========================================================= */
+
 :root{
+  /* AMBIENTE (fallback) */
   --bg:#0d0d0f;
   --bg2:#141416;
+
   --panel:rgba(20,20,22,0.85);
   --text:#f1e9dc;
   --muted:rgba(241,233,220,0.65);
@@ -19,7 +25,21 @@
   --paperLine: rgba(212,175,55,0.12);
   --paperMargin: rgba(225,85,95,0.30);
   --paperNoise: rgba(255,255,255,0.03);
+
+  /* =========================================================
+     TIPOGRAFIA — variáveis base (NÍVEL 2)
+     ========================================================= */
+  --poemWeight: 500;
+  --poemLetter: 0.20px;
+  --poemLine: 1.72;
+
+  --titleWeight: 600;
+  --titleLetter: 0.60px;
 }
+
+/* =========================================================
+   BODY / LAYOUT
+   ========================================================= */
 
 body{
   margin:0;
@@ -31,6 +51,7 @@ body{
   text-align:center;
   padding:24px;
 
+  /* ✅ background agora é “dirigido” por --bg / --bg2 */
   background:
     radial-gradient(900px 500px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
     linear-gradient(180deg, var(--bg), var(--bg2));
@@ -63,7 +84,7 @@ body[data-dia="365"]::after{
 
   opacity:0;
   transform:translateY(6px);
-  animation:fadeIn 0.7s ease forwards;
+  animation:fadeIn 0.70s ease forwards;
 
   overflow:hidden;
 }
@@ -84,7 +105,30 @@ body.memoria-mode #conteudo{
   overflow: visible;
 }
 
-/* ===== MODO ARQUIVO ===== */
+/* =========================================================
+   TIPOGRAFIA APLICADA (seletores reais do projeto)
+   ========================================================= */
+
+.poema,
+#poema{
+  font-weight: var(--poemWeight);
+  letter-spacing: var(--poemLetter);
+  line-height: var(--poemLine);
+}
+
+/* títulos do projeto */
+h1, h2,
+.title,
+.titleSmall,
+#tituloTopo{
+  font-weight: var(--titleWeight);
+  letter-spacing: var(--titleLetter);
+}
+
+/* =========================================================
+   MODO ARQUIVO (papel)
+   ========================================================= */
+
 body.modo-arquivo #conteudo{
   background: none !important;
   background-color: var(--paperBase) !important;
@@ -134,12 +178,12 @@ body.modo-arquivo #conteudo{
 }
 
 @keyframes pageSweepIn{
-  0%{ transform: translateX(-105%); opacity:0.0; }
+  0%{ transform: translateX(-105%); opacity:0.00; }
   15%{ opacity:1; }
   100%{ transform: translateX(105%); opacity:0; }
 }
 @keyframes pageSweepOut{
-  0%{ transform: translateX(105%); opacity:0.0; }
+  0%{ transform: translateX(105%); opacity:0.00; }
   15%{ opacity:1; }
   100%{ transform: translateX(-105%); opacity:0; }
 }
@@ -157,9 +201,11 @@ body.modo-arquivo #conteudo{
   100%{ transform: translateY(0) scale(1); }
 }
 
+/* =========================================================
+   UI BÁSICA
+   ========================================================= */
+
 h1,h2{
-  font-weight:500;
-  letter-spacing:1px;
   margin:0 0 14px;
   color:var(--accent);
   font-size:28px;
@@ -211,7 +257,7 @@ button{
   border:1px solid var(--border);
   border-radius:16px;
   cursor:pointer;
-  transition:0.3s ease;
+  transition:0.30s ease;
   font-size:16px;
   letter-spacing:1px;
   font-family:'Cormorant Garamond', serif;
@@ -240,7 +286,6 @@ button:disabled{
 .poema{
   margin-top:28px;
   font-size:20px;
-  line-height:2;
   color:var(--text);
   min-height:120px;
   white-space:pre-wrap;
@@ -259,7 +304,7 @@ button:disabled{
   margin-top:18px;
   font-size:16px;
   color:rgba(241,233,220,0.75);
-  line-height:1.8;
+  line-height:1.80;
 }
 
 .assinatura{
@@ -272,14 +317,17 @@ button:disabled{
 .fade{
   opacity:0;
   transform:translateY(4px);
-  transition:0.4s ease;
+  transition:0.40s ease;
 }
 .fade.show{
   opacity:1;
   transform:translateY(0);
 }
 
-/* Intro */
+/* =========================================================
+   INTRO
+   ========================================================= */
+
 .extra{
   margin: 10px auto 0;
   width: min(56ch, 100%);
@@ -292,7 +340,7 @@ button:disabled{
 
 .extraTag{
   font-size: 13px;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.80px;
   color: rgba(241,233,220,0.58);
   margin-bottom: 8px;
   text-transform: uppercase;
@@ -310,7 +358,10 @@ button:disabled{
   width: 100%;
 }
 
-/* Arquivos */
+/* =========================================================
+   ARQUIVOS
+   ========================================================= */
+
 .arquivoBox{ margin-top: 10px; }
 
 .arquivoHeader{
@@ -341,7 +392,6 @@ button:disabled{
 
 .titleSmall{
   color: var(--accent);
-  letter-spacing: 0.8px;
   font-size: 20px;
 }
 
@@ -382,7 +432,7 @@ button:disabled{
 .arquivoTitulo{
   font-size: 16px;
   color: rgba(241,233,220,0.94);
-  letter-spacing: 0.4px;
+  letter-spacing: 0.40px;
 }
 
 .lockIcon{
@@ -394,7 +444,40 @@ button:disabled{
   opacity: 0.95;
 }
 
-/* Dia 365 trigger */
+/* ✅ Range (arquivo por blocos de 30) */
+.rangeRow{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.rangeBtn{
+  margin-top: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: rgba(241,233,220,0.90);
+  font-size: 14px;
+  letter-spacing: 0.40px;
+}
+
+.rangeBtn:hover{
+  background: rgba(255,255,255,0.07);
+}
+
+.rangeBtn.active{
+  border-color: var(--border);
+  background: rgba(212,175,55,0.10);
+  color: var(--accent);
+}
+
+/* =========================================================
+   DIA 365 — TRIGGER + CÁPSULA
+   ========================================================= */
+
 .capsulaTrigger{
   margin: 18px auto 0;
   width: min(56ch, 100%);
@@ -407,7 +490,7 @@ button:disabled{
 
 .capsulaTitle{
   font-size: 18px;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.60px;
   color: rgba(241,233,220,0.95);
 }
 
@@ -422,7 +505,7 @@ button:disabled{
   width: 100%;
 }
 
-/* ✅ Página da cápsula agora rola por dentro */
+/* ✅ Página da cápsula rola por dentro */
 .capsulaPage{
   position:absolute;
   inset:0;
@@ -466,7 +549,7 @@ body.capsula-mode #capsulaPage{
 
 .capsulaTopbarTitle{
   color: rgba(241,233,220,0.72);
-  letter-spacing: 0.8px;
+  letter-spacing: 0.80px;
   font-size: 15px;
   text-transform: uppercase;
 }
@@ -545,13 +628,13 @@ body.capsula-mode #capsulaPage{
 .capsulaPaperTitle{
   color: rgba(241,233,220,0.94);
   font-size: 18px;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.40px;
 }
 
 .capsulaPaperDate{
   color: rgba(241,233,220,0.58);
   font-size: 13px;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.40px;
 }
 
 .cursiva{
@@ -576,7 +659,7 @@ body.capsula-mode #capsulaPage{
 .capsulaDecidi{
   text-align:center;
   font-size: 16px;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.60px;
   color: rgba(241,233,220,0.92);
 }
 
@@ -585,81 +668,10 @@ body.capsula-mode #capsulaPage{
   width: 100%;
 }
 
-/* Toast */
-.toast{
-  position: fixed;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%) translateY(12px);
-  width: min(92vw, 520px);
-  padding: 14px 18px;
+/* =========================================================
+   OVERLAY MEMÓRIA (aba/página separada)
+   ========================================================= */
 
-  background: rgba(20,20,22,0.95);
-  border: 1px solid rgba(212,175,55,0.22);
-  border-radius: 18px;
-
-  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
-
-  color: rgba(241,233,220,0.92);
-  text-align: center;
-  letter-spacing: 0.6px;
-  font-size: 16px;
-
-  opacity: 0;
-  transition: 0.28s ease;
-  z-index: 999;
-}
-
-.toast.show{
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.fadeOverlay{
-  position: fixed;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 3s ease;
-  z-index: 2000;
-}
-.fadeOverlay.show{
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* ✅ Range (arquivo por blocos de 30) */
-.rangeRow{
-  margin-top: 14px;
-  display:flex;
-  gap: 10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-.rangeBtn{
-  margin-top: 0;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
-  color: rgba(241,233,220,0.90);
-  font-size: 14px;
-  letter-spacing: 0.4px;
-}
-
-.rangeBtn:hover{
-  background: rgba(255,255,255,0.07);
-}
-
-.rangeBtn.active{
-  border-color: var(--border);
-  background: rgba(212,175,55,0.10);
-  color: var(--accent);
-}
-
-/* ✅ Overlay memória */
 .memoriaPage{
   position:absolute;
   inset:0;
@@ -703,7 +715,7 @@ body.memoria-mode #memoriaPage{
 
 .memoriaTopbarTitle{
   color: rgba(241,233,220,0.72);
-  letter-spacing: 0.8px;
+  letter-spacing: 0.80px;
   font-size: 15px;
   text-transform: uppercase;
 }
@@ -732,13 +744,13 @@ body.memoria-mode #memoriaPage{
 .memoriaPaperTitle{
   color: rgba(241,233,220,0.94);
   font-size: 18px;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.40px;
 }
 
 .memoriaPaperMeta{
   color: rgba(241,233,220,0.58);
   font-size: 13px;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.40px;
 }
 
 .memoriaPageTexto{
@@ -748,18 +760,106 @@ body.memoria-mode #memoriaPage{
   line-height: 1.95;
 }
 
-/* Temas por ato */
-body[data-ato="2"]{
-  --line: rgba(224,180,90,0.16);
-  --border: rgba(224,180,90,0.24);
-  --accent: #e0b45a;
-  --extraBorder: rgba(224,180,90,0.16);
+/* =========================================================
+   TOAST + FADE FINAL
+   ========================================================= */
 
-  --paperLine: rgba(224,180,90,0.11);
-  --paperMargin: rgba(225,85,95,0.26);
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) translateY(12px);
+  width: min(92vw, 520px);
+  padding: 14px 18px;
+
+  background: rgba(20,20,22,0.95);
+  border: 1px solid rgba(212,175,55,0.22);
+  border-radius: 18px;
+
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+
+  color: rgba(241,233,220,0.92);
+  text-align: center;
+  letter-spacing: 0.60px;
+  font-size: 16px;
+
+  opacity: 0;
+  transition: 0.28s ease;
+  z-index: 999;
 }
 
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.fadeOverlay{
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 3s ease;
+  z-index: 2000;
+}
+.fadeOverlay.show{
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* =========================================================
+   PROJETO 365 — ATMOSFERA + TIPOGRAFIA POR ATO (NÍVEL 2)
+   Objetivo: cada ato muda o ambiente de forma perceptível,
+   mas continua elegante (todos escuros, sem brega).
+   ========================================================= */
+
+/* ATO 1 — ESCOLHA (base firme, preto neutro + dourado) */
+body[data-ato="1"]{
+  --bg: #0d0d0f;
+  --bg2:#141416;
+
+  --line: rgba(212,175,55,0.18);
+  --border: rgba(212,175,55,0.25);
+  --accent: #d4af37;
+  --extraBorder: rgba(212,175,55,0.18);
+
+  --paperLine: rgba(212,175,55,0.12);
+  --paperMargin: rgba(225,85,95,0.30);
+
+  --poemWeight: 500;
+  --poemLetter: 0.35px;
+  --poemLine: 1.78;
+
+  --titleWeight: 650;
+  --titleLetter: 0.90px;
+}
+
+/* ATO 2 — CONEXÃO (azul petróleo quase preto: profundidade íntima) */
+body[data-ato="2"]{
+  --bg: #0f141a;
+  --bg2:#141a22;
+
+  --line: rgba(120,170,210,0.16);
+  --border: rgba(120,170,210,0.24);
+  --accent: #78aad2;
+  --extraBorder: rgba(120,170,210,0.16);
+
+  --paperLine: rgba(120,170,210,0.11);
+  --paperMargin: rgba(225,85,95,0.26);
+
+  --poemWeight: 400;
+  --poemLetter: 0.05px;
+  --poemLine: 1.66;
+
+  --titleWeight: 600;
+  --titleLetter: 0.55px;
+}
+
+/* ATO 3 — FOGO (bordô quase negro: calor, tensão, densidade) */
 body[data-ato="3"]{
+  --bg: #1a0f12;
+  --bg2:#211216;
+
   --line: rgba(140,40,55,0.20);
   --border: rgba(140,40,55,0.28);
   --accent: #8c2837;
@@ -767,29 +867,62 @@ body[data-ato="3"]{
 
   --paperLine: rgba(140,40,55,0.12);
   --paperMargin: rgba(225,85,95,0.28);
+
+  --poemWeight: 600;
+  --poemLetter: -0.10px;
+  --poemLine: 1.58;
+
+  --titleWeight: 700;
+  --titleLetter: 0.35px;
 }
 
+/* ATO 4 — CRESCIMENTO (verde musgo escuro: evolução e equilíbrio) */
 body[data-ato="4"]{
-  --line: rgba(200,180,120,0.14);
-  --border: rgba(200,180,120,0.22);
-  --accent: #c8b478;
-  --extraBorder: rgba(200,180,120,0.14);
+  --bg: #0f1a14;
+  --bg2:#132017;
 
-  --paperLine: rgba(200,180,120,0.10);
+  --line: rgba(122,155,118,0.14);
+  --border: rgba(122,155,118,0.22);
+  --accent: #7a9b76;
+  --extraBorder: rgba(122,155,118,0.14);
+
+  --paperLine: rgba(122,155,118,0.10);
   --paperMargin: rgba(225,85,95,0.22);
+
+  --poemWeight: 500;
+  --poemLetter: 0.15px;
+  --poemLine: 1.72;
+
+  --titleWeight: 650;
+  --titleLetter: 0.65px;
 }
 
+/* ATO 5 — RAIZ (terroso profundo: casa, chão, estabilidade) */
 body[data-ato="5"]{
-  --line: rgba(185,175,150,0.14);
-  --border: rgba(185,175,150,0.22);
-  --accent: #b9af96;
-  --extraBorder: rgba(185,175,150,0.14);
+  --bg: #18130f;
+  --bg2:#1d1612;
 
-  --paperLine: rgba(185,175,150,0.10);
+  --line: rgba(166,139,109,0.14);
+  --border: rgba(166,139,109,0.22);
+  --accent: #a68b6d;
+  --extraBorder: rgba(166,139,109,0.14);
+
+  --paperLine: rgba(166,139,109,0.10);
   --paperMargin: rgba(225,85,95,0.18);
+
+  --poemWeight: 450;
+  --poemLetter: 0.20px;
+  --poemLine: 1.84;
+
+  --titleWeight: 620;
+  --titleLetter: 0.70px;
 }
 
+/* ATO 6 — RECOMEÇO (retorno ao dourado, mais luminoso/refinado) */
 body[data-ato="6"]{
+  --bg: #111114;
+  --bg2:#151518;
+
   --line: rgba(230,200,110,0.18);
   --border: rgba(230,200,110,0.26);
   --accent: #e6c86e;
@@ -797,4 +930,11 @@ body[data-ato="6"]{
 
   --paperLine: rgba(230,200,110,0.11);
   --paperMargin: rgba(225,85,95,0.26);
+
+  --poemWeight: 500;
+  --poemLetter: 0.25px;
+  --poemLine: 1.76;
+
+  --titleWeight: 700;
+  --titleLetter: 1.00px;
 }
