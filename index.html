@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260226_2" />
+  <link rel="stylesheet" href="style.css?v=20260226_3" />
 </head>
 
 <body>
@@ -49,6 +49,18 @@
       <!-- POEMA / TEXTO PRINCIPAL -->
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
+
+      <!-- ===== ATO 1 — PALAVRA DOURADA (DIA 1–30) ===== -->
+      <div id="ato1Chave" class="ato1Chave hidden" aria-hidden="true">
+        <div class="ato1Label">Entrelinhas</div>
+        <div class="ato1PalavraWrap">
+          <span id="ato1Palavra" class="ato1Palavra"></span>
+        </div>
+      </div>
+
+      <!-- Dia 30: montagem cinematográfica -->
+      <div id="ato1Montagem" class="ato1Montagem hidden" aria-hidden="true"></div>
+      <!-- ===== /ATO 1 ===== -->
 
       <!-- ===== DIA 365 — GATILHO DA CÁPSULA ===== -->
       <div id="capsulaTrigger" class="capsulaTrigger hidden">
@@ -174,7 +186,7 @@
   <!-- Overlay de fade final (Dia 365) -->
   <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
 
-  <script src="poemas.js?v=20260226_2"></script>
+  <script src="poemas.js?v=20260226_3"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -183,6 +195,16 @@
 
     let DIA_ATUAL = 1;
     let DIA_EM_TELA = 1;
+    let IS_TEST_MODE = false;
+
+    // ===== ATO 1 — FRASE (30 PALAVRAS) =====
+    // Dia 1 libera a palavra 1, ... Dia 30 libera a palavra 30
+    const ATO1_UNLOCK_KEY = "projeto365_ato1_unlock";
+    const ATO1_PALAVRAS = [
+      "Eu","te","escolho","todos","os","dias,","mesmo","quando","o","mundo","pesa","e","medo","grita,",
+      "porque","amar","você","é","decisão","firme:","transformar","incerteza","em","casa,","silêncio",
+      "em","abrigo,","futuro","em","promessa."
+    ];
 
     const INTRO_ATOS = {
       31: { tag: "Ato 2 — Conexão", texto:
@@ -297,7 +319,6 @@ Ele renova.` }
 
     // ✅ AURA CRESCENTE: seta --auraT de 0 → 1 dentro do ato
     function setAuraProgress(dia){
-      // fora do range “normal”
       if(!Number.isFinite(dia) || dia < 1) {
         document.documentElement.style.setProperty("--auraT", "0");
         return;
@@ -545,6 +566,7 @@ Ele renova.` }
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
+      esconderAto1UI(true);
       esconderCapsulaTrigger();
       fecharCapsulaPage(true);
       fecharMemoriaPage(true);
@@ -830,6 +852,128 @@ Ele renova.` }
       }, 3000);
     }
 
+    // ===== ATO 1 — LÓGICA =====
+    function getAto1Unlocked(){
+      const raw = Number(localStorage.getItem(ATO1_UNLOCK_KEY) || 0);
+      if(!Number.isFinite(raw)) return 0;
+      return Math.max(0, Math.min(30, Math.floor(raw)));
+    }
+
+    function setAto1Unlocked(n){
+      const clamped = Math.max(0, Math.min(30, Math.floor(n)));
+      localStorage.setItem(ATO1_UNLOCK_KEY, String(clamped));
+    }
+
+    function esconderAto1UI(silencioso=false){
+      const chave = document.getElementById("ato1Chave");
+      const palavra = document.getElementById("ato1Palavra");
+      const montagem = document.getElementById("ato1Montagem");
+
+      chave.classList.add("hidden");
+      chave.setAttribute("aria-hidden", "true");
+      palavra.textContent = "";
+
+      montagem.classList.add("hidden");
+      montagem.classList.remove("show", "assemble");
+      montagem.setAttribute("aria-hidden", "true");
+      if(!silencioso) montagem.innerHTML = "";
+    }
+
+    function renderAto1Palavra(diaEmTela){
+      const chave = document.getElementById("ato1Chave");
+      const palavra = document.getElementById("ato1Palavra");
+      const montagem = document.getElementById("ato1Montagem");
+
+      // não mostrar em modos especiais
+      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
+        esconderAto1UI(true);
+        return;
+      }
+
+      // só Ato 1
+      if(diaEmTela < 1 || diaEmTela > 30){
+        esconderAto1UI(true);
+        return;
+      }
+
+      const unlocked = getAto1Unlocked();
+
+      // se ainda não liberou aquele dia, não mostra
+      if(diaEmTela > unlocked){
+        esconderAto1UI(true);
+        return;
+      }
+
+      // dia 30: a palavra do dia aparece, mas depois a montagem toma a cena
+      const w = ATO1_PALAVRAS[diaEmTela - 1] || "";
+      palavra.textContent = w;
+
+      montagem.classList.add("hidden");
+      montagem.classList.remove("show","assemble");
+      montagem.setAttribute("aria-hidden", "true");
+
+      chave.classList.remove("hidden");
+      chave.setAttribute("aria-hidden", "false");
+    }
+
+    function montarAto1FraseNoCentro(){
+      const chave = document.getElementById("ato1Chave");
+      const montagem = document.getElementById("ato1Montagem");
+
+      // evita duplicar
+      montagem.innerHTML = "";
+      montagem.classList.remove("show", "assemble");
+
+      // some com a chave
+      chave.classList.add("hidden");
+      chave.setAttribute("aria-hidden","true");
+
+      // cria spans com delay
+      ATO1_PALAVRAS.forEach((w, i) => {
+        const s = document.createElement("span");
+        s.className = "ato1Word";
+        s.textContent = w;
+        // stagger suave
+        s.style.transitionDelay = `${60 + i * 28}ms`;
+        montagem.appendChild(s);
+      });
+
+      montagem.classList.remove("hidden");
+      montagem.setAttribute("aria-hidden","false");
+
+      // fade in
+      void montagem.offsetWidth;
+      montagem.classList.add("show");
+
+      // “assenta” no centro depois
+      clearTimeout(window.__ato1AssembleTimer);
+      window.__ato1AssembleTimer = setTimeout(() => {
+        montagem.classList.add("assemble");
+      }, 1100);
+    }
+
+    function afterPoemTyped(dia){
+      // desbloqueio só no dia de hoje e fora do modo teste
+      if(!IS_TEST_MODE && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
+        const current = getAto1Unlocked();
+        if(dia > current){
+          setAto1Unlocked(dia);
+        }
+      }
+
+      // render palavra (se disponível)
+      renderAto1Palavra(dia);
+
+      // dia 30: se já está liberado, faz a montagem
+      if(dia === 30 && getAto1Unlocked() >= 30){
+        // pequena pausa pra respirar antes de reorganizar
+        clearTimeout(window.__ato1FinalTimer);
+        window.__ato1FinalTimer = setTimeout(() => {
+          montarAto1FraseNoCentro();
+        }, 480);
+      }
+    }
+
     function carregarPoema(dia){
       DIA_EM_TELA = dia;
 
@@ -845,6 +989,9 @@ Ele renova.` }
       esconderCapsulaTrigger();
       fecharCapsulaPage(true);
       fecharMemoriaPage(true);
+
+      // reset Ato 1 UI sempre que trocar de dia
+      esconderAto1UI(true);
 
       if(dia <= 0){
         document.body.removeAttribute("data-ato");
@@ -879,11 +1026,12 @@ Ele renova.` }
       metaEl.innerText = "Um poema por dia.";
 
       const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "Em breve...";
-      typeText(poemaEl, texto, 12);
+      typeText(poemaEl, texto, 12, () => afterPoemTyped(dia));
     }
 
     function carregarHoje(){
       const forced = getForcedDay();
+      IS_TEST_MODE = (forced !== null);
       showModoTeste(forced);
 
       if(forced !== null){
@@ -920,6 +1068,7 @@ Ele renova.` }
         document.getElementById("meta").textContent = "";
         setTemaPorAto(DIA_ATUAL);
         setDayAttr(DIA_ATUAL);
+        esconderAto1UI(true);
         esconderCapsulaTrigger();
         fecharCapsulaPage(true);
         fecharMemoriaPage(true);
