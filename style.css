@@ -79,6 +79,11 @@ body.capsula-mode #conteudo{
   overflow: visible;
 }
 
+/* ✅ quando entra na memória (overlay), mesma lógica */
+body.memoria-mode #conteudo{
+  overflow: visible;
+}
+
 /* ===== MODO ARQUIVO ===== */
 body.modo-arquivo #conteudo{
   background: none !important;
@@ -389,49 +394,6 @@ button:disabled{
   opacity: .95;
 }
 
-/* Viewer memória */
-.memoriaViewer{
-  margin-top: 14px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  text-align: left;
-}
-
-.memoriaViewerHeader{
-  display:flex;
-  justify-content:space-between;
-  gap: 12px;
-  align-items:baseline;
-  margin-bottom: 10px;
-}
-
-.memoriaViewerTitle{
-  color: rgba(241,233,220,.95);
-  letter-spacing: .6px;
-  font-size: 18px;
-}
-
-.memoriaViewerMeta{
-  color: rgba(241,233,220,.55);
-  font-size: 13px;
-  letter-spacing: .4px;
-}
-
-.memoriaViewerTexto{
-  white-space: pre-wrap;
-  color: rgba(241,233,220,.95);
-  font-size: 18px;
-  line-height: 1.95;
-}
-
-.memoriaViewerBtns{
-  margin-top: 12px;
-  display:flex;
-  justify-content:flex-end;
-}
-
 /* Dia 365 trigger */
 .capsulaTrigger{
   margin: 18px auto 0;
@@ -665,6 +627,125 @@ body.capsula-mode #capsulaPage{
 .fadeOverlay.show{
   opacity: 1;
   pointer-events: all;
+}
+
+/* ✅ Range (arquivo por blocos de 30) */
+.rangeRow{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.rangeBtn{
+  margin-top: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: rgba(241,233,220,.90);
+  font-size: 14px;
+  letter-spacing: .4px;
+}
+
+.rangeBtn:hover{
+  background: rgba(255,255,255,.07);
+}
+
+.rangeBtn.active{
+  border-color: var(--border);
+  background: rgba(212,175,55,.10);
+  color: var(--accent);
+}
+
+/* ✅ Overlay memória */
+.memoriaPage{
+  position:absolute;
+  inset:0;
+  z-index: 60;
+  border-radius: 18px;
+
+  background:
+    radial-gradient(900px 480px at 50% 14%, rgba(255,255,255,.06), transparent 62%),
+    linear-gradient(180deg, rgba(12,12,14,.96), rgba(8,8,10,.98));
+
+  padding: 18px 16px 28px;
+
+  opacity: 0;
+  transform: translateY(6px);
+  transition: .45s ease;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.memoria-mode #memoriaPage{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.memoriaTopbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding-top: 2px;
+  padding-bottom: 10px;
+  background: linear-gradient(180deg, rgba(10,10,12,.96), rgba(10,10,12,.78), rgba(10,10,12,0));
+  backdrop-filter: blur(2px);
+}
+
+.memoriaTopbarTitle{
+  color: rgba(241,233,220,.72);
+  letter-spacing: .8px;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.memoriaBack{ margin-top: 0; }
+
+.memoriaPaper{
+  width: min(60ch, 100%);
+  margin: 10px auto 0;
+  padding: 16px 18px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  text-align:left;
+}
+
+.memoriaPaperHeader{
+  display:flex;
+  justify-content:space-between;
+  gap: 10px;
+  align-items:baseline;
+  margin-bottom: 10px;
+}
+
+.memoriaPaperTitle{
+  color: rgba(241,233,220,.94);
+  font-size: 18px;
+  letter-spacing: .4px;
+}
+
+.memoriaPaperMeta{
+  color: rgba(241,233,220,.58);
+  font-size: 13px;
+  letter-spacing: .4px;
+}
+
+.memoriaPageTexto{
+  white-space: pre-wrap;
+  color: rgba(241,233,220,.96);
+  font-size: 18px;
+  line-height: 1.95;
 }
 
 /* Temas por ato */
