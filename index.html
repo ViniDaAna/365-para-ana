@@ -46,18 +46,24 @@
         <button class="btnIntro" id="btnContinuarAto" type="button">Continuar</button>
       </div>
 
+      <!-- ===== ATO 2 — CONEXÃO (31–90) UI ===== -->
+      <div id="ato2UI" class="ato2UI hidden" aria-hidden="true">
+        <div id="ato2Linhas" class="ato2Linhas" aria-hidden="true">
+          <div class="ato2Linha a"></div>
+          <div class="ato2Linha b"></div>
+        </div>
+
+        <div id="ato2Hint" class="ato2Hint hidden" aria-hidden="true">
+          Algumas palavras têm um pensamento por baixo. Clica nelas.
+        </div>
+
+        <div id="ato2Pensamento" class="ato2Pensamento hidden" aria-hidden="true"></div>
+      </div>
+      <!-- ===== /ATO 2 UI ===== -->
+
       <!-- POEMA / TEXTO PRINCIPAL -->
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
-
-      <!-- ===== ATO 2 — SUSSURROS (31–90) ===== -->
-      <div id="ato2Hint" class="ato2Hint hidden" aria-hidden="true">
-        <span class="ato2HintDot"></span>
-        <span class="ato2HintText">Passe o mouse nas palavras sublinhadas.</span>
-      </div>
-
-      <div id="ato2Thought" class="ato2Thought hidden" aria-hidden="true"></div>
-      <!-- ===== /ATO 2 ===== -->
 
       <!-- ===== ATO 1 — ENTRELINHAS (1–30) ===== -->
       <div id="ato1Chave" class="ato1Chave hidden" aria-hidden="true">
@@ -327,25 +333,13 @@ Ele renova.` }
     function setAuraProgress(dia){
       if(!Number.isFinite(dia) || dia < 1) {
         document.documentElement.style.setProperty("--auraT", "0");
-        document.documentElement.style.setProperty("--ato2T", "0");
         return;
       }
-
       const {start, end} = getFaixaAto(dia);
       const denom = Math.max(1, (end - start));
       const t = (dia - start) / denom;
       const clamped = Math.max(0, Math.min(1, t));
       document.documentElement.style.setProperty("--auraT", clamped.toFixed(4));
-
-      // Ato 2 progress (31–90)
-      if(getAto(dia) === 2){
-        const denom2 = Math.max(1, (90 - 31));
-        const t2 = (dia - 31) / denom2;
-        const c2 = Math.max(0, Math.min(1, t2));
-        document.documentElement.style.setProperty("--ato2T", c2.toFixed(4));
-      } else {
-        document.documentElement.style.setProperty("--ato2T", "0");
-      }
     }
 
     function setTemaPorAto(dia){
@@ -960,317 +954,180 @@ Ele renova.` }
       }, 1100);
     }
 
-    // ===== ATO 2 — SUSSURROS + LINHAS =====
-    const ATO2_PIN_KEY = "projeto365_ato2_pin"; // apenas estado local (opcional)
-
+    // ===== ATO 2 — LINHAS + PENSAMENTOS =====
     function esconderAto2UI(silencioso=false){
+      const ui = document.getElementById("ato2UI");
       const hint = document.getElementById("ato2Hint");
-      const box = document.getElementById("ato2Thought");
+      const box = document.getElementById("ato2Pensamento");
+
+      ui.classList.add("hidden");
+      ui.setAttribute("aria-hidden","true");
+
       hint.classList.add("hidden");
       hint.setAttribute("aria-hidden","true");
 
       box.classList.add("hidden");
-      box.classList.remove("pinned");
       box.setAttribute("aria-hidden","true");
       if(!silencioso) box.textContent = "";
 
-      if(!silencioso) localStorage.removeItem(ATO2_PIN_KEY);
-    }
-
-    function isAto2Ativo(dia){
-      if(getAto(dia) !== 2) return false;
-      if(document.body.classList.contains("modo-arquivo")) return false;
-      if(document.body.classList.contains("capsula-mode")) return false;
-      if(document.body.classList.contains("memoria-mode")) return false;
-      return true;
-    }
-
-    const STOPWORDS_PT = new Set([
-      "a","o","os","as","um","uma","uns","umas","de","do","da","dos","das","em","no","na","nos","nas",
-      "por","pra","pro","para","com","sem","e","ou","que","se","eu","você","vc","me","te","seu","sua",
-      "seus","suas","minha","meu","meus","minhas","num","nunca","já","tô","to","tá","ta","é","foi","ser",
-      "só","isso","essa","esse","isso","aqui","ali","lá","bem","mal","mais","menos","muito","pouco","também",
-      "como","quando","onde","porque","porquê","pq","tem","tinha","tenho","vai","vou","tava","tive","tiver",
-      "tudo","nada","ninguém","alguém","ele","ela","eles","elas","um","uma","ao","à","às","aos"
-    ]);
-
-    const ATO2_SUSSURROS = [
-      "Eu não quero ganhar. Eu quero entender.",
-      "Meu medo costuma falar alto. Eu tô aprendendo a ouvir você primeiro.",
-      "Quando eu fico quieto, nem sempre é distância. Às vezes é cuidado.",
-      "Eu te amo melhor quando eu paro de me defender.",
-      "Eu não quero te perder por orgulho bobo.",
-      "Eu tô aqui. Mesmo quando eu falho.",
-      "O que eu sinto por você não é pressa. É presença.",
-      "Eu não preciso parecer forte com você.",
-      "Se eu exagerar, me chama de volta. Eu volto.",
-      "Eu aprendi: amor não é prova. É constância.",
-      "Eu não quero te segurar. Eu quero te acolher.",
-      "Se eu tiver medo, eu prefiro falar do que sumir.",
-      "Você é a parte do meu dia que me deixa em paz.",
-      "Eu fico. Mesmo quando o ego quer fugir."
-    ];
-
-    function hashStr32(s){
-      // FNV-1a (rápido, determinístico)
-      let h = 2166136261 >>> 0;
-      for(let i=0;i<s.length;i++){
-        h ^= s.charCodeAt(i);
-        h = Math.imul(h, 16777619);
+      // limpa marcações do poema (volta texto puro)
+      const poemaEl = document.getElementById("poema");
+      if(poemaEl && poemaEl.innerHTML && poemaEl.innerHTML.includes("ato2Link")){
+        poemaEl.textContent = poemaEl.textContent;
       }
-      return h >>> 0;
     }
 
-    function mulberry32(seed){
-      return function(){
-        let t = seed += 0x6D2B79F5;
-        t = Math.imul(t ^ (t >>> 15), t | 1);
-        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    function setAto2LinhasProgress(dia){
+      // dia 31->90: gap diminui (linhas se aproximando)
+      const el = document.getElementById("ato2Linhas");
+      const a = el.querySelector(".ato2Linha.a");
+      const b = el.querySelector(".ato2Linha.b");
+
+      const start = 31, end = 90;
+      const t = Math.max(0, Math.min(1, (dia - start) / Math.max(1, (end - start))));
+      const gapMax = 22; // px
+      const gapMin = 6;  // px
+      const gap = gapMax + (gapMin - gapMax) * t;
+
+      a.style.transform = `translateY(${(-gap/2).toFixed(2)}px)`;
+      b.style.transform = `translateY(${( gap/2).toFixed(2)}px)`;
+      el.style.opacity = (0.65 + 0.25 * t).toFixed(3);
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function applyAto2Underlines(dia){
+      const poemaEl = document.getElementById("poema");
+      const box = document.getElementById("ato2Pensamento");
+      const hint = document.getElementById("ato2Hint");
+
+      const map = (typeof getAto2Anotacoes === "function") ? getAto2Anotacoes(dia) : [];
+      if(!map || !map.length){
+        hint.classList.add("hidden");
+        hint.setAttribute("aria-hidden","true");
+        box.classList.add("hidden");
+        box.setAttribute("aria-hidden","true");
+        box.textContent = "";
+        return;
+      }
+
+      hint.classList.remove("hidden");
+      hint.setAttribute("aria-hidden","false");
+
+      // trabalha em cima do texto puro atual
+      const text = poemaEl.textContent || "";
+      const marks = [];
+
+      map.forEach((it, idx) => {
+        const target = String(it.target || "").trim();
+        if(!target) return;
+
+        // primeira ocorrência (case-sensitive)
+        const pos = text.indexOf(target);
+        if(pos === -1) return;
+
+        // evita sobreposição
+        const end = pos + target.length;
+        const overlaps = marks.some(m => !(end <= m.start || pos >= m.end));
+        if(overlaps) return;
+
+        marks.push({ start: pos, end, target, thought: String(it.thought || ""), idx });
+      });
+
+      if(!marks.length){
+        hint.classList.add("hidden");
+        hint.setAttribute("aria-hidden","true");
+        return;
+      }
+
+      // monta string com tokens para depois virar HTML
+      marks.sort((a,b) => b.start - a.start); // desc pra não bagunçar índices
+      let withTokens = text;
+
+      marks.forEach((m) => {
+        const before = withTokens.slice(0, m.start);
+        const mid = withTokens.slice(m.start, m.end);
+        const after = withTokens.slice(m.end);
+
+        // token com separador seguro
+        const token = `\u0001${m.idx}\u0002${mid}\u0003`;
+        withTokens = before + token + after;
+      });
+
+      // agora converte em HTML escapado e troca tokens
+      let html = escapeHtml(withTokens).replaceAll("\n","<br>");
+
+      marks.forEach((m) => {
+        const tokenStart = escapeHtml(`\u0001${m.idx}\u0002`);
+        const tokenEnd = escapeHtml("\u0003");
+        const midEsc = escapeHtml(m.target);
+
+        const span =
+          `<span class="ato2Link" data-thought="${escapeHtml(m.thought)}">${midEsc}</span>`;
+
+        // substitui exatamente 1 vez
+        const needle = tokenStart + midEsc + tokenEnd;
+        html = html.replace(needle, span);
+      });
+
+      poemaEl.innerHTML = html;
+
+      // bind click (delegation)
+      poemaEl.onclick = (ev) => {
+        const t = ev.target;
+        if(!(t instanceof HTMLElement)) return;
+        if(!t.classList.contains("ato2Link")) return;
+
+        const thought = t.getAttribute("data-thought") || "";
+        if(!thought.trim()) return;
+
+        box.textContent = thought;
+        box.classList.remove("hidden");
+        box.setAttribute("aria-hidden","false");
+
+        // leve “pulse” visual
+        box.classList.remove("pop");
+        void box.offsetWidth;
+        box.classList.add("pop");
       };
     }
 
-    function normalizeToken(w){
-      return String(w)
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, "");
-    }
+    function renderAto2UI(dia){
+      const ui = document.getElementById("ato2UI");
 
-    function pickAto2WordsDeterministic(text, dia){
-      const raw = String(text || "");
-      const words = raw.match(/[A-Za-zÀ-ÿ0-9]+(?:'[A-Za-zÀ-ÿ]+)?/g) || [];
-      const candidates = [];
-      const seen = new Set();
-
-      for(const w of words){
-        const norm = normalizeToken(w);
-        if(!norm) continue;
-        if(norm.length < 4) continue;
-        if(STOPWORDS_PT.has(norm)) continue;
-        if(seen.has(norm)) continue;
-        seen.add(norm);
-        candidates.push(w);
+      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
+        esconderAto2UI(true);
+        return;
       }
-
-      const seed = (dia * 2654435761) ^ hashStr32(raw);
-      const rnd = mulberry32(seed >>> 0);
-
-      const desired = candidates.length >= 10 ? 3 : (candidates.length >= 6 ? 2 : 1);
-      const picks = [];
-
-      // embaralha determinístico e pega os primeiros
-      const shuffled = candidates.slice();
-      for(let i = shuffled.length - 1; i > 0; i--){
-        const j = Math.floor(rnd() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-
-      for(const w of shuffled){
-        if(picks.length >= desired) break;
-        picks.push(w);
-      }
-
-      return picks;
-    }
-
-    function escapeHtml(s){
-      return String(s)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#39;");
-    }
-
-    function chooseSussurroDeterministic(dia, word){
-      const seed = (dia * 2246822519) ^ hashStr32(String(word || ""));
-      const rnd = mulberry32(seed >>> 0);
-      const idx = Math.floor(rnd() * ATO2_SUSSURROS.length);
-      return ATO2_SUSSURROS[idx] || "Eu tô aqui.";
-    }
-
-    function wrapAto2Words(text, dia){
-      const picks = pickAto2WordsDeterministic(text, dia);
-      if(!picks.length) return escapeHtml(text);
-
-      // substitui apenas a PRIMEIRA ocorrência de cada pick (pra ficar sutil)
-      let html = escapeHtml(text);
-
-      picks.forEach((w) => {
-        const thought = chooseSussurroDeterministic(dia, w);
-        const safeW = escapeHtml(w);
-        const safeThought = escapeHtml(thought);
-
-        // regex em cima do HTML escapado é ok porque estamos usando o token escapado
-        // substitui só a primeira ocorrência
-        const re = new RegExp(`\\b${safeW}\\b`);
-        html = html.replace(re, `<span class="thoughtWord" data-thought="${safeThought}">${safeW}</span>`);
-      });
-
-      return html;
-    }
-
-    function showAto2Hint(){
-      const hint = document.getElementById("ato2Hint");
-      hint.classList.remove("hidden");
-      hint.setAttribute("aria-hidden","false");
-    }
-
-    function hideAto2Hint(){
-      const hint = document.getElementById("ato2Hint");
-      hint.classList.add("hidden");
-      hint.setAttribute("aria-hidden","true");
-    }
-
-    function showThoughtAt(x, y, text, pin=false){
-      const box = document.getElementById("ato2Thought");
-      box.textContent = text;
-
-      box.classList.remove("hidden");
-      box.setAttribute("aria-hidden","false");
-
-      if(pin){
-        box.classList.add("pinned");
-        localStorage.setItem(ATO2_PIN_KEY, "1");
-      } else {
-        box.classList.remove("pinned");
-        localStorage.removeItem(ATO2_PIN_KEY);
-      }
-
-      // posição: tenta não estourar borda
-      const pad = 12;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-
-      // primeiro coloca, mede, depois ajusta
-      box.style.left = `${Math.max(pad, Math.min(vw - pad, x))}px`;
-      box.style.top = `${Math.max(pad, Math.min(vh - pad, y))}px`;
-
-      // ajuste fino com bounding box
-      const r = box.getBoundingClientRect();
-      let nx = x, ny = y;
-      if(r.right > vw - pad) nx = vw - pad - r.width;
-      if(r.left < pad) nx = pad;
-      if(r.bottom > vh - pad) ny = vh - pad - r.height;
-      if(r.top < pad) ny = pad;
-
-      box.style.left = `${nx}px`;
-      box.style.top = `${ny}px`;
-    }
-
-    function hideThought(){
-      const box = document.getElementById("ato2Thought");
-      box.classList.add("hidden");
-      box.classList.remove("pinned");
-      box.setAttribute("aria-hidden","true");
-      box.textContent = "";
-      localStorage.removeItem(ATO2_PIN_KEY);
-    }
-
-    function initAto2Interactions(){
-      if(window.__ato2Init) return;
-      window.__ato2Init = true;
-
-      const poemaEl = document.getElementById("poema");
-
-      // hover (desktop)
-      poemaEl.addEventListener("mousemove", (e) => {
-        const t = e.target;
-        if(!(t instanceof HTMLElement)) return;
-        if(!t.classList.contains("thoughtWord")) return;
-
-        const thought = t.getAttribute("data-thought") || "";
-        if(!thought) return;
-
-        const box = document.getElementById("ato2Thought");
-        if(box.classList.contains("pinned")) return;
-
-        const rect = t.getBoundingClientRect();
-        const x = rect.left + rect.width/2;
-        const y = rect.top - 10;
-        showThoughtAt(x, y, thought, false);
-      }, {passive:true});
-
-      poemaEl.addEventListener("mouseleave", () => {
-        const box = document.getElementById("ato2Thought");
-        if(box.classList.contains("pinned")) return;
-        hideThought();
-      });
-
-      // click/touch: fixa
-      poemaEl.addEventListener("click", (e) => {
-        const t = e.target;
-        if(!(t instanceof HTMLElement)) return;
-        if(!t.classList.contains("thoughtWord")) return;
-
-        const thought = t.getAttribute("data-thought") || "";
-        if(!thought) return;
-
-        const rect = t.getBoundingClientRect();
-        const x = rect.left + rect.width/2;
-        const y = rect.bottom + 10;
-
-        showThoughtAt(x, y, thought, true);
-      });
-
-      // click fora: fecha
-      document.addEventListener("click", (e) => {
-        const box = document.getElementById("ato2Thought");
-        if(box.classList.contains("hidden")) return;
-
-        const target = e.target;
-        if(!(target instanceof Node)) return;
-
-        if(box.contains(target)) return;
-        if(target instanceof HTMLElement && target.classList.contains("thoughtWord")) return;
-
-        hideThought();
-      });
-
-      // ESC
-      document.addEventListener("keydown", (e) => {
-        if(e.key === "Escape"){
-          hideThought();
-        }
-      });
-    }
-
-    function aplicarAto2NoPoema(dia){
-      if(!isAto2Ativo(dia)){
+      if(dia < 31 || dia > 90){
         esconderAto2UI(true);
         return;
       }
 
-      const poemaEl = document.getElementById("poema");
-      const plain = poemaEl.textContent || "";
-      if(!plain.trim()) return;
+      ui.classList.remove("hidden");
+      ui.setAttribute("aria-hidden","false");
 
-      // converte para HTML com marcações
-      poemaEl.innerHTML = wrapAto2Words(plain, dia);
-
-      // hint só no ato 2
-      showAto2Hint();
-
-      initAto2Interactions();
+      setAto2LinhasProgress(dia);
+      applyAto2Underlines(dia);
     }
-
-    // ===== /ATO 2 =====
 
     function afterPoemTyped(dia){
       const forced = getForcedDay();
       const isTest = (forced !== null);
 
-      // Ato 1 unlock
+      // Ato 1
       if(!isTest && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
         const current = getAto1Unlocked();
         if(dia > current) setAto1Unlocked(dia);
       }
-
-      // render Ato 1
       renderAto1Palavra(dia);
-
       if(dia === 30 && getAto1Unlocked() >= 30){
         clearTimeout(window.__ato1FinalTimer);
         window.__ato1FinalTimer = setTimeout(() => {
@@ -1279,11 +1136,7 @@ Ele renova.` }
       }
 
       // Ato 2
-      if(getAto(dia) === 2){
-        aplicarAto2NoPoema(dia);
-      } else {
-        esconderAto2UI(true);
-      }
+      renderAto2UI(dia);
     }
 
     function carregarPoema(dia){
@@ -1308,7 +1161,6 @@ Ele renova.` }
         document.body.removeAttribute("data-ato");
         document.body.removeAttribute("data-dia");
         document.documentElement.style.setProperty("--auraT", "0");
-        document.documentElement.style.setProperty("--ato2T", "0");
         tituloTopo.innerText = "Antes do primeiro poema";
         metaEl.innerText = "";
         const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
