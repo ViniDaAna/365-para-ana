@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260228_1" />
+  <link rel="stylesheet" href="style.css?v=20260228_2" />
 </head>
 
 <body>
@@ -51,7 +51,6 @@
       <div class="meta" id="meta"></div>
 
       <!-- ===== ATO 1 — ENTRELINHAS (1–30) ===== -->
-      <!-- Mantém a mesma ideia do seu print: caixinha + palavra -->
       <div id="ato1Chave" class="ato1Chave hidden" aria-hidden="true">
         <div class="ato1Label">ENTRELINHAS</div>
         <div class="ato1PalavraWrap">
@@ -187,7 +186,7 @@
   <!-- Overlay de fade final (Dia 365) -->
   <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
 
-  <script src="poemas.js?v=20260228_1"></script>
+  <script src="poemas.js?v=20260228_2"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -316,7 +315,6 @@ Ele renova.` }
       return {start:331, end:365};
     }
 
-    // ✅ AURA CRESCENTE: seta --auraT de 0 → 1 dentro do ato
     function setAuraProgress(dia){
       if(!Number.isFinite(dia) || dia < 1) {
         document.documentElement.style.setProperty("--auraT", "0");
@@ -513,7 +511,7 @@ Ele renova.` }
       resetInatividade();
     }
 
-    // ===== INTRO DE ATO (CORRIGIDO) =====
+    // ===== INTRO DE ATO =====
     function introKeyForDay(dia){ return `projeto365_intro_vista_${dia}`; }
     function deveMostrarIntro(dia){
       if(dia !== DIA_ATUAL) return false;
@@ -599,7 +597,6 @@ Ele renova.` }
       return t;
     }
 
-    // ranges de 30
     function buildRanges(maxDay){
       const ranges = [];
       let start = 1;
@@ -884,13 +881,11 @@ Ele renova.` }
       const palavra = document.getElementById("ato1Palavra");
       const montagem = document.getElementById("ato1Montagem");
 
-      // se estiver em modos especiais, esconde
       if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
         esconderAto1UI(true);
         return;
       }
 
-      // só Ato 1
       if(diaEmTela < 1 || diaEmTela > 30){
         esconderAto1UI(true);
         return;
@@ -902,7 +897,6 @@ Ele renova.` }
         return;
       }
 
-      // exibe palavra do dia em tela
       const w = ATO1_PALAVRAS[diaEmTela - 1] || "";
       palavra.textContent = w;
 
@@ -945,7 +939,6 @@ Ele renova.` }
     }
 
     function afterPoemTyped(dia){
-      // Atualiza unlock real: só se for o dia de hoje e estiver no Ato 1
       const forced = getForcedDay();
       const isTest = (forced !== null);
 
@@ -954,10 +947,8 @@ Ele renova.` }
         if(dia > current) setAto1Unlocked(dia);
       }
 
-      // mostra palavra (se já desbloqueada)
       renderAto1Palavra(dia);
 
-      // dia 30: se unlock chegou em 30, monta
       if(dia === 30 && getAto1Unlocked() >= 30){
         clearTimeout(window.__ato1FinalTimer);
         window.__ato1FinalTimer = setTimeout(() => {
@@ -1027,7 +1018,7 @@ Ele renova.` }
       if(forced !== null){
         DIA_ATUAL = forced;
 
-        // simula unlock Ato 1 só no seu navegador (pra testar dia 30)
+        // simula unlock Ato 1 só no seu navegador
         if(DIA_ATUAL >= 1 && DIA_ATUAL <= 30){
           const cur = getAto1Unlocked();
           if(DIA_ATUAL > cur) setAto1Unlocked(DIA_ATUAL);
@@ -1037,8 +1028,10 @@ Ele renova.` }
         btn.disabled = (DIA_ATUAL <= 1);
         sairModoLista();
 
-        // ✅ INTRO TAMBÉM FUNCIONA NO TESTE
+        // ✅ FIX: revela o bloco também na intro
         if(deveMostrarIntro(DIA_ATUAL)){
+          revelarBloco(); /* <- AQUI */
+
           document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
           document.getElementById("poema").textContent = "";
           document.getElementById("meta").textContent = "";
@@ -1076,8 +1069,10 @@ Ele renova.` }
         return;
       }
 
-      // ✅ INTRO RESTAURADA AQUI
+      // ✅ FIX: revela o bloco também na intro
       if(deveMostrarIntro(DIA_ATUAL)){
+        revelarBloco(); /* <- AQUI */
+
         document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
         document.getElementById("poema").textContent = "";
         document.getElementById("meta").textContent = "";
@@ -1096,10 +1091,7 @@ Ele renova.` }
     }
 
     function voltarParaHoje(){ carregarHoje(); }
-
-    function mostrarSaudade(){
-      document.getElementById("saudade").classList.toggle("hidden");
-    }
+    function mostrarSaudade(){ document.getElementById("saudade").classList.toggle("hidden"); }
 
     function verificarSenha(){
       const senha = document.getElementById("senha").value;
