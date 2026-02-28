@@ -1,903 +1,1288 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
-
-:root{
-  --bg:#0d0d0f;
-  --bg2:#141416;
-
-  /* Aura dinâmica */
-  --auraT: 0;                 /* 0 → 1 (JS seta) */
-  --auraMin: 0.10;            /* opacidade mínima por ato */
-  --auraMax: 0.28;            /* opacidade máxima por ato */
-  --auraColor: rgba(212,175,55,1);
-  --auraOpacity: calc(var(--auraMin) + (var(--auraT) * (var(--auraMax) - var(--auraMin))));
-
-  --panel:rgba(20,20,22,0.85);
-  --text:#f1e9dc;
-  --muted:rgba(241,233,220,0.65);
-
-  --line:rgba(212,175,55,0.18);
-  --border:rgba(212,175,55,0.25);
-  --accent:#d4af37;
-
-  --extraBg: rgba(0,0,0,0.22);
-  --extraBorder: rgba(212,175,55,0.18);
-
-  --paperBase: rgba(24,24,28,0.92);
-  --paperLine: rgba(212,175,55,0.12);
-  --paperMargin: rgba(225,85,95,0.30);
-  --paperNoise: rgba(255,255,255,0.03);
-
-  --poemWeight: 500;
-  --poemLetter: 0.20px;
-  --poemLine: 1.72;
-
-  --titleWeight: 600;
-  --titleLetter: 0.60px;
-}
-
-body{
-  margin:0;
-  font-family:'Cormorant Garamond', serif;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:24px;
-  position:relative;
-
-  background:
-    radial-gradient(900px 500px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
-    linear-gradient(180deg, var(--bg), var(--bg2));
-
-  color:var(--text);
-}
-
-/* Aura por ato, com intensidade crescendo conforme --auraT */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:0;
-
-  background:
-    radial-gradient(900px 420px at 50% 12%, var(--auraColor), transparent 65%),
-    radial-gradient(700px 360px at 50% 22%, rgba(255,255,255,0.02), transparent 70%);
-
-  opacity: var(--auraOpacity);
-  transition: opacity 0.45s ease, background 0.60s ease;
-}
-
-body[data-dia="365"]::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:0.18;
-  background:
-    radial-gradient(700px 380px at 50% 18%, rgba(230,200,110,0.14), transparent 62%),
-    linear-gradient(180deg, rgba(230,200,110,0.06), transparent 45%);
-  z-index:0;
-}
-
-.container{
-  width:min(680px, 100%);
-  padding:52px 42px;
-  position:relative;
-  z-index:1;
-
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.60);
-
-  opacity:0;
-  transform:translateY(6px);
-  animation:fadeIn 0.70s ease forwards;
-
-  overflow:hidden;
-}
-
-@keyframes fadeIn{
-  to{ opacity:1; transform:translateY(0); }
-}
-
-.hidden{ display:none; }
-
-body.capsula-mode #conteudo{ overflow: visible; }
-body.memoria-mode #conteudo{ overflow: visible; }
-
-/* Tipografia aplicada */
-.poema, #poema{
-  font-weight: var(--poemWeight);
-  letter-spacing: var(--poemLetter);
-  line-height: var(--poemLine);
-}
-
-h1,h2,.title,.titleSmall,#tituloTopo{
-  font-weight: var(--titleWeight);
-  letter-spacing: var(--titleLetter);
-}
-
-/* ===== MODO ARQUIVO ===== */
-body.modo-arquivo #conteudo{
-  background: none !important;
-  background-color: var(--paperBase) !important;
-  background-image:
-    radial-gradient(1px 1px at 12% 18%, var(--paperNoise), transparent 60%),
-    radial-gradient(1px 1px at 72% 44%, var(--paperNoise), transparent 60%),
-    radial-gradient(1px 1px at 38% 78%, var(--paperNoise), transparent 60%),
-    linear-gradient(to right,
-      transparent 0,
-      transparent 62px,
-      var(--paperMargin) 63px,
-      transparent 64px,
-      transparent 100%
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.00) 0px,
-      rgba(255,255,255,0.00) 26px,
-      var(--paperLine) 27px
-    );
-  background-blend-mode: screen, screen, screen, normal, normal;
-}
-
-#conteudo::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:0;
-  transform: translateX(-105%);
-  background:
-    linear-gradient(90deg,
-      rgba(255,255,255,0.00) 0%,
-      rgba(255,255,255,0.03) 25%,
-      rgba(0,0,0,0.18) 55%,
-      rgba(0,0,0,0.00) 100%);
-  transition: none;
-}
-
-#conteudo.pageflip-in::before{ opacity:1; animation: pageSweepIn 0.52s ease forwards; }
-#conteudo.pageflip-out::before{ opacity:1; animation: pageSweepOut 0.52s ease forwards; }
-
-@keyframes pageSweepIn{
-  0%{ transform: translateX(-105%); opacity:0.00; }
-  15%{ opacity:1; }
-  100%{ transform: translateX(105%); opacity:0; }
-}
-@keyframes pageSweepOut{
-  0%{ transform: translateX(105%); opacity:0.00; }
-  15%{ opacity:1; }
-  100%{ transform: translateX(-105%); opacity:0; }
-}
-
-#conteudo.pageflip-in{ animation: bumpIn 0.52s ease; }
-#conteudo.pageflip-out{ animation: bumpOut 0.52s ease; }
-
-@keyframes bumpIn{
-  0%{ transform: translateY(0) scale(1); }
-  35%{ transform: translateY(-1px) scale(1.01); }
-  100%{ transform: translateY(0) scale(1); }
-}
-@keyframes bumpOut{
-  0%{ transform: translateY(0) scale(1); }
-  35%{ transform: translateY(-1px) scale(1.01); }
-  100%{ transform: translateY(0) scale(1); }
-}
-
-h1,h2{
-  margin:0 0 14px;
-  color:var(--accent);
-  font-size:28px;
-}
-
-.subtitle{
-  margin-top:0;
-  font-size:18px;
-  color:var(--muted);
-}
-
-.thin-line{
-  width:70px;
-  height:1px;
-  background:var(--line);
-  margin:22px auto 26px;
-}
-
-.corner-date{
-  position:absolute;
-  top:18px;
-  right:22px;
-  font-size:13px;
-  color:rgba(241,233,220,0.40);
-  letter-spacing:1px;
-  user-select:none;
-}
-
-input{
-  padding:12px;
-  border:1px solid var(--border);
-  background:rgba(0,0,0,0.25);
-  color:var(--text);
-  border-radius:12px;
-  margin-top:14px;
-  width:240px;
-  font-family:'Cormorant Garamond', serif;
-  font-size:16px;
-  outline:none;
-}
-input::placeholder{ color:rgba(241,233,220,0.40); }
-
-button{
-  padding:12px 26px;
-  margin-top:28px;
-  background:transparent;
-  color:var(--accent);
-  border:1px solid var(--border);
-  border-radius:16px;
-  cursor:pointer;
-  transition:0.30s ease;
-  font-size:16px;
-  letter-spacing:1px;
-  font-family:'Cormorant Garamond', serif;
-}
-button:hover{ background:rgba(212,175,55,0.08); transform:translateY(-2px); }
-button:active{ transform:translateY(0); }
-button:disabled{ opacity:0.45; cursor:not-allowed; transform:none; }
-
-.btnRow{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-
-.poema{
-  margin-top:28px;
-  font-size:20px;
-  color:var(--text);
-  min-height:120px;
-  white-space:pre-wrap;
-  max-width:55ch;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-.meta{ margin-top:18px; font-size:14px; color:rgba(241,233,220,0.45); }
-.saudade{ margin-top:18px; font-size:16px; color:rgba(241,233,220,0.75); line-height:1.80; }
-.assinatura{ margin-top:28px; font-size:15px; letter-spacing:1px; color:rgba(241,233,220,0.35); }
-
-.fade{ opacity:0; transform:translateY(4px); transition:0.40s ease; }
-.fade.show{ opacity:1; transform:translateY(0); }
-
-/* Intro */
-.extra{
-  margin: 10px auto 0;
-  width: min(56ch, 100%);
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid var(--extraBorder);
-  background: var(--extraBg);
-  text-align: left;
-}
-.extraTag{
-  font-size: 13px;
-  letter-spacing: 0.80px;
-  color: rgba(241,233,220,0.58);
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-.extraTexto{
-  font-size: 16px;
-  line-height: 1.85;
-  color: rgba(241,233,220,0.90);
-  white-space: pre-wrap;
-}
-.btnIntro{ margin-top: 14px; width: 100%; }
-
-/* ===== ATO 2 — UI (linhas + pensamentos) ===== */
-.ato2UI{
-  margin: 14px auto 0;
-  width: min(56ch, 100%);
-  padding: 12px 14px 10px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.10);
-  text-align: left;
-}
-
-.ato2Linhas{
-  height: 40px;
-  position: relative;
-  margin: 2px 0 10px;
-  opacity: 0.70;
-  transition: opacity 0.35s ease;
-}
-.ato2Linha{
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--line);
-  transform: translateY(0);
-  transition: transform 0.45s ease;
-}
-.ato2Linha.a{ top: 50%; }
-.ato2Linha.b{ top: 50%; }
-
-.ato2Hint{
-  font-size: 14px;
-  color: rgba(241,233,220,0.60);
-  letter-spacing: 0.25px;
-  margin-bottom: 10px;
-}
-
-.ato2Link{
-  display: inline;
-  border-bottom: 1px solid rgba(241,233,220,0.55);
-  padding-bottom: 1px;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-.ato2Link:hover{
-  border-bottom-color: var(--accent);
-  color: rgba(241,233,220,0.98);
-}
-
-.ato2Pensamento{
-  margin-top: 8px;
-  padding: 12px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  color: rgba(241,233,220,0.92);
-  font-size: 16px;
-  line-height: 1.85;
-}
-.ato2Pensamento.pop{
-  animation: ato2Pop 0.28s ease;
-}
-@keyframes ato2Pop{
-  0%{ transform: translateY(2px); opacity: 0.92; }
-  100%{ transform: translateY(0); opacity: 1; }
-}
-/* ===== /ATO 2 ===== */
-
-/* ===== ATO 1 — PALAVRA + MONTAGEM ===== */
-.ato1Chave{
-  margin: 18px auto 0;
-  width: min(56ch, 100%);
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(212,175,55,0.18);
-  background: rgba(0,0,0,0.14);
-  text-align: center;
-}
-
-.ato1Label{
-  font-size: 12px;
-  letter-spacing: 0.90px;
-  text-transform: uppercase;
-  color: rgba(241,233,220,0.55);
-}
-
-.ato1PalavraWrap{
-  margin-top: 10px;
-}
-
-.ato1Palavra{
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(212,175,55,0.22);
-  background: rgba(212,175,55,0.06);
-  color: var(--accent);
-  letter-spacing: 0.80px;
-  font-size: 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,0.20);
-}
-
-.ato1Montagem{
-  margin: 18px auto 0;
-  width: min(56ch, 100%);
-  padding: 18px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(212,175,55,0.16);
-  background: rgba(0,0,0,0.12);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
-}
-
-.ato1Montagem.show{
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.ato1Word{
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(212,175,55,0.18);
-  background: rgba(212,175,55,0.05);
-  color: rgba(241,233,220,0.92);
-  letter-spacing: 0.40px;
-  font-size: 16px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.45s ease, transform 0.45s ease, background 0.65s ease, color 0.65s ease;
-}
-
-.ato1Montagem.show .ato1Word{
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.ato1Montagem.assemble{
-  max-width: 52ch;
-  gap: 6px;
-  padding: 22px 16px;
-  background: rgba(0,0,0,0.16);
-  border-color: rgba(212,175,55,0.22);
-}
-
-.ato1Montagem.assemble .ato1Word{
-  border-color: transparent;
-  background: transparent;
-  color: rgba(241,233,220,0.96);
-  padding: 0;
-  border-radius: 0;
-  letter-spacing: 0.35px;
-  font-size: 18px;
-}
-/* ===== /ATO 1 ===== */
-
-/* Arquivos */
-.arquivoBox{ margin-top: 10px; }
-.arquivoHeader{ display:flex; align-items:center; justify-content:space-between; gap: 12px; }
-
-.ghostBtn{
-  margin-top: 0;
-  padding: 10px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(241,233,220,0.92);
-  background: rgba(255,255,255,0.04);
-}
-.ghostBtn:hover{ background: rgba(255,255,255,0.07); transform: translateY(-2px); }
-
-.arquivoHeaderText{ text-align:center; flex: 1; }
-.titleSmall{ color: var(--accent); font-size: 20px; }
-.metaSmall{ margin-top: 4px; color: rgba(241,233,220,0.55); font-size: 14px; }
-
-.arquivoLista{ margin-top: 10px; display:flex; flex-direction:column; gap: 10px; }
-
-.arquivoItem{
-  margin-top: 0;
-  width: 100%;
-  text-align:left;
-  padding: 14px 14px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.10);
-  display:flex;
-  align-items: baseline;
-  gap: 10px;
-}
-.arquivoItem:hover{ background: rgba(212,175,55,0.09); }
-
-.arquivoDia{ font-size: 14px; color: rgba(241,233,220,0.72); min-width: 70px; }
-.arquivoTitulo{ font-size: 16px; color: rgba(241,233,220,0.94); letter-spacing: 0.40px; }
-
-.lockIcon{
-  font-size: 16px;
-  width: 22px;
-  display:inline-flex;
-  justify-content:center;
-  align-items:center;
-  opacity: 0.95;
-}
-
-.rangeRow{
-  margin-top: 14px;
-  display:flex;
-  gap: 10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-.rangeBtn{
-  margin-top: 0;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
-  color: rgba(241,233,220,0.90);
-  font-size: 14px;
-  letter-spacing: 0.40px;
-}
-.rangeBtn:hover{ background: rgba(255,255,255,0.07); }
-.rangeBtn.active{
-  border-color: var(--border);
-  background: rgba(255,255,255,0.07);
-  color: var(--accent);
-}
-
-/* Dia 365 trigger */
-.capsulaTrigger{
-  margin: 18px auto 0;
-  width: min(56ch, 100%);
-  padding: 16px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.16);
-  text-align:center;
-}
-.capsulaTitle{ font-size: 18px; letter-spacing: 0.60px; color: rgba(241,233,220,0.95); }
-.capsulaMeta{ margin-top: 6px; font-size: 14px; color: rgba(241,233,220,0.60); }
-.btnCapsula{ margin-top: 14px; width: 100%; }
-
-/* Cápsula */
-.capsulaPage{
-  position:absolute;
-  inset:0;
-  z-index: 50;
-  border-radius: 18px;
-  background:
-    radial-gradient(900px 480px at 50% 14%, rgba(255,255,255,0.06), transparent 62%),
-    linear-gradient(180deg, rgba(12,12,14,0.96), rgba(8,8,10,0.98));
-  padding: 18px 16px 28px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: 0.45s ease;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-body.capsula-mode #capsulaPage{ opacity: 1; transform: translateY(0); }
-
-.capsulaTopbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  padding-top: 2px;
-  padding-bottom: 10px;
-  background: linear-gradient(180deg, rgba(10,10,12,0.96), rgba(10,10,12,0.78), rgba(10,10,12,0));
-  backdrop-filter: blur(2px);
-}
-.capsulaTopbarTitle{
-  color: rgba(241,233,220,0.72);
-  letter-spacing: 0.80px;
-  font-size: 15px;
-  text-transform: uppercase;
-}
-.capsulaBack{ margin-top: 0; }
-
-/* Notebook */
-.notebook{
-  width: min(60ch, 100%);
-  margin: 10px auto 0;
-  perspective: 1200px;
-  position:relative;
-}
-.notebookCover{
-  height: 34px;
-  border-radius: 14px;
-  border: 1px solid rgba(230,200,110,0.22);
-  background: linear-gradient(180deg, rgba(25,25,30,0.92), rgba(12,12,14,0.95));
-  box-shadow: 0 18px 45px rgba(0,0,0,0.55);
-  transform-origin: left center;
-  transform: rotateY(0deg);
-  position:relative;
-}
-.notebookPaper{
-  margin-top: -8px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background:
-    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.04), transparent 60%),
-    radial-gradient(1px 1px at 72% 44%, rgba(255,255,255,0.035), transparent 60%),
-    radial-gradient(1px 1px at 38% 78%, rgba(255,255,255,0.03), transparent 60%),
-    linear-gradient(to right,
-      transparent 0,
-      transparent 62px,
-      rgba(225,85,95,0.18) 63px,
-      transparent 64px,
-      transparent 100%
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.00) 0px,
-      rgba(255,255,255,0.00) 26px,
-      rgba(230,200,110,0.10) 27px
-    );
-  padding: 16px 18px 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,0.55);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: 0.55s ease;
-}
-.notebook.open .notebookCover{ animation: coverOpen 0.75s ease forwards; }
-.notebook.open .notebookPaper{ opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
-
-@keyframes coverOpen{
-  0%{ transform: rotateY(0deg); }
-  60%{ transform: rotateY(-65deg); }
-  100%{ transform: rotateY(-78deg); }
-}
-.capsulaPaperHeader{
-  display:flex;
-  justify-content:space-between;
-  gap: 10px;
-  align-items:baseline;
-  margin-bottom: 10px;
-}
-.capsulaPaperTitle{ color: rgba(241,233,220,0.94); font-size: 18px; letter-spacing: 0.40px; }
-.capsulaPaperDate{ color: rgba(241,233,220,0.58); font-size: 13px; letter-spacing: 0.40px; }
-.cursiva{
-  font-family: 'Parisienne', cursive;
-  font-size: 22px;
-  line-height: 1.95;
-  color: rgba(241,233,220,0.96);
-  white-space: pre-wrap;
-}
-.capsulaCarta{ margin-top: 6px; }
-.capsulaFecho{ margin-top: 14px; }
-.capsulaLine{ height: 1px; width: 100%; background: rgba(212,175,55,0.22); margin: 10px 0 10px; }
-.capsulaDecidi{ text-align:center; font-size: 16px; letter-spacing: 0.60px; color: rgba(241,233,220,0.92); }
-.btnEscolherDeNovo{ margin-top: 14px; width: 100%; }
-
-/* Overlay Memória */
-.memoriaPage{
-  position:absolute;
-  inset:0;
-  z-index: 60;
-  border-radius: 18px;
-  background:
-    radial-gradient(900px 480px at 50% 14%, rgba(255,255,255,0.06), transparent 62%),
-    linear-gradient(180deg, rgba(12,12,14,0.96), rgba(8,8,10,0.98));
-  padding: 18px 16px 28px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: 0.45s ease;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-body.memoria-mode #memoriaPage{ opacity: 1; transform: translateY(0); }
-
-.memoriaTopbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  padding-top: 2px;
-  padding-bottom: 10px;
-  background: linear-gradient(180deg, rgba(10,10,12,0.96), rgba(10,10,12,0.78), rgba(10,10,12,0));
-  backdrop-filter: blur(2px);
-}
-.memoriaTopbarTitle{
-  color: rgba(241,233,220,0.72);
-  letter-spacing: 0.80px;
-  font-size: 15px;
-  text-transform: uppercase;
-}
-.memoriaBack{ margin-top: 0; }
-
-.memoriaPaper{
-  width: min(60ch, 100%);
-  margin: 10px auto 0;
-  padding: 16px 18px 18px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.18);
-  box-shadow: 0 18px 55px rgba(0,0,0,0.45);
-  text-align:left;
-}
-.memoriaPaperHeader{
-  display:flex;
-  justify-content:space-between;
-  gap: 10px;
-  align-items:baseline;
-  margin-bottom: 10px;
-}
-.memoriaPaperTitle{ color: rgba(241,233,220,0.94); font-size: 18px; letter-spacing: 0.40px; }
-.memoriaPaperMeta{ color: rgba(241,233,220,0.58); font-size: 13px; letter-spacing: 0.40px; }
-.memoriaPageTexto{ white-space: pre-wrap; color: rgba(241,233,220,0.96); font-size: 18px; line-height: 1.95; }
-
-/* Toast + fade */
-.toast{
-  position: fixed;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%) translateY(12px);
-  width: min(92vw, 520px);
-  padding: 14px 18px;
-  background: rgba(20,20,22,0.95);
-  border: 1px solid rgba(212,175,55,0.22);
-  border-radius: 18px;
-  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
-  color: rgba(241,233,220,0.92);
-  text-align: center;
-  letter-spacing: 0.60px;
-  font-size: 16px;
-  opacity: 0;
-  transition: 0.28s ease;
-  z-index: 999;
-}
-.toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
-
-.fadeOverlay{
-  position: fixed;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 3s ease;
-  z-index: 2000;
-}
-.fadeOverlay.show{ opacity: 1; pointer-events: all; }
-
-/* =========================================================
-   TEMAS POR ATO (cor + tipografia + aura range)
-   ========================================================= */
-
-/* ATO 1 */
-body[data-ato="1"]{
-  --bg: #0d0d0f;
-  --bg2:#141416;
-
-  --auraColor: rgba(212,175,55,1);
-  --auraMin: 0.10;
-  --auraMax: 0.26;
-
-  --line: rgba(212,175,55,0.18);
-  --border: rgba(212,175,55,0.25);
-  --accent: #d4af37;
-  --extraBorder: rgba(212,175,55,0.18);
-
-  --paperLine: rgba(212,175,55,0.12);
-  --paperMargin: rgba(225,85,95,0.30);
-
-  --poemWeight: 500;
-  --poemLetter: 0.35px;
-  --poemLine: 1.78;
-
-  --titleWeight: 650;
-  --titleLetter: 0.90px;
-}
-
-/* ATO 2 */
-body[data-ato="2"]{
-  --bg: #0f141a;
-  --bg2:#141a22;
-
-  --auraColor: rgba(120,170,210,1);
-  --auraMin: 0.10;
-  --auraMax: 0.30;
-
-  --line: rgba(120,170,210,0.16);
-  --border: rgba(120,170,210,0.24);
-  --accent: #78aad2;
-  --extraBorder: rgba(120,170,210,0.16);
-
-  --paperLine: rgba(120,170,210,0.11);
-  --paperMargin: rgba(225,85,95,0.26);
-
-  --poemWeight: 400;
-  --poemLetter: 0.05px;
-  --poemLine: 1.66;
-
-  --titleWeight: 600;
-  --titleLetter: 0.55px;
-}
-
-/* ATO 3 */
-body[data-ato="3"]{
-  --bg: #1a0f12;
-  --bg2:#211216;
-
-  --auraColor: rgba(140,40,55,1);
-  --auraMin: 0.12;
-  --auraMax: 0.34;
-
-  --line: rgba(140,40,55,0.20);
-  --border: rgba(140,40,55,0.28);
-  --accent: #8c2837;
-  --extraBorder: rgba(140,40,55,0.20);
-
-  --paperLine: rgba(140,40,55,0.12);
-  --paperMargin: rgba(225,85,95,0.28);
-
-  --poemWeight: 600;
-  --poemLetter: -0.10px;
-  --poemLine: 1.58;
-
-  --titleWeight: 700;
-  --titleLetter: 0.35px;
-}
-
-/* ATO 4 */
-body[data-ato="4"]{
-  --bg: #0f1a14;
-  --bg2:#132017;
-
-  --auraColor: rgba(122,155,118,1);
-  --auraMin: 0.10;
-  --auraMax: 0.28;
-
-  --line: rgba(122,155,118,0.14);
-  --border: rgba(122,155,118,0.22);
-  --accent: #7a9b76;
-  --extraBorder: rgba(122,155,118,0.14);
-
-  --paperLine: rgba(122,155,118,0.10);
-  --paperMargin: rgba(225,85,95,0.22);
-
-  --poemWeight: 500;
-  --poemLetter: 0.15px;
-  --poemLine: 1.72;
-
-  --titleWeight: 650;
-  --titleLetter: 0.65px;
-}
-
-/* ATO 5 */
-body[data-ato="5"]{
-  --bg: #18130f;
-  --bg2:#1d1612;
-
-  --auraColor: rgba(166,139,109,1);
-  --auraMin: 0.10;
-  --auraMax: 0.26;
-
-  --line: rgba(166,139,109,0.14);
-  --border: rgba(166,139,109,0.22);
-  --accent: #a68b6d;
-  --extraBorder: rgba(166,139,109,0.14);
-
-  --paperLine: rgba(166,139,109,0.10);
-  --paperMargin: rgba(225,85,95,0.18);
-
-  --poemWeight: 450;
-  --poemLetter: 0.20px;
-  --poemLine: 1.84;
-
-  --titleWeight: 620;
-  --titleLetter: 0.70px;
-}
-
-/* ATO 6 */
-body[data-ato="6"]{
-  --bg: #111114;
-  --bg2:#151518;
-
-  --auraColor: rgba(230,200,110,1);
-  --auraMin: 0.12;
-  --auraMax: 0.32;
-
-  --line: rgba(230,200,110,0.18);
-  --border: rgba(230,200,110,0.26);
-  --accent: #e6c86e;
-  --extraBorder: rgba(230,200,110,0.18);
-
-  --paperLine: rgba(230,200,110,0.11);
-  --paperMargin: rgba(225,85,95,0.26);
-
-  --poemWeight: 500;
-  --poemLetter: 0.25px;
-  --poemLine: 1.76;
-
-  --titleWeight: 700;
-  --titleLetter: 1.00px;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entre Nós Dois</title>
+
+  <link rel="icon" href="data:," />
+  <!-- cache-buster -->
+  <link rel="stylesheet" href="style.css?v=20260228_3" />
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div class="container" id="login">
+    <div class="corner-date" id="cornerDateLogin"></div>
+
+    <h1 class="title">Um Lugar Só Nosso</h1>
+    <div class="thin-line"></div>
+    <p class="subtitle">Digite a data que tudo começou</p>
+
+    <input type="password" id="senha" placeholder="Senha" />
+    <br />
+    <button type="button" onclick="verificarSenha()">Entrar</button>
+
+    <div class="meta">Dica: o dia em que a gente virou “nós”.</div>
+  </div>
+
+  <!-- CONTEÚDO -->
+  <div class="container hidden" id="conteudo">
+    <div class="corner-date" id="cornerDate"></div>
+
+    <div id="fraseContexto" class="meta" style="margin-top:4px;"></div>
+    <div id="modoTeste" class="meta hidden" style="margin-top:6px; opacity:.9;"></div>
+
+    <h2 id="tituloTopo" class="title"></h2>
+    <div class="thin-line"></div>
+
+    <div id="blocoTexto" class="fade">
+
+      <!-- INTRODUÇÃO DE ATO -->
+      <div id="introAtoBox" class="extra hidden">
+        <div class="extraTag" id="introAtoTag">Novo Ato</div>
+        <div class="extraTexto" id="introAtoTexto"></div>
+        <button class="btnIntro" id="btnContinuarAto" type="button">Continuar</button>
+      </div>
+
+      <!-- POEMA / TEXTO PRINCIPAL -->
+      <div class="poema" id="poema"></div>
+
+      <!-- ===== ATO 2 — LINHAS + PENSAMENTO OCULTO (31–90) ===== -->
+      <div id="ato2Lines" class="ato2Lines hidden" aria-hidden="true">
+        <div class="ato2Line"></div>
+        <div class="ato2Line"></div>
+        <div class="ato2Line"></div>
+      </div>
+      <!-- Tooltip (fixo, pra não cortar dentro do container) -->
+      <div id="ato2Thought" class="ato2Thought hidden" aria-hidden="true"></div>
+      <!-- ===== /ATO 2 ===== -->
+
+      <div class="meta" id="meta"></div>
+
+      <!-- ===== ATO 1 — ENTRELINHAS (1–30) ===== -->
+      <div id="ato1Chave" class="ato1Chave hidden" aria-hidden="true">
+        <div class="ato1Label">ENTRELINHAS</div>
+        <div class="ato1PalavraWrap">
+          <span id="ato1Palavra" class="ato1Palavra"></span>
+        </div>
+      </div>
+
+      <!-- Dia 30: montagem da frase no centro -->
+      <div id="ato1Montagem" class="ato1Montagem hidden" aria-hidden="true"></div>
+      <!-- ===== /ATO 1 ===== -->
+
+      <!-- ===== DIA 365 — GATILHO DA CÁPSULA ===== -->
+      <div id="capsulaTrigger" class="capsulaTrigger hidden">
+        <div class="capsulaTitle">Cápsula do tempo.</div>
+        <div class="capsulaMeta">Escrita em 23/02/2025.</div>
+        <button id="btnAbrirCapsula" class="btnCapsula" type="button">Abrir</button>
+      </div>
+      <!-- ===== /DIA 365 ===== -->
+
+      <!-- ARQUIVO: POEMAS -->
+      <div id="arquivoBox" class="arquivoBox hidden">
+        <div class="arquivoHeader">
+          <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar</button>
+
+          <div class="arquivoHeaderText">
+            <div class="titleSmall">Poemas anteriores</div>
+            <div class="metaSmall" id="arquivoSub">—</div>
+          </div>
+
+          <div style="width:72px;"></div>
+        </div>
+
+        <div class="thin-line" style="margin-top:18px;"></div>
+
+        <!-- ranges -->
+        <div class="rangeRow" id="rangeRow"></div>
+
+        <div id="listaArquivo" class="arquivoLista"></div>
+      </div>
+
+      <!-- ARQUIVO: MEMÓRIAS -->
+      <div id="memoriasBox" class="arquivoBox hidden">
+        <div class="arquivoHeader">
+          <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar</button>
+
+          <div class="arquivoHeaderText">
+            <div class="titleSmall">Memórias</div>
+            <div class="metaSmall" id="memoriasSub">—</div>
+          </div>
+
+          <div style="width:72px;"></div>
+        </div>
+
+        <div class="thin-line" style="margin-top:18px;"></div>
+
+        <div id="listaMemorias" class="arquivoLista"></div>
+      </div>
+
+    </div>
+
+    <!-- Botões (normal) -->
+    <div class="btnRow" id="botoesNormal">
+      <button id="btnAnteriores" type="button" onclick="abrirArquivo()">Poemas anteriores</button>
+      <button id="btnMemorias" type="button" onclick="abrirMemorias()">Memórias</button>
+      <button type="button" onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
+    </div>
+
+    <!-- Botões (modo arquivo/memórias) -->
+    <div class="btnRow hidden" id="botoesArquivo">
+      <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar para o dia de hoje</button>
+    </div>
+
+    <div id="saudade" class="saudade hidden">
+      Se você sentiu saudade, é porque o que temos é real.
+      E eu escolho você — hoje e todos os dias.
+    </div>
+
+    <div class="assinatura">Entre nós dois.</div>
+
+    <!-- ===== PÁGINA DA CÁPSULA (overlay) ===== -->
+    <div id="capsulaPage" class="capsulaPage hidden" aria-hidden="true">
+      <div class="capsulaTopbar">
+        <button class="ghostBtn capsulaBack" id="btnCapsulaVoltar" type="button">Voltar</button>
+        <div class="capsulaTopbarTitle">Cápsula do Tempo</div>
+        <div style="width:72px;"></div>
+      </div>
+
+      <div class="notebook" id="notebook">
+        <div class="notebookCover"></div>
+
+        <div class="notebookPaper">
+          <div class="capsulaPaperHeader">
+            <div class="capsulaPaperTitle">Carta – Cápsula do Tempo</div>
+            <div class="capsulaPaperDate">23/02/2025</div>
+          </div>
+
+          <div id="capsulaCarta" class="capsulaCarta cursiva"></div>
+
+          <div id="capsulaFecho" class="capsulaFecho hidden">
+            <div class="capsulaLine"></div>
+            <div class="capsulaDecidi">23/02/2025 — Eu decidi.</div>
+            <button id="btnEscolherDeNovo" class="btnEscolherDeNovo" type="button">Escolher de novo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ===== /PÁGINA DA CÁPSULA ===== -->
+
+    <!-- OVERLAY MEMÓRIA -->
+    <div id="memoriaPage" class="memoriaPage hidden" aria-hidden="true">
+      <div class="memoriaTopbar">
+        <button class="ghostBtn memoriaBack" id="btnMemoriaVoltar" type="button">Voltar</button>
+        <div class="memoriaTopbarTitle">Memória</div>
+        <div style="width:72px;"></div>
+      </div>
+
+      <div class="memoriaPaper">
+        <div class="memoriaPaperHeader">
+          <div class="memoriaPaperTitle" id="memoriaPaperTitle">—</div>
+          <div class="memoriaPaperMeta" id="memoriaPaperMeta">—</div>
+        </div>
+
+        <div id="memoriaPageTexto" class="memoriaPageTexto"></div>
+      </div>
+    </div>
+    <!-- /OVERLAY MEMÓRIA -->
+
+  </div>
+
+  <!-- Toast -->
+  <div id="toastSegredo" class="toast hidden" aria-live="polite"></div>
+
+  <!-- Overlay de fade final (Dia 365) -->
+  <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
+
+  <script src="poemas.js?v=20260228_3"></script>
+
+  <script>
+    const senhaCorreta = "10022024";
+    const dataInicioPadrao = new Date("2026-02-24T00:00:00");
+    const START_OVERRIDE_KEY = "projeto365_start_override";
+
+    let DIA_ATUAL = 1;
+    let DIA_EM_TELA = 1;
+
+    // ===== ATO 1 — FRASE (30 palavras) =====
+    const ATO1_UNLOCK_KEY = "projeto365_ato1_unlock";
+    const ATO1_PALAVRAS = [
+      "Eu","te","escolho","todos","os","dias,","mesmo","quando","o","mundo","pesa","e","medo","grita,",
+      "porque","amar","você","é","decisão","firme:","transformar","incerteza","em","casa,","silêncio",
+      "em","abrigo,","futuro","em","promessa."
+    ];
+
+    const INTRO_ATOS = {
+      31: { tag: "Ato 2 — Conexão", texto:
+`Agora a gente se permite chegar mais perto.
+Menos defesa.
+Mais verdade.
+
+Se o Ato 1 foi escolha,
+o Ato 2 é presença.` },
+      91: { tag: "Ato 3 — Fogo", texto:
+`A intensidade não é pressa.
+É entrega consciente.
+
+Aqui, o desejo aparece
+com elegância — e coragem.` },
+      151:{ tag: "Ato 4 — Crescimento", texto:
+`O amor amadurece quando escolhe evoluir.
+
+Não é sobre sentir mais.
+É sobre cuidar melhor.` },
+      241:{ tag: "Ato 5 — Raiz", texto:
+`Agora não é só sentir.
+É pertencer.
+
+O que era promessa
+vira casa.` },
+      331:{ tag: "Ato 6 — Recomeço", texto:
+`Escolher de novo
+é a forma mais madura de amar.
+
+O fim não fecha.
+Ele renova.` }
+    };
+
+    const segredos = [
+      "Eu ainda estou aqui.",
+      "Você chegou. Eu já respirei melhor.",
+      "Esse lugar é seu também.",
+      "Eu escolho você, mesmo nos dias comuns.",
+      "Se o mundo estiver barulhento, fica aqui um pouco.",
+      "Eu gosto quando você volta.",
+      "O que a gente tem merece cuidado.",
+      "Eu não tenho pressa. Eu tenho certeza.",
+      "Aqui é onde eu fico.",
+      "Eu penso em você com calma.",
+      "Mesmo em silêncio, eu continuo.",
+      "Você é a minha decisão tranquila.",
+      "Se você ler isso, é porque existe nós.",
+      "Eu guardo você nas coisas pequenas.",
+      "Não precisa de nada grandioso. Só de você aqui."
+    ];
+
+    // ✅ MODO TESTE: /?day=60
+    function getForcedDay(){
+      try{
+        const p = new URLSearchParams(location.search);
+        const raw = p.get("day");
+        if(!raw) return null;
+        const n = Number(raw);
+        if(Number.isFinite(n) && n >= 0 && n <= 365) return Math.floor(n);
+        return null;
+      }catch(e){
+        return null;
+      }
+    }
+
+    function showModoTeste(dia){
+      const el = document.getElementById("modoTeste");
+      if(dia === null){
+        el.classList.add("hidden");
+        el.textContent = "";
+        return;
+      }
+      el.classList.remove("hidden");
+      el.textContent = `Modo teste ativo: Dia ${dia}. (URL: ?day=${dia})`;
+    }
+
+    function getDataInicio(){
+      const iso = localStorage.getItem(START_OVERRIDE_KEY);
+      if(iso && /^\d{4}-\d{2}-\d{2}$/.test(iso)){
+        return new Date(iso + "T00:00:00");
+      }
+      return dataInicioPadrao;
+    }
+
+    function diffDias(){
+      const dataInicio = getDataInicio();
+      const hoje = new Date();
+      const H = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+      const I = new Date(dataInicio.getFullYear(), dataInicio.getMonth(), dataInicio.getDate());
+      return Math.floor((H - I) / (1000*60*60*24));
+    }
+
+    function getAto(dia){
+      if(dia >= 1 && dia <= 30) return 1;
+      if(dia >= 31 && dia <= 90) return 2;
+      if(dia >= 91 && dia <= 150) return 3;
+      if(dia >= 151 && dia <= 240) return 4;
+      if(dia >= 241 && dia <= 330) return 5;
+      return 6;
+    }
+
+    function getFaixaAto(dia){
+      const ato = getAto(dia);
+      if(ato === 1) return {start:1, end:30};
+      if(ato === 2) return {start:31, end:90};
+      if(ato === 3) return {start:91, end:150};
+      if(ato === 4) return {start:151, end:240};
+      if(ato === 5) return {start:241, end:330};
+      return {start:331, end:365};
+    }
+
+    function setAuraProgress(dia){
+      if(!Number.isFinite(dia) || dia < 1) {
+        document.documentElement.style.setProperty("--auraT", "0");
+        return;
+      }
+      const {start, end} = getFaixaAto(dia);
+      const denom = Math.max(1, (end - start));
+      const t = (dia - start) / denom;
+      const clamped = Math.max(0, Math.min(1, t));
+      document.documentElement.style.setProperty("--auraT", clamped.toFixed(4));
+    }
+
+    function setTemaPorAto(dia){
+      document.body.setAttribute("data-ato", String(getAto(dia)));
+      setAuraProgress(dia);
+    }
+
+    function setDayAttr(dia){
+      if(dia >= 1 && dia <= 365) document.body.setAttribute("data-dia", String(dia));
+      else document.body.removeAttribute("data-dia");
+    }
+
+    function setCornerDates(){
+      const agora = new Date();
+      const dd = String(agora.getDate()).padStart(2,'0');
+      const mm = String(agora.getMonth()+1).padStart(2,'0');
+      const yyyy = agora.getFullYear();
+      const data = `${dd}/${mm}/${yyyy}`;
+      document.getElementById("cornerDateLogin").innerText = data;
+      document.getElementById("cornerDate").innerText = data;
+    }
+
+    function aplicarFrasePorHorario(){
+      const hora = new Date().getHours();
+      const el = document.getElementById("fraseContexto");
+      if(hora >= 5 && hora < 12) el.innerText = "Que seu dia seja leve. Eu já escolhi você hoje.";
+      else if(hora >= 12 && hora < 18) el.innerText = "No meio do seu dia, eu ainda penso em você.";
+      else if(hora >= 18 && hora < 23) el.innerText = "Eu gosto quando você vem aqui no fim do dia.";
+      else el.innerText = "Eu gosto quando você aparece antes de dormir.";
+    }
+
+    function verificarRetorno(){
+      const hoje = new Date().toDateString();
+      const key = "projeto365_visita";
+      const ultima = localStorage.getItem(key);
+      if(ultima === hoje){
+        const el = document.getElementById("fraseContexto");
+        el.innerText += " Você voltou. Eu gosto disso.";
+      }
+      localStorage.setItem(key, hoje);
+    }
+
+    function revelarBloco(){
+      const bloco = document.getElementById("blocoTexto");
+      bloco.classList.remove("show");
+      void bloco.offsetWidth;
+      bloco.classList.add("show");
+    }
+
+    let typingTimer = null;
+    function typeText(el, text, speed=12, onDone=null){
+      clearTimeout(typingTimer);
+      el.textContent = "";
+      let i = 0;
+      function step(){
+        el.textContent = text.slice(0, i);
+        i++;
+        if(i <= text.length){
+          typingTimer = setTimeout(step, speed);
+        } else {
+          if(typeof onDone === "function") onDone();
+        }
+      }
+      step();
+    }
+
+    function typeTextHuman(el, text, opts={}){
+      const {
+        minDelay = 34,
+        maxDelay = 68,
+        mistakeChance = 0.06,
+        maxBackspace = 4,
+        pauseChance = 0.05,
+        minPause = 220,
+        maxPause = 520,
+        scrollContainer = null,
+        onDone = null
+      } = opts;
+
+      clearTimeout(typingTimer);
+      el.textContent = "";
+      let i = 0;
+
+      function rand(a,b){ return a + Math.random() * (b-a); }
+      function nextDelay(){ return Math.floor(rand(minDelay, maxDelay)); }
+      function nextPause(){ return Math.floor(rand(minPause, maxPause)); }
+      function doScroll(){
+        if(scrollContainer && typeof scrollContainer.scrollTop === "number"){
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+      }
+
+      function step(){
+        if(Math.random() < pauseChance){
+          typingTimer = setTimeout(step, nextPause());
+          return;
+        }
+
+        if(i > 6 && i < text.length - 6 && Math.random() < mistakeChance){
+          const current = el.textContent;
+          const n = Math.max(1, Math.floor(rand(1, maxBackspace+1)));
+          let j = 0;
+
+          function back(){
+            el.textContent = el.textContent.slice(0, -1);
+            doScroll();
+            j++;
+            if(j < Math.min(n, current.length)){
+              typingTimer = setTimeout(back, Math.floor(rand(26, 58)));
+            } else {
+              typingTimer = setTimeout(step, Math.floor(rand(90, 180)));
+            }
+          }
+          back();
+          return;
+        }
+
+        el.textContent = text.slice(0, i);
+        i++;
+        doScroll();
+
+        if(i <= text.length){
+          typingTimer = setTimeout(step, nextDelay());
+        } else {
+          doScroll();
+          if(typeof onDone === "function") onDone();
+        }
+      }
+
+      step();
+    }
+
+    function pickSegredo(){ return segredos[Math.floor(Math.random() * segredos.length)]; }
+
+    function mostrarToast(texto){
+      const toast = document.getElementById("toastSegredo");
+      toast.textContent = texto;
+
+      toast.classList.remove("hidden");
+      toast.classList.remove("show");
+      void toast.offsetWidth;
+      toast.classList.add("show");
+
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.classList.add("hidden"), 250);
+      }, 4200);
+    }
+
+    function iniciarSegredo(){
+      const cooldownKey = "projeto365_toast";
+      const cooldownMs = 2 * 60 * 60 * 1000;
+
+      function resetInatividade(){
+        clearTimeout(window.__inatividadeTimer);
+        window.__inatividadeTimer = setTimeout(() => {
+          if(document.hidden) return;
+
+          const last = Number(localStorage.getItem(cooldownKey) || 0);
+          const now = Date.now();
+
+          if(now - last >= cooldownMs){
+            localStorage.setItem(cooldownKey, String(now));
+            mostrarToast(pickSegredo());
+          }
+        }, 10000);
+      }
+
+      if(window.__segredoInit){
+        resetInatividade();
+        return;
+      }
+      window.__segredoInit = true;
+
+      window.addEventListener("mousemove", resetInatividade, {passive:true});
+      window.addEventListener("keydown", resetInatividade);
+      window.addEventListener("touchstart", resetInatividade, {passive:true});
+      window.addEventListener("scroll", resetInatividade, {passive:true});
+
+      document.addEventListener("visibilitychange", () => { if(!document.hidden) resetInatividade(); });
+      window.addEventListener("focus", resetInatividade);
+
+      resetInatividade();
+    }
+
+    // ===== INTRO DE ATO =====
+    function introKeyForDay(dia){ return `projeto365_intro_vista_${dia}`; }
+    function deveMostrarIntro(dia){
+      if(dia !== DIA_ATUAL) return false;
+      if(!INTRO_ATOS[dia]) return false;
+      return localStorage.getItem(introKeyForDay(dia)) !== "1";
+    }
+    function marcarIntroComoVista(dia){ localStorage.setItem(introKeyForDay(dia), "1"); }
+    function esconderIntro(){
+      const box = document.getElementById("introAtoBox");
+      box.classList.add("hidden");
+      document.getElementById("introAtoTexto").textContent = "";
+    }
+    function mostrarIntro(dia){
+      const info = INTRO_ATOS[dia];
+      const box = document.getElementById("introAtoBox");
+      const tag = document.getElementById("introAtoTag");
+      const txt = document.getElementById("introAtoTexto");
+      const btn = document.getElementById("btnContinuarAto");
+
+      tag.textContent = info.tag;
+      txt.textContent = info.texto;
+
+      box.classList.remove("hidden");
+
+      btn.onclick = () => {
+        marcarIntroComoVista(dia);
+        esconderIntro();
+        carregarPoema(dia);
+      };
+    }
+
+    function animarFolha(direcao){
+      const c = document.getElementById("conteudo");
+      c.classList.remove("pageflip-in", "pageflip-out");
+      void c.offsetWidth;
+      c.classList.add(direcao === "in" ? "pageflip-in" : "pageflip-out");
+
+      clearTimeout(window.__flipTimer);
+      window.__flipTimer = setTimeout(() => {
+        c.classList.remove("pageflip-in", "pageflip-out");
+      }, 520);
+    }
+
+    function entrarModoLista(titulo){
+      document.body.classList.add("modo-arquivo");
+      document.getElementById("botoesNormal").classList.add("hidden");
+      document.getElementById("botoesArquivo").classList.remove("hidden");
+      document.getElementById("saudade").classList.add("hidden");
+
+      document.getElementById("poema").textContent = "";
+      document.getElementById("meta").textContent = "";
+      esconderIntro();
+      esconderCapsulaTrigger();
+      fecharCapsulaPage(true);
+      fecharMemoriaPage(true);
+      esconderAto1UI(true);
+      esconderAto2UI(true);
+
+      document.getElementById("tituloTopo").innerText = titulo;
+      animarFolha("in");
+    }
+
+    function sairModoLista(){
+      if(document.body.classList.contains("modo-arquivo")){
+        animarFolha("out");
+      }
+      document.body.classList.remove("modo-arquivo");
+      document.getElementById("arquivoBox").classList.add("hidden");
+      document.getElementById("memoriasBox").classList.add("hidden");
+      document.getElementById("botoesNormal").classList.remove("hidden");
+      document.getElementById("botoesArquivo").classList.add("hidden");
+    }
+
+    function primeiraLinha(texto){
+      if(!texto) return "Sem título";
+      const linha = String(texto).split("\n")[0].trim();
+      return linha || "Sem título";
+    }
+
+    function tituloParaLista(dia){
+      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "";
+      let t = primeiraLinha(texto);
+      if(t.length > 52) t = t.slice(0, 52).trim() + "…";
+      return t;
+    }
+
+    function buildRanges(maxDay){
+      const ranges = [];
+      let start = 1;
+      while(start <= maxDay){
+        const end = Math.min(start + 29, maxDay);
+        ranges.push({start, end});
+        start += 30;
+      }
+      return ranges;
+    }
+
+    function renderRangeButtons(max){
+      const row = document.getElementById("rangeRow");
+      row.innerHTML = "";
+      const ranges = buildRanges(max);
+
+      function renderList(start, end){
+        const lista = document.getElementById("listaArquivo");
+        lista.innerHTML = "";
+        for(let d = end; d >= start; d--){
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "arquivoItem";
+          btn.innerHTML =
+            `<span class="arquivoDia">Dia ${d}</span>
+             <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
+          btn.onclick = () => {
+            sairModoLista();
+            esconderIntro();
+            carregarPoema(d);
+          };
+          lista.appendChild(btn);
+        }
+      }
+
+      ranges.forEach((r) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "rangeBtn";
+        b.textContent = `${r.start}–${r.end}`;
+        b.onclick = () => {
+          [...row.querySelectorAll(".rangeBtn")].forEach(x => x.classList.remove("active"));
+          b.classList.add("active");
+          renderList(r.start, r.end);
+        };
+        row.appendChild(b);
+      });
+
+      const last = ranges[ranges.length - 1];
+      if(last){
+        row.lastChild.classList.add("active");
+        renderList(last.start, last.end);
+      }
+    }
+
+    function abrirArquivo(){
+      if(DIA_ATUAL <= 1) return;
+
+      const max = DIA_ATUAL - 1;
+      document.getElementById("arquivoSub").innerText = `Disponíveis: Dias 1 a ${max}`;
+
+      document.getElementById("arquivoBox").classList.remove("hidden");
+      document.getElementById("memoriasBox").classList.add("hidden");
+
+      setTemaPorAto(DIA_ATUAL);
+      setDayAttr(DIA_ATUAL);
+
+      entrarModoLista("Arquivo");
+      renderRangeButtons(max);
+    }
+
+    function getMemoryDays(){
+      const days = [];
+      for(let d = 30; d <= 330; d += 30) days.push(d);
+      return days;
+    }
+    function memoriaTituloPorIndice(idx){ return `Memória ${idx + 1}`; }
+
+    function abrirMemorias(){
+      const days = getMemoryDays();
+      document.getElementById("memoriasSub").innerText = `Total previsto: ${days.length}`;
+
+      const lista = document.getElementById("listaMemorias");
+      lista.innerHTML = "";
+
+      days.forEach((diaMem, idx) => {
+        const liberada = (DIA_ATUAL >= diaMem);
+        const icon = liberada ? "🔓" : "🔒";
+        const titulo = memoriaTituloPorIndice(idx);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "arquivoItem memoriaItem";
+        btn.innerHTML =
+          `<span class="lockIcon">${icon}</span>
+           <span class="arquivoDia">Dia ${diaMem}</span>
+           <span class="arquivoTitulo">${titulo}</span>`;
+
+        btn.onclick = () => abrirMemoriaPage(diaMem, idx);
+        lista.appendChild(btn);
+      });
+
+      setTemaPorAto(DIA_ATUAL);
+      setDayAttr(DIA_ATUAL);
+
+      document.getElementById("arquivoBox").classList.add("hidden");
+      document.getElementById("memoriasBox").classList.remove("hidden");
+      entrarModoLista("Memórias");
+    }
+
+    function abrirMemoriaPage(diaMem, idx){
+      const page = document.getElementById("memoriaPage");
+      const titleEl = document.getElementById("memoriaPaperTitle");
+      const metaEl = document.getElementById("memoriaPaperMeta");
+      const textoEl = document.getElementById("memoriaPageTexto");
+      const btnVoltar = document.getElementById("btnMemoriaVoltar");
+
+      const liberada = (DIA_ATUAL >= diaMem);
+      const titulo = memoriaTituloPorIndice(idx);
+
+      titleEl.textContent = titulo;
+
+      if(!liberada){
+        metaEl.textContent = `Bloqueada até o Dia ${diaMem}.`;
+        textoEl.textContent = `Quando chegar o Dia ${diaMem}, essa memória vai abrir — e vai ficar disponível pra sempre.`;
+      } else {
+        metaEl.textContent = `Liberada no Dia ${diaMem}.`;
+        const texto = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(diaMem) : "";
+        const conteudo = texto && texto.trim().length ? texto : "Em breve...";
+        textoEl.textContent = "";
+        typeText(textoEl, conteudo, 12);
+      }
+
+      page.classList.remove("hidden");
+      page.setAttribute("aria-hidden", "false");
+      document.body.classList.add("memoria-mode");
+
+      btnVoltar.onclick = () => fecharMemoriaPage();
+      page.scrollTop = 0;
+    }
+
+    function fecharMemoriaPage(silencioso=false){
+      const page = document.getElementById("memoriaPage");
+      if(!silencioso && page.classList.contains("hidden")) return;
+      page.classList.add("hidden");
+      page.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("memoria-mode");
+      document.getElementById("memoriaPageTexto").textContent = "";
+    }
+
+    // ===== Dia 365 — cápsula =====
+    const CAPSULA_OPEN_KEY = "projeto365_capsula_365_aberta";
+
+    function esconderCapsulaTrigger(){
+      document.getElementById("capsulaTrigger").classList.add("hidden");
+    }
+
+    function mostrarCapsulaTrigger(){
+      const t = document.getElementById("capsulaTrigger");
+      const btn = document.getElementById("btnAbrirCapsula");
+      t.classList.remove("hidden");
+      btn.onclick = () => abrirCapsulaPage();
+    }
+
+    function abrirCapsulaPage(){
+      const page = document.getElementById("capsulaPage");
+      const notebook = document.getElementById("notebook");
+      const cartaEl = document.getElementById("capsulaCarta");
+      const fecho = document.getElementById("capsulaFecho");
+      const btnVoltar = document.getElementById("btnCapsulaVoltar");
+      const btnFinal = document.getElementById("btnEscolherDeNovo");
+
+      localStorage.setItem(CAPSULA_OPEN_KEY, "1");
+
+      cartaEl.textContent = "";
+      fecho.classList.add("hidden");
+
+      page.classList.remove("hidden");
+      page.setAttribute("aria-hidden", "false");
+      document.body.classList.add("capsula-mode");
+
+      esconderAto2UI(true);
+
+      page.scrollTop = 0;
+
+      notebook.classList.remove("open");
+      void notebook.offsetWidth;
+      notebook.classList.add("open");
+
+      btnVoltar.onclick = () => fecharCapsulaPage();
+      btnFinal.onclick = () => escolherDeNovo();
+
+      clearTimeout(window.__capsulaStartTimer);
+      window.__capsulaStartTimer = setTimeout(() => {
+        const carta = (typeof getCartaCapsula365 === "function") ? getCartaCapsula365() : "";
+        typeTextHuman(cartaEl, carta || "Em breve...", {
+          minDelay: 38,
+          maxDelay: 82,
+          mistakeChance: 0.075,
+          maxBackspace: 4,
+          pauseChance: 0.07,
+          minPause: 260,
+          maxPause: 760,
+          scrollContainer: page,
+          onDone: () => {
+            fecho.classList.remove("hidden");
+            page.scrollTop = page.scrollHeight;
+          }
+        });
+      }, 640);
+    }
+
+    function fecharCapsulaPage(silencioso=false){
+      const page = document.getElementById("capsulaPage");
+      if(!silencioso && page.classList.contains("hidden")) return;
+
+      page.classList.add("hidden");
+      page.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("capsula-mode");
+
+      clearTimeout(window.__capsulaStartTimer);
+    }
+
+    function clearProjeto365Storage(){
+      const keys = [];
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith("projeto365_")) keys.push(k);
+      }
+      keys.forEach(k => localStorage.removeItem(k));
+    }
+
+    function escolherDeNovo(){
+      const overlay = document.getElementById("fadeOverlay");
+      overlay.classList.add("show");
+
+      setTimeout(() => {
+        setTimeout(() => {
+          const now = new Date();
+          const y = now.getFullYear();
+          const m = String(now.getMonth()+1).padStart(2,'0');
+          const d = String(now.getDate()).padStart(2,'0');
+          const iso = `${y}-${m}-${d}`;
+
+          clearProjeto365Storage();
+          localStorage.setItem(START_OVERRIDE_KEY, iso);
+
+          overlay.classList.remove("show");
+          fecharCapsulaPage(true);
+          carregarHoje();
+        }, 1000);
+      }, 3000);
+    }
+
+    // ===== ATO 1 — PROGRESSO + UI =====
+    function getAto1Unlocked(){
+      const raw = Number(localStorage.getItem(ATO1_UNLOCK_KEY) || 0);
+      if(!Number.isFinite(raw)) return 0;
+      return Math.max(0, Math.min(30, Math.floor(raw)));
+    }
+
+    function setAto1Unlocked(n){
+      const clamped = Math.max(0, Math.min(30, Math.floor(n)));
+      localStorage.setItem(ATO1_UNLOCK_KEY, String(clamped));
+    }
+
+    function esconderAto1UI(silencioso=false){
+      const chave = document.getElementById("ato1Chave");
+      const palavra = document.getElementById("ato1Palavra");
+      const montagem = document.getElementById("ato1Montagem");
+
+      chave.classList.add("hidden");
+      chave.setAttribute("aria-hidden","true");
+      palavra.textContent = "";
+
+      montagem.classList.add("hidden");
+      montagem.classList.remove("show","assemble");
+      montagem.setAttribute("aria-hidden","true");
+      if(!silencioso) montagem.innerHTML = "";
+    }
+
+    function renderAto1Palavra(diaEmTela){
+      const chave = document.getElementById("ato1Chave");
+      const palavra = document.getElementById("ato1Palavra");
+      const montagem = document.getElementById("ato1Montagem");
+
+      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
+        esconderAto1UI(true);
+        return;
+      }
+
+      if(diaEmTela < 1 || diaEmTela > 30){
+        esconderAto1UI(true);
+        return;
+      }
+
+      const unlocked = getAto1Unlocked();
+      if(diaEmTela > unlocked){
+        esconderAto1UI(true);
+        return;
+      }
+
+      const w = ATO1_PALAVRAS[diaEmTela - 1] || "";
+      palavra.textContent = w;
+
+      montagem.classList.add("hidden");
+      montagem.classList.remove("show","assemble");
+      montagem.setAttribute("aria-hidden","true");
+
+      chave.classList.remove("hidden");
+      chave.setAttribute("aria-hidden","false");
+    }
+
+    function montarAto1FraseNoCentro(){
+      const chave = document.getElementById("ato1Chave");
+      const montagem = document.getElementById("ato1Montagem");
+
+      montagem.innerHTML = "";
+      montagem.classList.remove("show","assemble");
+
+      chave.classList.add("hidden");
+      chave.setAttribute("aria-hidden","true");
+
+      ATO1_PALAVRAS.forEach((w, i) => {
+        const s = document.createElement("span");
+        s.className = "ato1Word";
+        s.textContent = w;
+        s.style.transitionDelay = `${60 + i * 28}ms`;
+        montagem.appendChild(s);
+      });
+
+      montagem.classList.remove("hidden");
+      montagem.setAttribute("aria-hidden","false");
+
+      void montagem.offsetWidth;
+      montagem.classList.add("show");
+
+      clearTimeout(window.__ato1AssembleTimer);
+      window.__ato1AssembleTimer = setTimeout(() => {
+        montagem.classList.add("assemble");
+      }, 1100);
+    }
+
+    // ===== ATO 2 — LINHAS + PALAVRAS SUBLINHADAS =====
+    function esconderAto2UI(silencioso=false){
+      const lines = document.getElementById("ato2Lines");
+      const tip = document.getElementById("ato2Thought");
+      lines.classList.add("hidden");
+      lines.setAttribute("aria-hidden","true");
+      if(!silencioso){
+        tip.classList.add("hidden");
+        tip.setAttribute("aria-hidden","true");
+        tip.textContent = "";
+      }
+    }
+
+    function setAto2Lines(dia){
+      const lines = document.getElementById("ato2Lines");
+
+      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
+        esconderAto2UI(true);
+        return;
+      }
+
+      if(getAto(dia) !== 2){
+        esconderAto2UI(true);
+        return;
+      }
+
+      const t = Math.max(0, Math.min(1, (dia - 31) / 59)); // 31..90
+      const gap = (30 - (t * 18)); // 30px -> 12px (mais visível)
+      lines.style.setProperty("--ato2Gap", `${gap.toFixed(1)}px`);
+
+      lines.classList.remove("hidden");
+      lines.setAttribute("aria-hidden","false");
+    }
+
+    function escapeHTML(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function applyAto2Markup(dia){
+      if(getAto(dia) !== 2) return;
+
+      if(typeof getAto2Anotacoes !== "function") return;
+      const anot = getAto2Anotacoes(dia) || [];
+      if(!anot.length) return;
+
+      const poemaEl = document.getElementById("poema");
+      const raw = poemaEl.textContent || "";
+      let html = escapeHTML(raw).replaceAll("\n","<br>");
+
+      // marca 1 ocorrência por anotação (leve e previsível)
+      anot.forEach((a) => {
+        const target = (a && a.target) ? String(a.target) : "";
+        const thought = (a && a.thought) ? String(a.thought) : "";
+        if(!target.trim()) return;
+
+        // tenta encontrar a palavra como texto literal
+        const safeTarget = target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const re = new RegExp(`\\b(${safeTarget})\\b`, ""); // 1ª ocorrência
+        html = html.replace(re, (m) => {
+          const dt = escapeHTML(thought);
+          return `<span class="ato2Mark" data-thought="${dt}">${m}</span>`;
+        });
+      });
+
+      poemaEl.innerHTML = html;
+    }
+
+    function setupAto2Interactions(){
+      const poemaEl = document.getElementById("poema");
+      const tip = document.getElementById("ato2Thought");
+
+      function hideTip(){
+        tip.classList.add("hidden");
+        tip.setAttribute("aria-hidden","true");
+        tip.textContent = "";
+      }
+
+      function showTipFor(el){
+        const thought = el.getAttribute("data-thought") || "";
+        if(!thought.trim()) return;
+
+        tip.textContent = thought;
+        tip.classList.remove("hidden");
+        tip.setAttribute("aria-hidden","false");
+
+        const r = el.getBoundingClientRect();
+        const pad = 10;
+
+        // posiciona acima se der, senão abaixo
+        const tipW = Math.min(520, window.innerWidth - 24);
+        tip.style.width = tipW + "px";
+
+        // força layout
+        tip.style.left = "0px";
+        tip.style.top = "0px";
+        const tr = tip.getBoundingClientRect();
+
+        let left = Math.max(12, Math.min(window.innerWidth - tr.width - 12, r.left + (r.width/2) - (tr.width/2)));
+        let top = r.top - tr.height - pad;
+
+        if(top < 12){
+          top = r.bottom + pad;
+        }
+        tip.style.left = left + "px";
+        tip.style.top = top + "px";
+      }
+
+      poemaEl.addEventListener("click", (e) => {
+        const t = e.target;
+        if(!(t instanceof Element)) return;
+        const mark = t.closest(".ato2Mark");
+        if(!mark){ hideTip(); return; }
+
+        // toggle
+        if(!tip.classList.contains("hidden") && tip.textContent === (mark.getAttribute("data-thought") || "")){
+          hideTip();
+        }else{
+          showTipFor(mark);
+        }
+      });
+
+      poemaEl.addEventListener("mouseover", (e) => {
+        const t = e.target;
+        if(!(t instanceof Element)) return;
+        const mark = t.closest(".ato2Mark");
+        if(!mark) return;
+        showTipFor(mark);
+      });
+
+      poemaEl.addEventListener("mouseout", (e) => {
+        const t = e.target;
+        if(!(t instanceof Element)) return;
+        const mark = t.closest(".ato2Mark");
+        if(!mark) return;
+        // não some instantaneamente pra não ficar “piscando”
+        clearTimeout(window.__ato2TipOut);
+        window.__ato2TipOut = setTimeout(() => {
+          hideTip();
+        }, 120);
+      });
+
+      window.addEventListener("scroll", () => hideTip(), {passive:true});
+      window.addEventListener("resize", () => hideTip());
+      document.addEventListener("visibilitychange", () => hideTip());
+    }
+
+    // ===== ATO 1 pós-typing =====
+    function afterPoemTyped(dia){
+      const forced = getForcedDay();
+      const isTest = (forced !== null);
+
+      // unlock Ato 1
+      if(!isTest && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
+        const current = getAto1Unlocked();
+        if(dia > current) setAto1Unlocked(dia);
+      }
+
+      // Ato 1 UI
+      renderAto1Palavra(dia);
+      if(dia === 30 && getAto1Unlocked() >= 30){
+        clearTimeout(window.__ato1FinalTimer);
+        window.__ato1FinalTimer = setTimeout(() => {
+          montarAto1FraseNoCentro();
+        }, 480);
+      }
+
+      // Ato 2 UI
+      setAto2Lines(dia);
+      applyAto2Markup(dia);
+    }
+
+    function carregarPoema(dia){
+      DIA_EM_TELA = dia;
+
+      const tituloTopo = document.getElementById("tituloTopo");
+      const poemaEl = document.getElementById("poema");
+      const metaEl = document.getElementById("meta");
+
+      revelarBloco();
+
+      setTemaPorAto(dia);
+      setDayAttr(dia);
+
+      esconderCapsulaTrigger();
+      fecharCapsulaPage(true);
+      fecharMemoriaPage(true);
+      esconderAto1UI(true);
+      esconderAto2UI(true);
+
+      if(dia <= 0){
+        document.body.removeAttribute("data-ato");
+        document.body.removeAttribute("data-dia");
+        document.documentElement.style.setProperty("--auraT", "0");
+        tituloTopo.innerText = "Antes do primeiro poema";
+        metaEl.innerText = "";
+        const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
+        typeText(poemaEl, textoPrefacio, 14);
+        return;
+      }
+
+      if(dia > 365){
+        tituloTopo.innerText = "365 dias com você";
+        metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
+        typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
+        return;
+      }
+
+      if(dia === 365){
+        tituloTopo.innerText = `Dia 365 de 365`;
+        metaEl.innerText = "Um poema por dia.";
+
+        const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
+        typeText(poemaEl, poema365 || "Em breve...", 12, () => {
+          mostrarCapsulaTrigger();
+        });
+        return;
+      }
+
+      tituloTopo.innerText = `Dia ${dia} de 365`;
+      metaEl.innerText = "Um poema por dia.";
+
+      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "Em breve...";
+      typeText(poemaEl, texto, 12, () => afterPoemTyped(dia));
+    }
+
+    function carregarHoje(){
+      const forced = getForcedDay();
+      showModoTeste(forced);
+
+      // ✅ MODO TESTE
+      if(forced !== null){
+        DIA_ATUAL = forced;
+
+        // simula unlock Ato 1 só no seu navegador
+        if(DIA_ATUAL >= 1 && DIA_ATUAL <= 30){
+          const cur = getAto1Unlocked();
+          if(DIA_ATUAL > cur) setAto1Unlocked(DIA_ATUAL);
+        }
+
+        const btn = document.getElementById("btnAnteriores");
+        btn.disabled = (DIA_ATUAL <= 1);
+        sairModoLista();
+
+        if(deveMostrarIntro(DIA_ATUAL)){
+          revelarBloco();
+
+          document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
+          document.getElementById("poema").textContent = "";
+          document.getElementById("meta").textContent = "";
+          setTemaPorAto(DIA_ATUAL);
+          setDayAttr(DIA_ATUAL);
+          esconderCapsulaTrigger();
+          fecharCapsulaPage(true);
+          fecharMemoriaPage(true);
+          esconderAto1UI(true);
+          esconderAto2UI(true);
+          mostrarIntro(DIA_ATUAL);
+          return;
+        }
+
+        esconderIntro();
+        carregarPoema(DIA_ATUAL);
+        return;
+      }
+
+      // ✅ MODO NORMAL
+      const d = diffDias();
+      DIA_ATUAL = d + 1;
+
+      aplicarFrasePorHorario();
+      verificarRetorno();
+      iniciarSegredo();
+
+      const btn = document.getElementById("btnAnteriores");
+      btn.disabled = (DIA_ATUAL <= 1);
+
+      sairModoLista();
+
+      if(d < 0){
+        esconderIntro();
+        carregarPoema(DIA_ATUAL);
+        return;
+      }
+
+      if(deveMostrarIntro(DIA_ATUAL)){
+        revelarBloco();
+
+        document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
+        document.getElementById("poema").textContent = "";
+        document.getElementById("meta").textContent = "";
+        setTemaPorAto(DIA_ATUAL);
+        setDayAttr(DIA_ATUAL);
+        esconderCapsulaTrigger();
+        fecharCapsulaPage(true);
+        fecharMemoriaPage(true);
+        esconderAto1UI(true);
+        esconderAto2UI(true);
+        mostrarIntro(DIA_ATUAL);
+        return;
+      }
+
+      esconderIntro();
+      carregarPoema(DIA_ATUAL);
+    }
+
+    function voltarParaHoje(){ carregarHoje(); }
+    function mostrarSaudade(){ document.getElementById("saudade").classList.toggle("hidden"); }
+
+    function verificarSenha(){
+      const senha = document.getElementById("senha").value;
+      if(senha === senhaCorreta){
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("conteudo").classList.remove("hidden");
+        setCornerDates();
+        carregarHoje();
+      } else {
+        alert("Senha incorreta.");
+      }
+    }
+
+    setCornerDates();
+    setInterval(setCornerDates, 60000);
+
+    // init Ato 2 (event delegation)
+    setupAto2Interactions();
+  </script>
+
+</body>
+</html>
