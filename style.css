@@ -12,9 +12,6 @@
   --auraColor: rgba(212,175,55,1);
   --auraOpacity: calc(var(--auraMin) + (var(--auraT) * (var(--auraMax) - var(--auraMin))));
 
-  /* ATO 2 progress */
-  --ato2T: 0; /* 0 → 1 (JS seta) */
-
   --panel:rgba(20,20,22,0.85);
   --text:#f1e9dc;
   --muted:rgba(241,233,220,0.65);
@@ -297,116 +294,72 @@ button:disabled{ opacity:0.45; cursor:not-allowed; transform:none; }
 }
 .btnIntro{ margin-top: 14px; width: 100%; }
 
-/* ===== ATO 2 — LINHAS + SUSSURROS ===== */
-
-/* Linhas: começam mais afastadas e aproximam com --ato2T */
-body[data-ato="2"] #blocoTexto{
-  position: relative;
+/* ===== ATO 2 — UI (linhas + pensamentos) ===== */
+.ato2UI{
+  margin: 14px auto 0;
+  width: min(56ch, 100%);
+  padding: 12px 14px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.10);
+  text-align: left;
 }
-body[data-ato="2"] #blocoTexto::before,
-body[data-ato="2"] #blocoTexto::after{
-  content:"";
-  position:absolute;
-  left: 50%;
-  width: min(56ch, 86%);
+
+.ato2Linhas{
+  height: 40px;
+  position: relative;
+  margin: 2px 0 10px;
+  opacity: 0.70;
+  transition: opacity 0.35s ease;
+}
+.ato2Linha{
+  position: absolute;
+  left: 0;
+  right: 0;
   height: 1px;
-  transform: translateX(-50%);
-  background: rgba(120,170,210,0.18);
-  opacity: calc(0.20 + (var(--ato2T) * 0.28));
-  transition: opacity 0.45s ease, transform 0.45s ease;
-  pointer-events:none;
+  background: var(--line);
+  transform: translateY(0);
+  transition: transform 0.45s ease;
+}
+.ato2Linha.a{ top: 50%; }
+.ato2Linha.b{ top: 50%; }
+
+.ato2Hint{
+  font-size: 14px;
+  color: rgba(241,233,220,0.60);
+  letter-spacing: 0.25px;
+  margin-bottom: 10px;
 }
 
-body[data-ato="2"] #blocoTexto::before{
-  top: 8px;
-  transform:
-    translateX(-50%)
-    translateY(calc((1 - var(--ato2T)) * -10px));
-}
-
-body[data-ato="2"] #blocoTexto::after{
-  bottom: 8px;
-  transform:
-    translateX(-50%)
-    translateY(calc((1 - var(--ato2T)) * 10px));
-}
-
-/* desliga em modos especiais */
-body.modo-arquivo[data-ato="2"] #blocoTexto::before,
-body.modo-arquivo[data-ato="2"] #blocoTexto::after,
-body.capsula-mode[data-ato="2"] #blocoTexto::before,
-body.capsula-mode[data-ato="2"] #blocoTexto::after,
-body.memoria-mode[data-ato="2"] #blocoTexto::before,
-body.memoria-mode[data-ato="2"] #blocoTexto::after{
-  display:none;
-}
-
-.thoughtWord{
-  position: relative;
+.ato2Link{
   display: inline;
-  color: rgba(241,233,220,0.96);
-  border-bottom: 1px solid rgba(120,170,210,0.28);
+  border-bottom: 1px solid rgba(241,233,220,0.55);
   padding-bottom: 1px;
   cursor: pointer;
   transition: 0.25s ease;
 }
-.thoughtWord:hover{
-  border-bottom-color: rgba(120,170,210,0.55);
-  color: rgba(241,233,220,1);
+.ato2Link:hover{
+  border-bottom-color: var(--accent);
+  color: rgba(241,233,220,0.98);
 }
 
-.ato2Hint{
-  margin: 14px auto 0;
-  width: min(56ch, 100%);
-  padding: 10px 14px;
+.ato2Pensamento{
+  margin-top: 8px;
+  padding: 12px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(120,170,210,0.16);
-  background: rgba(0,0,0,0.14);
-  text-align: center;
-  display:flex;
-  gap: 10px;
-  align-items:center;
-  justify-content:center;
-}
-.ato2HintDot{
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: rgba(120,170,210,0.65);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-}
-.ato2HintText{
-  font-size: 13px;
-  letter-spacing: 0.55px;
-  color: rgba(241,233,220,0.62);
-}
-
-.ato2Thought{
-  position: fixed;
-  z-index: 1200;
-  max-width: min(72vw, 420px);
-  padding: 12px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(120,170,210,0.22);
-  background: rgba(16,18,22,0.96);
-  box-shadow: 0 18px 55px rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
   color: rgba(241,233,220,0.92);
   font-size: 16px;
-  line-height: 1.65;
-  letter-spacing: 0.20px;
-  transform: translate(-50%, -100%);
-  opacity: 1;
+  line-height: 1.85;
 }
-.ato2Thought.pinned{
-  border-color: rgba(120,170,210,0.34);
+.ato2Pensamento.pop{
+  animation: ato2Pop 0.28s ease;
 }
-@media (max-width: 480px){
-  .ato2Thought{
-    max-width: 88vw;
-    font-size: 15px;
-  }
+@keyframes ato2Pop{
+  0%{ transform: translateY(2px); opacity: 0.92; }
+  100%{ transform: translateY(0); opacity: 1; }
 }
-
 /* ===== /ATO 2 ===== */
 
 /* ===== ATO 1 — PALAVRA + MONTAGEM ===== */
