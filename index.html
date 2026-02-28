@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260228_3" />
+  <link rel="stylesheet" href="style.css?v=20260228_4" />
 </head>
 
 <body>
@@ -55,7 +55,8 @@
         <div class="ato2Line"></div>
         <div class="ato2Line"></div>
       </div>
-      <!-- Tooltip (fixo, pra não cortar dentro do container) -->
+
+      <!-- Tooltip (fixo, pra não cortar) -->
       <div id="ato2Thought" class="ato2Thought hidden" aria-hidden="true"></div>
       <!-- ===== /ATO 2 ===== -->
 
@@ -69,7 +70,6 @@
         </div>
       </div>
 
-      <!-- Dia 30: montagem da frase no centro -->
       <div id="ato1Montagem" class="ato1Montagem hidden" aria-hidden="true"></div>
       <!-- ===== /ATO 1 ===== -->
 
@@ -79,7 +79,6 @@
         <div class="capsulaMeta">Escrita em 23/02/2025.</div>
         <button id="btnAbrirCapsula" class="btnCapsula" type="button">Abrir</button>
       </div>
-      <!-- ===== /DIA 365 ===== -->
 
       <!-- ARQUIVO: POEMAS -->
       <div id="arquivoBox" class="arquivoBox hidden">
@@ -96,9 +95,7 @@
 
         <div class="thin-line" style="margin-top:18px;"></div>
 
-        <!-- ranges -->
         <div class="rangeRow" id="rangeRow"></div>
-
         <div id="listaArquivo" class="arquivoLista"></div>
       </div>
 
@@ -116,20 +113,17 @@
         </div>
 
         <div class="thin-line" style="margin-top:18px;"></div>
-
         <div id="listaMemorias" class="arquivoLista"></div>
       </div>
 
     </div>
 
-    <!-- Botões (normal) -->
     <div class="btnRow" id="botoesNormal">
       <button id="btnAnteriores" type="button" onclick="abrirArquivo()">Poemas anteriores</button>
       <button id="btnMemorias" type="button" onclick="abrirMemorias()">Memórias</button>
       <button type="button" onclick="mostrarSaudade()">Clique aqui quando estiver com saudade</button>
     </div>
 
-    <!-- Botões (modo arquivo/memórias) -->
     <div class="btnRow hidden" id="botoesArquivo">
       <button class="ghostBtn" type="button" onclick="voltarParaHoje()">Voltar para o dia de hoje</button>
     </div>
@@ -141,63 +135,15 @@
 
     <div class="assinatura">Entre nós dois.</div>
 
-    <!-- ===== PÁGINA DA CÁPSULA (overlay) ===== -->
-    <div id="capsulaPage" class="capsulaPage hidden" aria-hidden="true">
-      <div class="capsulaTopbar">
-        <button class="ghostBtn capsulaBack" id="btnCapsulaVoltar" type="button">Voltar</button>
-        <div class="capsulaTopbarTitle">Cápsula do Tempo</div>
-        <div style="width:72px;"></div>
-      </div>
+    <!-- Toast -->
+    <div id="toastSegredo" class="toast hidden" aria-live="polite"></div>
 
-      <div class="notebook" id="notebook">
-        <div class="notebookCover"></div>
-
-        <div class="notebookPaper">
-          <div class="capsulaPaperHeader">
-            <div class="capsulaPaperTitle">Carta – Cápsula do Tempo</div>
-            <div class="capsulaPaperDate">23/02/2025</div>
-          </div>
-
-          <div id="capsulaCarta" class="capsulaCarta cursiva"></div>
-
-          <div id="capsulaFecho" class="capsulaFecho hidden">
-            <div class="capsulaLine"></div>
-            <div class="capsulaDecidi">23/02/2025 — Eu decidi.</div>
-            <button id="btnEscolherDeNovo" class="btnEscolherDeNovo" type="button">Escolher de novo</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- ===== /PÁGINA DA CÁPSULA ===== -->
-
-    <!-- OVERLAY MEMÓRIA -->
-    <div id="memoriaPage" class="memoriaPage hidden" aria-hidden="true">
-      <div class="memoriaTopbar">
-        <button class="ghostBtn memoriaBack" id="btnMemoriaVoltar" type="button">Voltar</button>
-        <div class="memoriaTopbarTitle">Memória</div>
-        <div style="width:72px;"></div>
-      </div>
-
-      <div class="memoriaPaper">
-        <div class="memoriaPaperHeader">
-          <div class="memoriaPaperTitle" id="memoriaPaperTitle">—</div>
-          <div class="memoriaPaperMeta" id="memoriaPaperMeta">—</div>
-        </div>
-
-        <div id="memoriaPageTexto" class="memoriaPageTexto"></div>
-      </div>
-    </div>
-    <!-- /OVERLAY MEMÓRIA -->
-
+    <!-- Fade final -->
+    <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
   </div>
 
-  <!-- Toast -->
-  <div id="toastSegredo" class="toast hidden" aria-live="polite"></div>
-
-  <!-- Overlay de fade final (Dia 365) -->
-  <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
-
-  <script src="poemas.js?v=20260228_3"></script>
+  <!-- ✅ cache-buster novo -->
+  <script src="poemas.js?v=20260228_4"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -206,14 +152,6 @@
 
     let DIA_ATUAL = 1;
     let DIA_EM_TELA = 1;
-
-    // ===== ATO 1 — FRASE (30 palavras) =====
-    const ATO1_UNLOCK_KEY = "projeto365_ato1_unlock";
-    const ATO1_PALAVRAS = [
-      "Eu","te","escolho","todos","os","dias,","mesmo","quando","o","mundo","pesa","e","medo","grita,",
-      "porque","amar","você","é","decisão","firme:","transformar","incerteza","em","casa,","silêncio",
-      "em","abrigo,","futuro","em","promessa."
-    ];
 
     const INTRO_ATOS = {
       31: { tag: "Ato 2 — Conexão", texto:
@@ -228,43 +166,8 @@ o Ato 2 é presença.` },
 É entrega consciente.
 
 Aqui, o desejo aparece
-com elegância — e coragem.` },
-      151:{ tag: "Ato 4 — Crescimento", texto:
-`O amor amadurece quando escolhe evoluir.
-
-Não é sobre sentir mais.
-É sobre cuidar melhor.` },
-      241:{ tag: "Ato 5 — Raiz", texto:
-`Agora não é só sentir.
-É pertencer.
-
-O que era promessa
-vira casa.` },
-      331:{ tag: "Ato 6 — Recomeço", texto:
-`Escolher de novo
-é a forma mais madura de amar.
-
-O fim não fecha.
-Ele renova.` }
+com elegância — e coragem.` }
     };
-
-    const segredos = [
-      "Eu ainda estou aqui.",
-      "Você chegou. Eu já respirei melhor.",
-      "Esse lugar é seu também.",
-      "Eu escolho você, mesmo nos dias comuns.",
-      "Se o mundo estiver barulhento, fica aqui um pouco.",
-      "Eu gosto quando você volta.",
-      "O que a gente tem merece cuidado.",
-      "Eu não tenho pressa. Eu tenho certeza.",
-      "Aqui é onde eu fico.",
-      "Eu penso em você com calma.",
-      "Mesmo em silêncio, eu continuo.",
-      "Você é a minha decisão tranquila.",
-      "Se você ler isso, é porque existe nós.",
-      "Eu guardo você nas coisas pequenas.",
-      "Não precisa de nada grandioso. Só de você aqui."
-    ];
 
     // ✅ MODO TESTE: /?day=60
     function getForcedDay(){
@@ -275,9 +178,7 @@ Ele renova.` }
         const n = Number(raw);
         if(Number.isFinite(n) && n >= 0 && n <= 365) return Math.floor(n);
         return null;
-      }catch(e){
-        return null;
-      }
+      }catch(e){ return null; }
     }
 
     function showModoTeste(dia){
@@ -316,31 +217,8 @@ Ele renova.` }
       return 6;
     }
 
-    function getFaixaAto(dia){
-      const ato = getAto(dia);
-      if(ato === 1) return {start:1, end:30};
-      if(ato === 2) return {start:31, end:90};
-      if(ato === 3) return {start:91, end:150};
-      if(ato === 4) return {start:151, end:240};
-      if(ato === 5) return {start:241, end:330};
-      return {start:331, end:365};
-    }
-
-    function setAuraProgress(dia){
-      if(!Number.isFinite(dia) || dia < 1) {
-        document.documentElement.style.setProperty("--auraT", "0");
-        return;
-      }
-      const {start, end} = getFaixaAto(dia);
-      const denom = Math.max(1, (end - start));
-      const t = (dia - start) / denom;
-      const clamped = Math.max(0, Math.min(1, t));
-      document.documentElement.style.setProperty("--auraT", clamped.toFixed(4));
-    }
-
     function setTemaPorAto(dia){
       document.body.setAttribute("data-ato", String(getAto(dia)));
-      setAuraProgress(dia);
     }
 
     function setDayAttr(dia){
@@ -402,126 +280,6 @@ Ele renova.` }
       step();
     }
 
-    function typeTextHuman(el, text, opts={}){
-      const {
-        minDelay = 34,
-        maxDelay = 68,
-        mistakeChance = 0.06,
-        maxBackspace = 4,
-        pauseChance = 0.05,
-        minPause = 220,
-        maxPause = 520,
-        scrollContainer = null,
-        onDone = null
-      } = opts;
-
-      clearTimeout(typingTimer);
-      el.textContent = "";
-      let i = 0;
-
-      function rand(a,b){ return a + Math.random() * (b-a); }
-      function nextDelay(){ return Math.floor(rand(minDelay, maxDelay)); }
-      function nextPause(){ return Math.floor(rand(minPause, maxPause)); }
-      function doScroll(){
-        if(scrollContainer && typeof scrollContainer.scrollTop === "number"){
-          scrollContainer.scrollTop = scrollContainer.scrollHeight;
-        }
-      }
-
-      function step(){
-        if(Math.random() < pauseChance){
-          typingTimer = setTimeout(step, nextPause());
-          return;
-        }
-
-        if(i > 6 && i < text.length - 6 && Math.random() < mistakeChance){
-          const current = el.textContent;
-          const n = Math.max(1, Math.floor(rand(1, maxBackspace+1)));
-          let j = 0;
-
-          function back(){
-            el.textContent = el.textContent.slice(0, -1);
-            doScroll();
-            j++;
-            if(j < Math.min(n, current.length)){
-              typingTimer = setTimeout(back, Math.floor(rand(26, 58)));
-            } else {
-              typingTimer = setTimeout(step, Math.floor(rand(90, 180)));
-            }
-          }
-          back();
-          return;
-        }
-
-        el.textContent = text.slice(0, i);
-        i++;
-        doScroll();
-
-        if(i <= text.length){
-          typingTimer = setTimeout(step, nextDelay());
-        } else {
-          doScroll();
-          if(typeof onDone === "function") onDone();
-        }
-      }
-
-      step();
-    }
-
-    function pickSegredo(){ return segredos[Math.floor(Math.random() * segredos.length)]; }
-
-    function mostrarToast(texto){
-      const toast = document.getElementById("toastSegredo");
-      toast.textContent = texto;
-
-      toast.classList.remove("hidden");
-      toast.classList.remove("show");
-      void toast.offsetWidth;
-      toast.classList.add("show");
-
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-        setTimeout(() => toast.classList.add("hidden"), 250);
-      }, 4200);
-    }
-
-    function iniciarSegredo(){
-      const cooldownKey = "projeto365_toast";
-      const cooldownMs = 2 * 60 * 60 * 1000;
-
-      function resetInatividade(){
-        clearTimeout(window.__inatividadeTimer);
-        window.__inatividadeTimer = setTimeout(() => {
-          if(document.hidden) return;
-
-          const last = Number(localStorage.getItem(cooldownKey) || 0);
-          const now = Date.now();
-
-          if(now - last >= cooldownMs){
-            localStorage.setItem(cooldownKey, String(now));
-            mostrarToast(pickSegredo());
-          }
-        }, 10000);
-      }
-
-      if(window.__segredoInit){
-        resetInatividade();
-        return;
-      }
-      window.__segredoInit = true;
-
-      window.addEventListener("mousemove", resetInatividade, {passive:true});
-      window.addEventListener("keydown", resetInatividade);
-      window.addEventListener("touchstart", resetInatividade, {passive:true});
-      window.addEventListener("scroll", resetInatividade, {passive:true});
-
-      document.addEventListener("visibilitychange", () => { if(!document.hidden) resetInatividade(); });
-      window.addEventListener("focus", resetInatividade);
-
-      resetInatividade();
-    }
-
     // ===== INTRO DE ATO =====
     function introKeyForDay(dia){ return `projeto365_intro_vista_${dia}`; }
     function deveMostrarIntro(dia){
@@ -554,434 +312,27 @@ Ele renova.` }
       };
     }
 
-    function animarFolha(direcao){
-      const c = document.getElementById("conteudo");
-      c.classList.remove("pageflip-in", "pageflip-out");
-      void c.offsetWidth;
-      c.classList.add(direcao === "in" ? "pageflip-in" : "pageflip-out");
-
-      clearTimeout(window.__flipTimer);
-      window.__flipTimer = setTimeout(() => {
-        c.classList.remove("pageflip-in", "pageflip-out");
-      }, 520);
-    }
-
-    function entrarModoLista(titulo){
-      document.body.classList.add("modo-arquivo");
-      document.getElementById("botoesNormal").classList.add("hidden");
-      document.getElementById("botoesArquivo").classList.remove("hidden");
-      document.getElementById("saudade").classList.add("hidden");
-
-      document.getElementById("poema").textContent = "";
-      document.getElementById("meta").textContent = "";
-      esconderIntro();
-      esconderCapsulaTrigger();
-      fecharCapsulaPage(true);
-      fecharMemoriaPage(true);
-      esconderAto1UI(true);
-      esconderAto2UI(true);
-
-      document.getElementById("tituloTopo").innerText = titulo;
-      animarFolha("in");
-    }
-
-    function sairModoLista(){
-      if(document.body.classList.contains("modo-arquivo")){
-        animarFolha("out");
-      }
-      document.body.classList.remove("modo-arquivo");
-      document.getElementById("arquivoBox").classList.add("hidden");
-      document.getElementById("memoriasBox").classList.add("hidden");
-      document.getElementById("botoesNormal").classList.remove("hidden");
-      document.getElementById("botoesArquivo").classList.add("hidden");
-    }
-
-    function primeiraLinha(texto){
-      if(!texto) return "Sem título";
-      const linha = String(texto).split("\n")[0].trim();
-      return linha || "Sem título";
-    }
-
-    function tituloParaLista(dia){
-      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "";
-      let t = primeiraLinha(texto);
-      if(t.length > 52) t = t.slice(0, 52).trim() + "…";
-      return t;
-    }
-
-    function buildRanges(maxDay){
-      const ranges = [];
-      let start = 1;
-      while(start <= maxDay){
-        const end = Math.min(start + 29, maxDay);
-        ranges.push({start, end});
-        start += 30;
-      }
-      return ranges;
-    }
-
-    function renderRangeButtons(max){
-      const row = document.getElementById("rangeRow");
-      row.innerHTML = "";
-      const ranges = buildRanges(max);
-
-      function renderList(start, end){
-        const lista = document.getElementById("listaArquivo");
-        lista.innerHTML = "";
-        for(let d = end; d >= start; d--){
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "arquivoItem";
-          btn.innerHTML =
-            `<span class="arquivoDia">Dia ${d}</span>
-             <span class="arquivoTitulo">${tituloParaLista(d)}</span>`;
-          btn.onclick = () => {
-            sairModoLista();
-            esconderIntro();
-            carregarPoema(d);
-          };
-          lista.appendChild(btn);
-        }
-      }
-
-      ranges.forEach((r) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "rangeBtn";
-        b.textContent = `${r.start}–${r.end}`;
-        b.onclick = () => {
-          [...row.querySelectorAll(".rangeBtn")].forEach(x => x.classList.remove("active"));
-          b.classList.add("active");
-          renderList(r.start, r.end);
-        };
-        row.appendChild(b);
-      });
-
-      const last = ranges[ranges.length - 1];
-      if(last){
-        row.lastChild.classList.add("active");
-        renderList(last.start, last.end);
-      }
-    }
-
-    function abrirArquivo(){
-      if(DIA_ATUAL <= 1) return;
-
-      const max = DIA_ATUAL - 1;
-      document.getElementById("arquivoSub").innerText = `Disponíveis: Dias 1 a ${max}`;
-
-      document.getElementById("arquivoBox").classList.remove("hidden");
-      document.getElementById("memoriasBox").classList.add("hidden");
-
-      setTemaPorAto(DIA_ATUAL);
-      setDayAttr(DIA_ATUAL);
-
-      entrarModoLista("Arquivo");
-      renderRangeButtons(max);
-    }
-
-    function getMemoryDays(){
-      const days = [];
-      for(let d = 30; d <= 330; d += 30) days.push(d);
-      return days;
-    }
-    function memoriaTituloPorIndice(idx){ return `Memória ${idx + 1}`; }
-
-    function abrirMemorias(){
-      const days = getMemoryDays();
-      document.getElementById("memoriasSub").innerText = `Total previsto: ${days.length}`;
-
-      const lista = document.getElementById("listaMemorias");
-      lista.innerHTML = "";
-
-      days.forEach((diaMem, idx) => {
-        const liberada = (DIA_ATUAL >= diaMem);
-        const icon = liberada ? "🔓" : "🔒";
-        const titulo = memoriaTituloPorIndice(idx);
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "arquivoItem memoriaItem";
-        btn.innerHTML =
-          `<span class="lockIcon">${icon}</span>
-           <span class="arquivoDia">Dia ${diaMem}</span>
-           <span class="arquivoTitulo">${titulo}</span>`;
-
-        btn.onclick = () => abrirMemoriaPage(diaMem, idx);
-        lista.appendChild(btn);
-      });
-
-      setTemaPorAto(DIA_ATUAL);
-      setDayAttr(DIA_ATUAL);
-
-      document.getElementById("arquivoBox").classList.add("hidden");
-      document.getElementById("memoriasBox").classList.remove("hidden");
-      entrarModoLista("Memórias");
-    }
-
-    function abrirMemoriaPage(diaMem, idx){
-      const page = document.getElementById("memoriaPage");
-      const titleEl = document.getElementById("memoriaPaperTitle");
-      const metaEl = document.getElementById("memoriaPaperMeta");
-      const textoEl = document.getElementById("memoriaPageTexto");
-      const btnVoltar = document.getElementById("btnMemoriaVoltar");
-
-      const liberada = (DIA_ATUAL >= diaMem);
-      const titulo = memoriaTituloPorIndice(idx);
-
-      titleEl.textContent = titulo;
-
-      if(!liberada){
-        metaEl.textContent = `Bloqueada até o Dia ${diaMem}.`;
-        textoEl.textContent = `Quando chegar o Dia ${diaMem}, essa memória vai abrir — e vai ficar disponível pra sempre.`;
-      } else {
-        metaEl.textContent = `Liberada no Dia ${diaMem}.`;
-        const texto = (typeof getMemoriaDoDia === "function") ? getMemoriaDoDia(diaMem) : "";
-        const conteudo = texto && texto.trim().length ? texto : "Em breve...";
-        textoEl.textContent = "";
-        typeText(textoEl, conteudo, 12);
-      }
-
-      page.classList.remove("hidden");
-      page.setAttribute("aria-hidden", "false");
-      document.body.classList.add("memoria-mode");
-
-      btnVoltar.onclick = () => fecharMemoriaPage();
-      page.scrollTop = 0;
-    }
-
-    function fecharMemoriaPage(silencioso=false){
-      const page = document.getElementById("memoriaPage");
-      if(!silencioso && page.classList.contains("hidden")) return;
-      page.classList.add("hidden");
-      page.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("memoria-mode");
-      document.getElementById("memoriaPageTexto").textContent = "";
-    }
-
-    // ===== Dia 365 — cápsula =====
-    const CAPSULA_OPEN_KEY = "projeto365_capsula_365_aberta";
-
-    function esconderCapsulaTrigger(){
-      document.getElementById("capsulaTrigger").classList.add("hidden");
-    }
-
-    function mostrarCapsulaTrigger(){
-      const t = document.getElementById("capsulaTrigger");
-      const btn = document.getElementById("btnAbrirCapsula");
-      t.classList.remove("hidden");
-      btn.onclick = () => abrirCapsulaPage();
-    }
-
-    function abrirCapsulaPage(){
-      const page = document.getElementById("capsulaPage");
-      const notebook = document.getElementById("notebook");
-      const cartaEl = document.getElementById("capsulaCarta");
-      const fecho = document.getElementById("capsulaFecho");
-      const btnVoltar = document.getElementById("btnCapsulaVoltar");
-      const btnFinal = document.getElementById("btnEscolherDeNovo");
-
-      localStorage.setItem(CAPSULA_OPEN_KEY, "1");
-
-      cartaEl.textContent = "";
-      fecho.classList.add("hidden");
-
-      page.classList.remove("hidden");
-      page.setAttribute("aria-hidden", "false");
-      document.body.classList.add("capsula-mode");
-
-      esconderAto2UI(true);
-
-      page.scrollTop = 0;
-
-      notebook.classList.remove("open");
-      void notebook.offsetWidth;
-      notebook.classList.add("open");
-
-      btnVoltar.onclick = () => fecharCapsulaPage();
-      btnFinal.onclick = () => escolherDeNovo();
-
-      clearTimeout(window.__capsulaStartTimer);
-      window.__capsulaStartTimer = setTimeout(() => {
-        const carta = (typeof getCartaCapsula365 === "function") ? getCartaCapsula365() : "";
-        typeTextHuman(cartaEl, carta || "Em breve...", {
-          minDelay: 38,
-          maxDelay: 82,
-          mistakeChance: 0.075,
-          maxBackspace: 4,
-          pauseChance: 0.07,
-          minPause: 260,
-          maxPause: 760,
-          scrollContainer: page,
-          onDone: () => {
-            fecho.classList.remove("hidden");
-            page.scrollTop = page.scrollHeight;
-          }
-        });
-      }, 640);
-    }
-
-    function fecharCapsulaPage(silencioso=false){
-      const page = document.getElementById("capsulaPage");
-      if(!silencioso && page.classList.contains("hidden")) return;
-
-      page.classList.add("hidden");
-      page.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("capsula-mode");
-
-      clearTimeout(window.__capsulaStartTimer);
-    }
-
-    function clearProjeto365Storage(){
-      const keys = [];
-      for(let i = 0; i < localStorage.length; i++){
-        const k = localStorage.key(i);
-        if(k && k.startsWith("projeto365_")) keys.push(k);
-      }
-      keys.forEach(k => localStorage.removeItem(k));
-    }
-
-    function escolherDeNovo(){
-      const overlay = document.getElementById("fadeOverlay");
-      overlay.classList.add("show");
-
-      setTimeout(() => {
-        setTimeout(() => {
-          const now = new Date();
-          const y = now.getFullYear();
-          const m = String(now.getMonth()+1).padStart(2,'0');
-          const d = String(now.getDate()).padStart(2,'0');
-          const iso = `${y}-${m}-${d}`;
-
-          clearProjeto365Storage();
-          localStorage.setItem(START_OVERRIDE_KEY, iso);
-
-          overlay.classList.remove("show");
-          fecharCapsulaPage(true);
-          carregarHoje();
-        }, 1000);
-      }, 3000);
-    }
-
-    // ===== ATO 1 — PROGRESSO + UI =====
-    function getAto1Unlocked(){
-      const raw = Number(localStorage.getItem(ATO1_UNLOCK_KEY) || 0);
-      if(!Number.isFinite(raw)) return 0;
-      return Math.max(0, Math.min(30, Math.floor(raw)));
-    }
-
-    function setAto1Unlocked(n){
-      const clamped = Math.max(0, Math.min(30, Math.floor(n)));
-      localStorage.setItem(ATO1_UNLOCK_KEY, String(clamped));
-    }
-
-    function esconderAto1UI(silencioso=false){
-      const chave = document.getElementById("ato1Chave");
-      const palavra = document.getElementById("ato1Palavra");
-      const montagem = document.getElementById("ato1Montagem");
-
-      chave.classList.add("hidden");
-      chave.setAttribute("aria-hidden","true");
-      palavra.textContent = "";
-
-      montagem.classList.add("hidden");
-      montagem.classList.remove("show","assemble");
-      montagem.setAttribute("aria-hidden","true");
-      if(!silencioso) montagem.innerHTML = "";
-    }
-
-    function renderAto1Palavra(diaEmTela){
-      const chave = document.getElementById("ato1Chave");
-      const palavra = document.getElementById("ato1Palavra");
-      const montagem = document.getElementById("ato1Montagem");
-
-      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
-        esconderAto1UI(true);
-        return;
-      }
-
-      if(diaEmTela < 1 || diaEmTela > 30){
-        esconderAto1UI(true);
-        return;
-      }
-
-      const unlocked = getAto1Unlocked();
-      if(diaEmTela > unlocked){
-        esconderAto1UI(true);
-        return;
-      }
-
-      const w = ATO1_PALAVRAS[diaEmTela - 1] || "";
-      palavra.textContent = w;
-
-      montagem.classList.add("hidden");
-      montagem.classList.remove("show","assemble");
-      montagem.setAttribute("aria-hidden","true");
-
-      chave.classList.remove("hidden");
-      chave.setAttribute("aria-hidden","false");
-    }
-
-    function montarAto1FraseNoCentro(){
-      const chave = document.getElementById("ato1Chave");
-      const montagem = document.getElementById("ato1Montagem");
-
-      montagem.innerHTML = "";
-      montagem.classList.remove("show","assemble");
-
-      chave.classList.add("hidden");
-      chave.setAttribute("aria-hidden","true");
-
-      ATO1_PALAVRAS.forEach((w, i) => {
-        const s = document.createElement("span");
-        s.className = "ato1Word";
-        s.textContent = w;
-        s.style.transitionDelay = `${60 + i * 28}ms`;
-        montagem.appendChild(s);
-      });
-
-      montagem.classList.remove("hidden");
-      montagem.setAttribute("aria-hidden","false");
-
-      void montagem.offsetWidth;
-      montagem.classList.add("show");
-
-      clearTimeout(window.__ato1AssembleTimer);
-      window.__ato1AssembleTimer = setTimeout(() => {
-        montagem.classList.add("assemble");
-      }, 1100);
-    }
-
-    // ===== ATO 2 — LINHAS + PALAVRAS SUBLINHADAS =====
-    function esconderAto2UI(silencioso=false){
+    // ===== ATO 2 — LINHAS + SUBLINHADO (CORRIGIDO) =====
+    function esconderAto2UI(){
       const lines = document.getElementById("ato2Lines");
       const tip = document.getElementById("ato2Thought");
       lines.classList.add("hidden");
       lines.setAttribute("aria-hidden","true");
-      if(!silencioso){
-        tip.classList.add("hidden");
-        tip.setAttribute("aria-hidden","true");
-        tip.textContent = "";
-      }
+      tip.classList.add("hidden");
+      tip.setAttribute("aria-hidden","true");
+      tip.textContent = "";
     }
 
     function setAto2Lines(dia){
       const lines = document.getElementById("ato2Lines");
-
-      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
-        esconderAto2UI(true);
-        return;
-      }
-
       if(getAto(dia) !== 2){
-        esconderAto2UI(true);
+        lines.classList.add("hidden");
+        lines.setAttribute("aria-hidden","true");
         return;
       }
-
       const t = Math.max(0, Math.min(1, (dia - 31) / 59)); // 31..90
-      const gap = (30 - (t * 18)); // 30px -> 12px (mais visível)
+      const gap = (30 - (t * 18)); // 30px -> 12px
       lines.style.setProperty("--ato2Gap", `${gap.toFixed(1)}px`);
-
       lines.classList.remove("hidden");
       lines.setAttribute("aria-hidden","false");
     }
@@ -995,30 +346,44 @@ Ele renova.` }
         .replaceAll("'","&#039;");
     }
 
+    // ✅ NOVO: marcação por indexOf (não quebra com acento)
     function applyAto2Markup(dia){
       if(getAto(dia) !== 2) return;
-
       if(typeof getAto2Anotacoes !== "function") return;
+
       const anot = getAto2Anotacoes(dia) || [];
       if(!anot.length) return;
 
       const poemaEl = document.getElementById("poema");
-      const raw = poemaEl.textContent || "";
-      let html = escapeHTML(raw).replaceAll("\n","<br>");
+      const rawOriginal = poemaEl.textContent || "";
+      let raw = rawOriginal;
 
-      // marca 1 ocorrência por anotação (leve e previsível)
-      anot.forEach((a) => {
+      // cria tokens estáveis
+      const tokens = [];
+      anot.forEach((a, idx) => {
         const target = (a && a.target) ? String(a.target) : "";
         const thought = (a && a.thought) ? String(a.thought) : "";
         if(!target.trim()) return;
 
-        // tenta encontrar a palavra como texto literal
-        const safeTarget = target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const re = new RegExp(`\\b(${safeTarget})\\b`, ""); // 1ª ocorrência
-        html = html.replace(re, (m) => {
-          const dt = escapeHTML(thought);
-          return `<span class="ato2Mark" data-thought="${dt}">${m}</span>`;
-        });
+        const pos = raw.indexOf(target);
+        if(pos === -1) return;
+
+        const token = `[[A2_${idx}]]`;
+        tokens.push({ token, target, thought });
+
+        raw = raw.slice(0, pos) + token + raw.slice(pos + target.length);
+      });
+
+      if(!tokens.length) return;
+
+      // escapa e transforma quebras de linha
+      let html = escapeHTML(raw).replaceAll("\n", "<br>");
+
+      // substitui tokens por spans
+      tokens.forEach((t) => {
+        const safeThought = escapeHTML(t.thought);
+        const safeTarget = escapeHTML(t.target);
+        html = html.replace(t.token, `<span class="ato2Mark" data-thought="${safeThought}">${safeTarget}</span>`);
       });
 
       poemaEl.innerHTML = html;
@@ -1045,21 +410,17 @@ Ele renova.` }
         const r = el.getBoundingClientRect();
         const pad = 10;
 
-        // posiciona acima se der, senão abaixo
         const tipW = Math.min(520, window.innerWidth - 24);
         tip.style.width = tipW + "px";
 
-        // força layout
         tip.style.left = "0px";
         tip.style.top = "0px";
         const tr = tip.getBoundingClientRect();
 
         let left = Math.max(12, Math.min(window.innerWidth - tr.width - 12, r.left + (r.width/2) - (tr.width/2)));
         let top = r.top - tr.height - pad;
+        if(top < 12) top = r.bottom + pad;
 
-        if(top < 12){
-          top = r.bottom + pad;
-        }
         tip.style.left = left + "px";
         tip.style.top = top + "px";
       }
@@ -1070,8 +431,8 @@ Ele renova.` }
         const mark = t.closest(".ato2Mark");
         if(!mark){ hideTip(); return; }
 
-        // toggle
-        if(!tip.classList.contains("hidden") && tip.textContent === (mark.getAttribute("data-thought") || "")){
+        const now = (mark.getAttribute("data-thought") || "");
+        if(!tip.classList.contains("hidden") && tip.textContent === now){
           hideTip();
         }else{
           showTipFor(mark);
@@ -1091,11 +452,8 @@ Ele renova.` }
         if(!(t instanceof Element)) return;
         const mark = t.closest(".ato2Mark");
         if(!mark) return;
-        // não some instantaneamente pra não ficar “piscando”
         clearTimeout(window.__ato2TipOut);
-        window.__ato2TipOut = setTimeout(() => {
-          hideTip();
-        }, 120);
+        window.__ato2TipOut = setTimeout(() => hideTip(), 120);
       });
 
       window.addEventListener("scroll", () => hideTip(), {passive:true});
@@ -1103,27 +461,7 @@ Ele renova.` }
       document.addEventListener("visibilitychange", () => hideTip());
     }
 
-    // ===== ATO 1 pós-typing =====
     function afterPoemTyped(dia){
-      const forced = getForcedDay();
-      const isTest = (forced !== null);
-
-      // unlock Ato 1
-      if(!isTest && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
-        const current = getAto1Unlocked();
-        if(dia > current) setAto1Unlocked(dia);
-      }
-
-      // Ato 1 UI
-      renderAto1Palavra(dia);
-      if(dia === 30 && getAto1Unlocked() >= 30){
-        clearTimeout(window.__ato1FinalTimer);
-        window.__ato1FinalTimer = setTimeout(() => {
-          montarAto1FraseNoCentro();
-        }, 480);
-      }
-
-      // Ato 2 UI
       setAto2Lines(dia);
       applyAto2Markup(dia);
     }
@@ -1140,79 +478,35 @@ Ele renova.` }
       setTemaPorAto(dia);
       setDayAttr(dia);
 
-      esconderCapsulaTrigger();
-      fecharCapsulaPage(true);
-      fecharMemoriaPage(true);
-      esconderAto1UI(true);
-      esconderAto2UI(true);
-
-      if(dia <= 0){
-        document.body.removeAttribute("data-ato");
-        document.body.removeAttribute("data-dia");
-        document.documentElement.style.setProperty("--auraT", "0");
-        tituloTopo.innerText = "Antes do primeiro poema";
-        metaEl.innerText = "";
-        const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
-        typeText(poemaEl, textoPrefacio, 14);
-        return;
-      }
-
-      if(dia > 365){
-        tituloTopo.innerText = "365 dias com você";
-        metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
-        typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
-        return;
-      }
-
-      if(dia === 365){
-        tituloTopo.innerText = `Dia 365 de 365`;
-        metaEl.innerText = "Um poema por dia.";
-
-        const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
-        typeText(poemaEl, poema365 || "Em breve...", 12, () => {
-          mostrarCapsulaTrigger();
-        });
-        return;
-      }
+      esconderAto2UI();
 
       tituloTopo.innerText = `Dia ${dia} de 365`;
       metaEl.innerText = "Um poema por dia.";
 
-      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "Em breve...";
-      typeText(poemaEl, texto, 12, () => afterPoemTyped(dia));
+      const texto = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "";
+      const safe = (texto && String(texto).trim().length) ? String(texto) : "(Poema vazio / não carregou.)";
+
+      typeText(poemaEl, safe, 12, () => afterPoemTyped(dia));
     }
 
     function carregarHoje(){
       const forced = getForcedDay();
       showModoTeste(forced);
 
-      // ✅ MODO TESTE
       if(forced !== null){
         DIA_ATUAL = forced;
 
-        // simula unlock Ato 1 só no seu navegador
-        if(DIA_ATUAL >= 1 && DIA_ATUAL <= 30){
-          const cur = getAto1Unlocked();
-          if(DIA_ATUAL > cur) setAto1Unlocked(DIA_ATUAL);
-        }
-
-        const btn = document.getElementById("btnAnteriores");
-        btn.disabled = (DIA_ATUAL <= 1);
-        sairModoLista();
+        aplicarFrasePorHorario();
+        verificarRetorno();
 
         if(deveMostrarIntro(DIA_ATUAL)){
           revelarBloco();
-
+          setTemaPorAto(DIA_ATUAL);
+          setDayAttr(DIA_ATUAL);
           document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
           document.getElementById("poema").textContent = "";
           document.getElementById("meta").textContent = "";
-          setTemaPorAto(DIA_ATUAL);
-          setDayAttr(DIA_ATUAL);
-          esconderCapsulaTrigger();
-          fecharCapsulaPage(true);
-          fecharMemoriaPage(true);
-          esconderAto1UI(true);
-          esconderAto2UI(true);
+          esconderAto2UI();
           mostrarIntro(DIA_ATUAL);
           return;
         }
@@ -1222,38 +516,20 @@ Ele renova.` }
         return;
       }
 
-      // ✅ MODO NORMAL
       const d = diffDias();
       DIA_ATUAL = d + 1;
 
       aplicarFrasePorHorario();
       verificarRetorno();
-      iniciarSegredo();
-
-      const btn = document.getElementById("btnAnteriores");
-      btn.disabled = (DIA_ATUAL <= 1);
-
-      sairModoLista();
-
-      if(d < 0){
-        esconderIntro();
-        carregarPoema(DIA_ATUAL);
-        return;
-      }
 
       if(deveMostrarIntro(DIA_ATUAL)){
         revelarBloco();
-
+        setTemaPorAto(DIA_ATUAL);
+        setDayAttr(DIA_ATUAL);
         document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
         document.getElementById("poema").textContent = "";
         document.getElementById("meta").textContent = "";
-        setTemaPorAto(DIA_ATUAL);
-        setDayAttr(DIA_ATUAL);
-        esconderCapsulaTrigger();
-        fecharCapsulaPage(true);
-        fecharMemoriaPage(true);
-        esconderAto1UI(true);
-        esconderAto2UI(true);
+        esconderAto2UI();
         mostrarIntro(DIA_ATUAL);
         return;
       }
@@ -1280,7 +556,6 @@ Ele renova.` }
     setCornerDates();
     setInterval(setCornerDates, 60000);
 
-    // init Ato 2 (event delegation)
     setupAto2Interactions();
   </script>
 
