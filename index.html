@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260226_4" />
+  <link rel="stylesheet" href="style.css?v=20260228_1" />
 </head>
 
 <body>
@@ -50,15 +50,16 @@
       <div class="poema" id="poema"></div>
       <div class="meta" id="meta"></div>
 
-      <!-- ===== ATO 1 — PALAVRA DOURADA (DIA 1–30) ===== -->
+      <!-- ===== ATO 1 — ENTRELINHAS (1–30) ===== -->
+      <!-- Mantém a mesma ideia do seu print: caixinha + palavra -->
       <div id="ato1Chave" class="ato1Chave hidden" aria-hidden="true">
-        <div class="ato1Label">Entrelinhas</div>
+        <div class="ato1Label">ENTRELINHAS</div>
         <div class="ato1PalavraWrap">
           <span id="ato1Palavra" class="ato1Palavra"></span>
         </div>
       </div>
 
-      <!-- Dia 30: montagem cinematográfica -->
+      <!-- Dia 30: montagem da frase no centro -->
       <div id="ato1Montagem" class="ato1Montagem hidden" aria-hidden="true"></div>
       <!-- ===== /ATO 1 ===== -->
 
@@ -186,7 +187,7 @@
   <!-- Overlay de fade final (Dia 365) -->
   <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
 
-  <script src="poemas.js?v=20260226_4"></script>
+  <script src="poemas.js?v=20260228_1"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -195,9 +196,8 @@
 
     let DIA_ATUAL = 1;
     let DIA_EM_TELA = 1;
-    let IS_TEST_MODE = false;
 
-    // ===== ATO 1 — FRASE (30 PALAVRAS) =====
+    // ===== ATO 1 — FRASE (30 palavras) =====
     const ATO1_UNLOCK_KEY = "projeto365_ato1_unlock";
     const ATO1_PALAVRAS = [
       "Eu","te","escolho","todos","os","dias,","mesmo","quando","o","mundo","pesa","e","medo","grita,",
@@ -256,6 +256,7 @@ Ele renova.` }
       "Não precisa de nada grandioso. Só de você aqui."
     ];
 
+    // ✅ MODO TESTE: /?day=60
     function getForcedDay(){
       try{
         const p = new URLSearchParams(location.search);
@@ -315,6 +316,7 @@ Ele renova.` }
       return {start:331, end:365};
     }
 
+    // ✅ AURA CRESCENTE: seta --auraT de 0 → 1 dentro do ato
     function setAuraProgress(dia){
       if(!Number.isFinite(dia) || dia < 1) {
         document.documentElement.style.setProperty("--auraT", "0");
@@ -391,6 +393,72 @@ Ele renova.` }
       step();
     }
 
+    function typeTextHuman(el, text, opts={}){
+      const {
+        minDelay = 34,
+        maxDelay = 68,
+        mistakeChance = 0.06,
+        maxBackspace = 4,
+        pauseChance = 0.05,
+        minPause = 220,
+        maxPause = 520,
+        scrollContainer = null,
+        onDone = null
+      } = opts;
+
+      clearTimeout(typingTimer);
+      el.textContent = "";
+      let i = 0;
+
+      function rand(a,b){ return a + Math.random() * (b-a); }
+      function nextDelay(){ return Math.floor(rand(minDelay, maxDelay)); }
+      function nextPause(){ return Math.floor(rand(minPause, maxPause)); }
+      function doScroll(){
+        if(scrollContainer && typeof scrollContainer.scrollTop === "number"){
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+      }
+
+      function step(){
+        if(Math.random() < pauseChance){
+          typingTimer = setTimeout(step, nextPause());
+          return;
+        }
+
+        if(i > 6 && i < text.length - 6 && Math.random() < mistakeChance){
+          const current = el.textContent;
+          const n = Math.max(1, Math.floor(rand(1, maxBackspace+1)));
+          let j = 0;
+
+          function back(){
+            el.textContent = el.textContent.slice(0, -1);
+            doScroll();
+            j++;
+            if(j < Math.min(n, current.length)){
+              typingTimer = setTimeout(back, Math.floor(rand(26, 58)));
+            } else {
+              typingTimer = setTimeout(step, Math.floor(rand(90, 180)));
+            }
+          }
+          back();
+          return;
+        }
+
+        el.textContent = text.slice(0, i);
+        i++;
+        doScroll();
+
+        if(i <= text.length){
+          typingTimer = setTimeout(step, nextDelay());
+        } else {
+          doScroll();
+          if(typeof onDone === "function") onDone();
+        }
+      }
+
+      step();
+    }
+
     function pickSegredo(){ return segredos[Math.floor(Math.random() * segredos.length)]; }
 
     function mostrarToast(texto){
@@ -445,6 +513,7 @@ Ele renova.` }
       resetInatividade();
     }
 
+    // ===== INTRO DE ATO (CORRIGIDO) =====
     function introKeyForDay(dia){ return `projeto365_intro_vista_${dia}`; }
     function deveMostrarIntro(dia){
       if(dia !== DIA_ATUAL) return false;
@@ -497,6 +566,9 @@ Ele renova.` }
       document.getElementById("poema").textContent = "";
       document.getElementById("meta").textContent = "";
       esconderIntro();
+      esconderCapsulaTrigger();
+      fecharCapsulaPage(true);
+      fecharMemoriaPage(true);
       esconderAto1UI(true);
 
       document.getElementById("tituloTopo").innerText = titulo;
@@ -527,6 +599,7 @@ Ele renova.` }
       return t;
     }
 
+    // ranges de 30
     function buildRanges(maxDay){
       const ranges = [];
       let start = 1;
@@ -677,7 +750,109 @@ Ele renova.` }
       document.getElementById("memoriaPageTexto").textContent = "";
     }
 
-    // ===== ATO 1 — STORAGE =====
+    // ===== Dia 365 — cápsula =====
+    const CAPSULA_OPEN_KEY = "projeto365_capsula_365_aberta";
+
+    function esconderCapsulaTrigger(){
+      document.getElementById("capsulaTrigger").classList.add("hidden");
+    }
+
+    function mostrarCapsulaTrigger(){
+      const t = document.getElementById("capsulaTrigger");
+      const btn = document.getElementById("btnAbrirCapsula");
+      t.classList.remove("hidden");
+      btn.onclick = () => abrirCapsulaPage();
+    }
+
+    function abrirCapsulaPage(){
+      const page = document.getElementById("capsulaPage");
+      const notebook = document.getElementById("notebook");
+      const cartaEl = document.getElementById("capsulaCarta");
+      const fecho = document.getElementById("capsulaFecho");
+      const btnVoltar = document.getElementById("btnCapsulaVoltar");
+      const btnFinal = document.getElementById("btnEscolherDeNovo");
+
+      localStorage.setItem(CAPSULA_OPEN_KEY, "1");
+
+      cartaEl.textContent = "";
+      fecho.classList.add("hidden");
+
+      page.classList.remove("hidden");
+      page.setAttribute("aria-hidden", "false");
+      document.body.classList.add("capsula-mode");
+
+      page.scrollTop = 0;
+
+      notebook.classList.remove("open");
+      void notebook.offsetWidth;
+      notebook.classList.add("open");
+
+      btnVoltar.onclick = () => fecharCapsulaPage();
+      btnFinal.onclick = () => escolherDeNovo();
+
+      clearTimeout(window.__capsulaStartTimer);
+      window.__capsulaStartTimer = setTimeout(() => {
+        const carta = (typeof getCartaCapsula365 === "function") ? getCartaCapsula365() : "";
+        typeTextHuman(cartaEl, carta || "Em breve...", {
+          minDelay: 38,
+          maxDelay: 82,
+          mistakeChance: 0.075,
+          maxBackspace: 4,
+          pauseChance: 0.07,
+          minPause: 260,
+          maxPause: 760,
+          scrollContainer: page,
+          onDone: () => {
+            fecho.classList.remove("hidden");
+            page.scrollTop = page.scrollHeight;
+          }
+        });
+      }, 640);
+    }
+
+    function fecharCapsulaPage(silencioso=false){
+      const page = document.getElementById("capsulaPage");
+      if(!silencioso && page.classList.contains("hidden")) return;
+
+      page.classList.add("hidden");
+      page.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("capsula-mode");
+
+      clearTimeout(window.__capsulaStartTimer);
+    }
+
+    function clearProjeto365Storage(){
+      const keys = [];
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith("projeto365_")) keys.push(k);
+      }
+      keys.forEach(k => localStorage.removeItem(k));
+    }
+
+    function escolherDeNovo(){
+      const overlay = document.getElementById("fadeOverlay");
+      overlay.classList.add("show");
+
+      setTimeout(() => {
+        setTimeout(() => {
+          const now = new Date();
+          const y = now.getFullYear();
+          const m = String(now.getMonth()+1).padStart(2,'0');
+          const d = String(now.getDate()).padStart(2,'0');
+          const iso = `${y}-${m}-${d}`;
+
+          clearProjeto365Storage();
+          localStorage.setItem(START_OVERRIDE_KEY, iso);
+
+          overlay.classList.remove("show");
+          fecharCapsulaPage(true);
+          carregarHoje();
+        }, 1000);
+      }, 3000);
+    }
+
+    // ===== ATO 1 — PROGRESSO + UI =====
     function getAto1Unlocked(){
       const raw = Number(localStorage.getItem(ATO1_UNLOCK_KEY) || 0);
       if(!Number.isFinite(raw)) return 0;
@@ -695,12 +870,12 @@ Ele renova.` }
       const montagem = document.getElementById("ato1Montagem");
 
       chave.classList.add("hidden");
-      chave.setAttribute("aria-hidden", "true");
+      chave.setAttribute("aria-hidden","true");
       palavra.textContent = "";
 
       montagem.classList.add("hidden");
-      montagem.classList.remove("show", "assemble");
-      montagem.setAttribute("aria-hidden", "true");
+      montagem.classList.remove("show","assemble");
+      montagem.setAttribute("aria-hidden","true");
       if(!silencioso) montagem.innerHTML = "";
     }
 
@@ -709,11 +884,13 @@ Ele renova.` }
       const palavra = document.getElementById("ato1Palavra");
       const montagem = document.getElementById("ato1Montagem");
 
+      // se estiver em modos especiais, esconde
       if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
         esconderAto1UI(true);
         return;
       }
 
+      // só Ato 1
       if(diaEmTela < 1 || diaEmTela > 30){
         esconderAto1UI(true);
         return;
@@ -725,15 +902,16 @@ Ele renova.` }
         return;
       }
 
+      // exibe palavra do dia em tela
       const w = ATO1_PALAVRAS[diaEmTela - 1] || "";
       palavra.textContent = w;
 
       montagem.classList.add("hidden");
       montagem.classList.remove("show","assemble");
-      montagem.setAttribute("aria-hidden", "true");
+      montagem.setAttribute("aria-hidden","true");
 
       chave.classList.remove("hidden");
-      chave.setAttribute("aria-hidden", "false");
+      chave.setAttribute("aria-hidden","false");
     }
 
     function montarAto1FraseNoCentro(){
@@ -741,7 +919,7 @@ Ele renova.` }
       const montagem = document.getElementById("ato1Montagem");
 
       montagem.innerHTML = "";
-      montagem.classList.remove("show", "assemble");
+      montagem.classList.remove("show","assemble");
 
       chave.classList.add("hidden");
       chave.setAttribute("aria-hidden","true");
@@ -767,14 +945,19 @@ Ele renova.` }
     }
 
     function afterPoemTyped(dia){
-      // progresso real só fora do modo teste
-      if(!IS_TEST_MODE && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
+      // Atualiza unlock real: só se for o dia de hoje e estiver no Ato 1
+      const forced = getForcedDay();
+      const isTest = (forced !== null);
+
+      if(!isTest && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
         const current = getAto1Unlocked();
         if(dia > current) setAto1Unlocked(dia);
       }
 
+      // mostra palavra (se já desbloqueada)
       renderAto1Palavra(dia);
 
+      // dia 30: se unlock chegou em 30, monta
       if(dia === 30 && getAto1Unlocked() >= 30){
         clearTimeout(window.__ato1FinalTimer);
         window.__ato1FinalTimer = setTimeout(() => {
@@ -795,7 +978,39 @@ Ele renova.` }
       setTemaPorAto(dia);
       setDayAttr(dia);
 
+      esconderCapsulaTrigger();
+      fecharCapsulaPage(true);
+      fecharMemoriaPage(true);
       esconderAto1UI(true);
+
+      if(dia <= 0){
+        document.body.removeAttribute("data-ato");
+        document.body.removeAttribute("data-dia");
+        document.documentElement.style.setProperty("--auraT", "0");
+        tituloTopo.innerText = "Antes do primeiro poema";
+        metaEl.innerText = "";
+        const textoPrefacio = (typeof PREFACIO !== "undefined" && PREFACIO) ? PREFACIO : "Em breve.";
+        typeText(poemaEl, textoPrefacio, 14);
+        return;
+      }
+
+      if(dia > 365){
+        tituloTopo.innerText = "365 dias com você";
+        metaEl.innerText = "E mesmo assim, eu ainda escolheria você de novo.";
+        typeText(poemaEl, "Fim de um ano.\nE o começo de tudo de novo.", 12);
+        return;
+      }
+
+      if(dia === 365){
+        tituloTopo.innerText = `Dia 365 de 365`;
+        metaEl.innerText = "Um poema por dia.";
+
+        const poema365 = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(365) : "";
+        typeText(poemaEl, poema365 || "Em breve...", 12, () => {
+          mostrarCapsulaTrigger();
+        });
+        return;
+      }
 
       tituloTopo.innerText = `Dia ${dia} de 365`;
       metaEl.innerText = "Um poema por dia.";
@@ -806,13 +1021,13 @@ Ele renova.` }
 
     function carregarHoje(){
       const forced = getForcedDay();
-      IS_TEST_MODE = (forced !== null);
       showModoTeste(forced);
 
+      // ✅ MODO TESTE
       if(forced !== null){
         DIA_ATUAL = forced;
 
-        // ✅ AJUSTE: em modo teste, simula desbloqueio até o dia testado (só Ato 1)
+        // simula unlock Ato 1 só no seu navegador (pra testar dia 30)
         if(DIA_ATUAL >= 1 && DIA_ATUAL <= 30){
           const cur = getAto1Unlocked();
           if(DIA_ATUAL > cur) setAto1Unlocked(DIA_ATUAL);
@@ -821,11 +1036,28 @@ Ele renova.` }
         const btn = document.getElementById("btnAnteriores");
         btn.disabled = (DIA_ATUAL <= 1);
         sairModoLista();
+
+        // ✅ INTRO TAMBÉM FUNCIONA NO TESTE
+        if(deveMostrarIntro(DIA_ATUAL)){
+          document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
+          document.getElementById("poema").textContent = "";
+          document.getElementById("meta").textContent = "";
+          setTemaPorAto(DIA_ATUAL);
+          setDayAttr(DIA_ATUAL);
+          esconderCapsulaTrigger();
+          fecharCapsulaPage(true);
+          fecharMemoriaPage(true);
+          esconderAto1UI(true);
+          mostrarIntro(DIA_ATUAL);
+          return;
+        }
+
         esconderIntro();
         carregarPoema(DIA_ATUAL);
         return;
       }
 
+      // ✅ MODO NORMAL
       const d = diffDias();
       DIA_ATUAL = d + 1;
 
@@ -837,12 +1069,37 @@ Ele renova.` }
       btn.disabled = (DIA_ATUAL <= 1);
 
       sairModoLista();
+
+      if(d < 0){
+        esconderIntro();
+        carregarPoema(DIA_ATUAL);
+        return;
+      }
+
+      // ✅ INTRO RESTAURADA AQUI
+      if(deveMostrarIntro(DIA_ATUAL)){
+        document.getElementById("tituloTopo").innerText = `Dia ${DIA_ATUAL} de 365`;
+        document.getElementById("poema").textContent = "";
+        document.getElementById("meta").textContent = "";
+        setTemaPorAto(DIA_ATUAL);
+        setDayAttr(DIA_ATUAL);
+        esconderCapsulaTrigger();
+        fecharCapsulaPage(true);
+        fecharMemoriaPage(true);
+        esconderAto1UI(true);
+        mostrarIntro(DIA_ATUAL);
+        return;
+      }
+
       esconderIntro();
       carregarPoema(DIA_ATUAL);
     }
 
     function voltarParaHoje(){ carregarHoje(); }
-    function mostrarSaudade(){ document.getElementById("saudade").classList.toggle("hidden"); }
+
+    function mostrarSaudade(){
+      document.getElementById("saudade").classList.toggle("hidden");
+    }
 
     function verificarSenha(){
       const senha = document.getElementById("senha").value;
