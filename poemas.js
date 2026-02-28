@@ -218,8 +218,7 @@ Mais seu.
 
 E, principalmente:
 mais disposto a cuidar do que a gente tem
-com palavra, não com guerra.`
-  ,
+com palavra, não com guerra.`,
   120:`Em breve...`,
   150:`Em breve...`,
   180:`Em breve...`,
@@ -231,104 +230,71 @@ com palavra, não com guerra.`
 };
 
 // ==============================
-// ATO 2 — “PENSAMENTOS OCULTOS”
-// Cada entrada: { target: "palavra", thought: "pensamento" }
-// A palavra precisa existir no poema do dia (case-sensitive).
+// ATO 2 — PENSAMENTOS OCULTOS (31–90)
+// target tem que existir no poema (igualzinho).
 // ==============================
 const ATO2_ANNOTATIONS = {
-  61: [
-    { target: "calma", thought: "Eu fico tranquilo porque é você — e isso muda tudo em mim." },
-    { target: "perto", thought: "Eu queria te encostar sem pedir licença — mas eu respeito teu tempo." }
-  ],
-  62: [
-    { target: "silêncio", thought: "O silêncio contigo não é vazio. É segurança." }
-  ],
-  63: [
-    { target: "entre", thought: "É ali que eu te conheço de verdade: no que você não anuncia." }
-  ],
-  64: [
-    { target: "comum", thought: "O cotidiano contigo me dá vontade de futuro." }
-  ],
-  65: [
-    { target: "caber", thought: "Eu não quero te sufocar. Eu quero ser espaço bom." }
-  ],
-  66: [
-    { target: "grato", thought: "Eu agradeço coisas pequenas porque eu sei o quanto elas viram ‘nós’." }
-  ],
-  67: [
-    { target: "peito", thought: "Eu ensaio firmeza, mas com você eu tremo bonito." }
-  ],
-  68: [
-    { target: "orgulho", thought: "Meu impulso é me defender. Mas eu tô aprendendo a te proteger." }
-  ],
-  69: [
-    { target: "casa", thought: "Casa é onde eu não preciso provar nada." }
-  ],
-  70: [
-    { target: "verdade", thought: "Eu não queria admitir isso tão cedo… mas eu já senti." }
-  ],
-  71: [
-    { target: "honesto", thought: "Eu tenho medo de ser pouco, mas contigo eu tento ser inteiro." }
-  ],
-  72: [
-    { target: "suficiente", thought: "Minha insegurança é antiga. Você não merece pagar por ela." }
-  ],
-  73: [
-    { target: "cenários", thought: "Eu crio tragédias na cabeça pra não ser pego de surpresa." }
-  ],
-  74: [
-    { target: "ficar", thought: "Eu quero aprender a confiar sem apertar." }
-  ],
-  75: [
-    { target: "pensamento", thought: "Eu te deixo entrar onde ninguém entra. Isso é amor." }
-  ],
-  76: [
-    { target: "volto", thought: "Se eu errar o tom… eu volto. Eu não te largo no meio." }
-  ],
-  77: [
-    { target: "inteiro", thought: "Eu não quero te amar com pedaços. Quero te amar por escolha." }
-  ],
-  78: [
-    { target: "medo", thought: "Eu tenho medo de perder e viro duro. Eu tô aprendendo a não virar." }
-  ],
-  79: [
-    { target: "presença", thought: "Eu não sei prometer mundo. Mas eu sei estar." }
-  ],
-  80: [
-    { target: "luz", thought: "Eu não quero te queimar. Eu quero te iluminar e te aquecer." }
-  ],
-  81: [
-    { target: "acalma", thought: "O futuro contigo não me aperta. Ele me encaixa." }
-  ],
-  82: [
-    { target: "simples", thought: "Eu gosto quando eu não preciso ser ‘bom’. Só real." }
-  ],
-  83: [
-    { target: "claro", thought: "Foi ficando claro porque você não confunde meu coração." }
-  ],
-  84: [
-    { target: "assenta", thought: "Depois da certeza, meu coração não corre. Ele pousa." }
-  ],
-  85: [
-    { target: "entra", thought: "Você entra e arruma o quarto dentro de mim sem falar nada." }
-  ],
-  86: [
-    { target: "caminho", thought: "Eu penso em você como direção: eu sempre volto." }
-  ],
-  87: [
-    { target: "raro", thought: "O comum virar bom é raridade. E eu sei disso." }
-  ],
-  88: [
-    { target: "continuidade", thought: "Eu não quero pico. Eu quero linha reta junto." }
-  ],
-  89: [
-    { target: "cansaço", thought: "Eu fico duro quando tô cansado. Mas eu não quero te ferir com isso." },
-    { target: "conversa", thought: "Eu te amo mais quando a gente se escolhe no diálogo." }
-  ],
-  90: [
-    { target: "coragem", thought: "Conexão é coragem: falar sem arma, ouvir sem escudo." },
-    { target: "cuidar", thought: "Eu aprendi que amar também é saber conversar." }
-  ]
+  31: [{ target: "detalhe", thought: "Eu começo a te amar no que ninguém vê." }],
+  32: [{ target: "silêncio", thought: "Com você, silêncio não vira distância — vira paz." }],
+  33: [{ target: "entre", thought: "É ali que eu te entendo de verdade." }],
+  34: [{ target: "cotidiano", thought: "Eu queria os teus dias, não só teus momentos." }],
+  35: [{ target: "caber", thought: "Eu não quero ocupar. Eu quero somar." }],
+  36: [{ target: "agradecer", thought: "Eu agradeço porque eu sei o valor de um ‘nós’ calmo." }],
+  37: [{ target: "controle", thought: "Eu tento controlar… mas você me desarma." }],
+  38: [{ target: "orgulho", thought: "Eu prefiro você do que ter razão." }],
+  39: [{ target: "casa", thought: "Casa é onde eu descanso por dentro." }],
+  40: [{ target: "verdade", thought: "Eu já sabia… antes de admitir." }],
+  41: [{ target: "honesto", thought: "Eu quero te mostrar o que eu escondo do mundo." }],
+  42: [{ target: "suficiente", thought: "Meu medo é antigo. Você não merece pagar por ele." }],
+  43: [{ target: "cenários", thought: "Minha cabeça inventa perdas pra tentar se proteger." }],
+  44: [{ target: "fico", thought: "Eu fico quando o impulso era fugir." }],
+  45: [{ target: "confiar", thought: "Eu quero confiar sem apertar." }],
+  46: [{ target: "íntimo", thought: "Meu íntimo é meu pensamento quando ninguém vê." }],
+  47: [{ target: "volto", thought: "Eu volto porque eu não quero te deixar no meio." }],
+  48: [{ target: "humano", thought: "Você puxa de mim a versão que eu gosto." }],
+  49: [{ target: "assusta", thought: "Você importa num nível que dá medo… e eu fico mesmo assim." }],
+  50: [{ target: "presença", thought: "Eu não sei prometer mundo. Eu sei estar." }],
+  51: [{ target: "luz", thought: "Eu não quero te queimar. Eu quero te aquecer." }],
+  52: [{ target: "acalma", thought: "Futuro contigo parece encaixe." }],
+  53: [{ target: "simples", thought: "Ser simples contigo é descanso." }],
+  54: [{ target: "claro", thought: "Foi ficando claro porque você não me confunde." }],
+  55: [{ target: "assenta", thought: "Depois da certeza, eu não corro. Eu pouso." }],
+  56: [{ target: "entra", thought: "Você entra e o mundo pesa menos." }],
+  57: [{ target: "caminho", thought: "Você é direção. Mesmo quando eu erro." }],
+  58: [{ target: "raro", thought: "O comum ficar bom é raridade." }],
+  59: [{ target: "continuidade", thought: "Eu quero linha reta, não pico." }],
+  60: [{ target: "inesquecível", thought: "Eu não lembro do filme… eu lembro de você virando casa." }],
+
+  61: [{ target: "calma", thought: "Eu te amo no jeito que você me desarma." }],
+  62: [{ target: "silêncio", thought: "Esse silêncio é cuidado. Não é falta." }],
+  63: [{ target: "entre", thought: "Conexão mora no intervalo, não no espetáculo." }],
+  64: [{ target: "futuro", thought: "O futuro contigo não assusta. Ele convida." }],
+  65: [{ target: "presença", thought: "Eu quero ser leve no teu mundo." }],
+  66: [{ target: "grato", thought: "Eu fico grato por existir um ‘nós’ possível." }],
+  67: [{ target: "peito", thought: "Meu peito entrega tudo antes da minha boca." }],
+  68: [{ target: "orgulho", thought: "Eu tô aprendendo a engolir o orgulho antes que ele nos machuque." }],
+  69: [{ target: "casa", thought: "Quando você tá perto, eu descanso." }],
+  70: [{ target: "verdade", thought: "Eu quero dar certo. De verdade." }],
+  71: [{ target: "honesto", thought: "Eu consigo ser honesto sem medo de virar menos." }],
+  72: [{ target: "disposto", thought: "Eu não preciso estar pronto. Eu preciso estar disposto." }],
+  73: [{ target: "cansa", thought: "Eu canso de lutar contra coisas que nem existem." }],
+  74: [{ target: "confiar", thought: "Eu quero confiar sem vigiar." }],
+  75: [{ target: "importa", thought: "Você importa num nível que muda minha vida." }],
+  76: [{ target: "volto", thought: "Eu volto porque eu não quero desistir da gente." }],
+  77: [{ target: "inteiro", thought: "Eu quero te amar inteiro, não por partes." }],
+  78: [{ target: "medo", thought: "Eu tenho medo… e eu tô aprendendo a falar em vez de ferir." }],
+  79: [{ target: "presença", thought: "Presença é meu jeito mais honesto de amar." }],
+  80: [{ target: "luz", thought: "Eu quero ser luz sem pressa." }],
+  81: [{ target: "acalma", thought: "Seu nome acalma meu futuro." }],
+  82: [{ target: "simples", thought: "Ser simples contigo é raro e bom." }],
+  83: [{ target: "claro", thought: "Não foi um dia. Foi repetição." }],
+  84: [{ target: "certeza", thought: "Certeza é paz." }],
+  85: [{ target: "entra", thought: "Você entra e arruma o caos sem falar." }],
+  86: [{ target: "volto", thought: "Mesmo perdido, eu volto pra você." }],
+  87: [{ target: "raro", thought: "O comum virar bom é raro. E virou." }],
+  88: [{ target: "continuidade", thought: "Eu quero constância sem medo." }],
+  89: [{ target: "conversa", thought: "Eu te amo mais quando a gente escolhe conversar." }],
+  90: [{ target: "coragem", thought: "Conexão é coragem: falar sem arma, ouvir sem escudo." }],
 };
 
 function getAto2Anotacoes(dia){
@@ -720,8 +686,7 @@ não é impulso.
 
 É decisão renovada.`,
 
-/* ===== 31–60 (Ato 2 — Conexão) ===== */
-
+/* 31–60 */
 `Hoje eu não pensei em grandes promessas.
 Pensei no detalhe.
 No jeito que você fica quando esquece do mundo.
@@ -957,8 +922,7 @@ Quase desajeitado.
 E ainda assim,
 inesquecível.`,
 
-/* ===== 61–90 (Ato 2 — Conexão: aprofundando) ===== */
-
+/* 61–90 */
 `Eu gosto quando você fala baixo
 e mesmo assim me atravessa.
 
@@ -1008,11 +972,11 @@ parece futuro.`,
 `Eu não quero te puxar.
 Eu não quero te prender.
 
-Eu só quero caber
-no teu mundo
+Eu só quero ser presença
+no teu mundo,
 sem virar peso.
 
-Eu quero ser presença leve.
+Eu quero ser leve.
 Do tipo que soma
 até quando não diz nada.`,
 
@@ -1062,9 +1026,9 @@ E eu acho isso lindo.
 Porque eu nem sabia que eu precisava.`,
 
 `Eu não falei pra ninguém.
-Mas eu senti uma verdade quieta.
+Mas eu senti uma verdade quieta:
 
-Eu não queria “ver no que dá”.
+eu não queria “ver no que dá”.
 Eu queria dar certo.
 
 E quando eu penso em dar certo,
@@ -1100,19 +1064,16 @@ eu tô lutando contra coisas que nem existem.
 
 E isso cansa.`,
 
-`Eu tô aprendendo a ficar
-sem apertar.
+`Eu tô aprendendo a confiar
+sem vigiar.
 
-A confiar sem vigiar.
 A amar sem controle.
 
 É difícil.
 Mas é o tipo de difícil
 que constrói.`,
 
-`Você virou meu pensamento.
-Não aquele pensamento invasivo.
-Aquele pensamento bom.
+`Você virou um pensamento bom.
 
 Que aparece no meio do dia e diz:
 “lembra do que importa.”
@@ -1221,7 +1182,7 @@ Como direção.
 mas é verdadeiro:
 
 mesmo quando eu tô perdido,
-eu sei onde é você.`,
+eu volto.`,
 
 `O comum virar bom
 é raro.
@@ -1242,8 +1203,8 @@ tem uma firmeza mansa.
 
 Eu confio nisso.`,
 
-`Teve um dia que o cansaço falou mais alto.
-E a gente se estranhou.
+`Teve um dia que o cansaço falou mais alto
+e a gente se estranhou.
 
 Eu percebi o quanto eu posso ser duro
 quando eu tenho medo.
@@ -1269,7 +1230,6 @@ sem se defender.
 
 Eu aprendi isso com você.
 E eu quero cuidar do que a gente tem.`
-
 ];
 
 // ==============================
