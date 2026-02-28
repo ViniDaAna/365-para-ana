@@ -46,23 +46,19 @@
         <button class="btnIntro" id="btnContinuarAto" type="button">Continuar</button>
       </div>
 
-      <!-- ===== ATO 2 — CONEXÃO (31–90) UI ===== -->
-      <div id="ato2UI" class="ato2UI hidden" aria-hidden="true">
-        <div id="ato2Linhas" class="ato2Linhas" aria-hidden="true">
-          <div class="ato2Linha a"></div>
-          <div class="ato2Linha b"></div>
-        </div>
-
-        <div id="ato2Hint" class="ato2Hint hidden" aria-hidden="true">
-          Algumas palavras têm um pensamento por baixo. Clica nelas.
-        </div>
-
-        <div id="ato2Pensamento" class="ato2Pensamento hidden" aria-hidden="true"></div>
-      </div>
-      <!-- ===== /ATO 2 UI ===== -->
-
       <!-- POEMA / TEXTO PRINCIPAL -->
       <div class="poema" id="poema"></div>
+
+      <!-- ===== ATO 2 — LINHAS + PENSAMENTO OCULTO (31–90) ===== -->
+      <div id="ato2Lines" class="ato2Lines hidden" aria-hidden="true">
+        <div class="ato2Line"></div>
+        <div class="ato2Line"></div>
+        <div class="ato2Line"></div>
+      </div>
+      <!-- Tooltip (fixo, pra não cortar dentro do container) -->
+      <div id="ato2Thought" class="ato2Thought hidden" aria-hidden="true"></div>
+      <!-- ===== /ATO 2 ===== -->
+
       <div class="meta" id="meta"></div>
 
       <!-- ===== ATO 1 — ENTRELINHAS (1–30) ===== -->
@@ -794,6 +790,8 @@ Ele renova.` }
       page.setAttribute("aria-hidden", "false");
       document.body.classList.add("capsula-mode");
 
+      esconderAto2UI(true);
+
       page.scrollTop = 0;
 
       notebook.classList.remove("open");
@@ -954,47 +952,41 @@ Ele renova.` }
       }, 1100);
     }
 
-    // ===== ATO 2 — LINHAS + PENSAMENTOS =====
+    // ===== ATO 2 — LINHAS + PALAVRAS SUBLINHADAS =====
     function esconderAto2UI(silencioso=false){
-      const ui = document.getElementById("ato2UI");
-      const hint = document.getElementById("ato2Hint");
-      const box = document.getElementById("ato2Pensamento");
-
-      ui.classList.add("hidden");
-      ui.setAttribute("aria-hidden","true");
-
-      hint.classList.add("hidden");
-      hint.setAttribute("aria-hidden","true");
-
-      box.classList.add("hidden");
-      box.setAttribute("aria-hidden","true");
-      if(!silencioso) box.textContent = "";
-
-      // limpa marcações do poema (volta texto puro)
-      const poemaEl = document.getElementById("poema");
-      if(poemaEl && poemaEl.innerHTML && poemaEl.innerHTML.includes("ato2Link")){
-        poemaEl.textContent = poemaEl.textContent;
+      const lines = document.getElementById("ato2Lines");
+      const tip = document.getElementById("ato2Thought");
+      lines.classList.add("hidden");
+      lines.setAttribute("aria-hidden","true");
+      if(!silencioso){
+        tip.classList.add("hidden");
+        tip.setAttribute("aria-hidden","true");
+        tip.textContent = "";
       }
     }
 
-    function setAto2LinhasProgress(dia){
-      // dia 31->90: gap diminui (linhas se aproximando)
-      const el = document.getElementById("ato2Linhas");
-      const a = el.querySelector(".ato2Linha.a");
-      const b = el.querySelector(".ato2Linha.b");
+    function setAto2Lines(dia){
+      const lines = document.getElementById("ato2Lines");
 
-      const start = 31, end = 90;
-      const t = Math.max(0, Math.min(1, (dia - start) / Math.max(1, (end - start))));
-      const gapMax = 22; // px
-      const gapMin = 6;  // px
-      const gap = gapMax + (gapMin - gapMax) * t;
+      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
+        esconderAto2UI(true);
+        return;
+      }
 
-      a.style.transform = `translateY(${(-gap/2).toFixed(2)}px)`;
-      b.style.transform = `translateY(${( gap/2).toFixed(2)}px)`;
-      el.style.opacity = (0.65 + 0.25 * t).toFixed(3);
+      if(getAto(dia) !== 2){
+        esconderAto2UI(true);
+        return;
+      }
+
+      const t = Math.max(0, Math.min(1, (dia - 31) / 59)); // 31..90
+      const gap = (30 - (t * 18)); // 30px -> 12px (mais visível)
+      lines.style.setProperty("--ato2Gap", `${gap.toFixed(1)}px`);
+
+      lines.classList.remove("hidden");
+      lines.setAttribute("aria-hidden","false");
     }
 
-    function escapeHtml(str){
+    function escapeHTML(str){
       return String(str)
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
@@ -1003,130 +995,126 @@ Ele renova.` }
         .replaceAll("'","&#039;");
     }
 
-    function applyAto2Underlines(dia){
+    function applyAto2Markup(dia){
+      if(getAto(dia) !== 2) return;
+
+      if(typeof getAto2Anotacoes !== "function") return;
+      const anot = getAto2Anotacoes(dia) || [];
+      if(!anot.length) return;
+
       const poemaEl = document.getElementById("poema");
-      const box = document.getElementById("ato2Pensamento");
-      const hint = document.getElementById("ato2Hint");
+      const raw = poemaEl.textContent || "";
+      let html = escapeHTML(raw).replaceAll("\n","<br>");
 
-      const map = (typeof getAto2Anotacoes === "function") ? getAto2Anotacoes(dia) : [];
-      if(!map || !map.length){
-        hint.classList.add("hidden");
-        hint.setAttribute("aria-hidden","true");
-        box.classList.add("hidden");
-        box.setAttribute("aria-hidden","true");
-        box.textContent = "";
-        return;
-      }
+      // marca 1 ocorrência por anotação (leve e previsível)
+      anot.forEach((a) => {
+        const target = (a && a.target) ? String(a.target) : "";
+        const thought = (a && a.thought) ? String(a.thought) : "";
+        if(!target.trim()) return;
 
-      hint.classList.remove("hidden");
-      hint.setAttribute("aria-hidden","false");
-
-      // trabalha em cima do texto puro atual
-      const text = poemaEl.textContent || "";
-      const marks = [];
-
-      map.forEach((it, idx) => {
-        const target = String(it.target || "").trim();
-        if(!target) return;
-
-        // primeira ocorrência (case-sensitive)
-        const pos = text.indexOf(target);
-        if(pos === -1) return;
-
-        // evita sobreposição
-        const end = pos + target.length;
-        const overlaps = marks.some(m => !(end <= m.start || pos >= m.end));
-        if(overlaps) return;
-
-        marks.push({ start: pos, end, target, thought: String(it.thought || ""), idx });
-      });
-
-      if(!marks.length){
-        hint.classList.add("hidden");
-        hint.setAttribute("aria-hidden","true");
-        return;
-      }
-
-      // monta string com tokens para depois virar HTML
-      marks.sort((a,b) => b.start - a.start); // desc pra não bagunçar índices
-      let withTokens = text;
-
-      marks.forEach((m) => {
-        const before = withTokens.slice(0, m.start);
-        const mid = withTokens.slice(m.start, m.end);
-        const after = withTokens.slice(m.end);
-
-        // token com separador seguro
-        const token = `\u0001${m.idx}\u0002${mid}\u0003`;
-        withTokens = before + token + after;
-      });
-
-      // agora converte em HTML escapado e troca tokens
-      let html = escapeHtml(withTokens).replaceAll("\n","<br>");
-
-      marks.forEach((m) => {
-        const tokenStart = escapeHtml(`\u0001${m.idx}\u0002`);
-        const tokenEnd = escapeHtml("\u0003");
-        const midEsc = escapeHtml(m.target);
-
-        const span =
-          `<span class="ato2Link" data-thought="${escapeHtml(m.thought)}">${midEsc}</span>`;
-
-        // substitui exatamente 1 vez
-        const needle = tokenStart + midEsc + tokenEnd;
-        html = html.replace(needle, span);
+        // tenta encontrar a palavra como texto literal
+        const safeTarget = target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const re = new RegExp(`\\b(${safeTarget})\\b`, ""); // 1ª ocorrência
+        html = html.replace(re, (m) => {
+          const dt = escapeHTML(thought);
+          return `<span class="ato2Mark" data-thought="${dt}">${m}</span>`;
+        });
       });
 
       poemaEl.innerHTML = html;
+    }
 
-      // bind click (delegation)
-      poemaEl.onclick = (ev) => {
-        const t = ev.target;
-        if(!(t instanceof HTMLElement)) return;
-        if(!t.classList.contains("ato2Link")) return;
+    function setupAto2Interactions(){
+      const poemaEl = document.getElementById("poema");
+      const tip = document.getElementById("ato2Thought");
 
-        const thought = t.getAttribute("data-thought") || "";
+      function hideTip(){
+        tip.classList.add("hidden");
+        tip.setAttribute("aria-hidden","true");
+        tip.textContent = "";
+      }
+
+      function showTipFor(el){
+        const thought = el.getAttribute("data-thought") || "";
         if(!thought.trim()) return;
 
-        box.textContent = thought;
-        box.classList.remove("hidden");
-        box.setAttribute("aria-hidden","false");
+        tip.textContent = thought;
+        tip.classList.remove("hidden");
+        tip.setAttribute("aria-hidden","false");
 
-        // leve “pulse” visual
-        box.classList.remove("pop");
-        void box.offsetWidth;
-        box.classList.add("pop");
-      };
+        const r = el.getBoundingClientRect();
+        const pad = 10;
+
+        // posiciona acima se der, senão abaixo
+        const tipW = Math.min(520, window.innerWidth - 24);
+        tip.style.width = tipW + "px";
+
+        // força layout
+        tip.style.left = "0px";
+        tip.style.top = "0px";
+        const tr = tip.getBoundingClientRect();
+
+        let left = Math.max(12, Math.min(window.innerWidth - tr.width - 12, r.left + (r.width/2) - (tr.width/2)));
+        let top = r.top - tr.height - pad;
+
+        if(top < 12){
+          top = r.bottom + pad;
+        }
+        tip.style.left = left + "px";
+        tip.style.top = top + "px";
+      }
+
+      poemaEl.addEventListener("click", (e) => {
+        const t = e.target;
+        if(!(t instanceof Element)) return;
+        const mark = t.closest(".ato2Mark");
+        if(!mark){ hideTip(); return; }
+
+        // toggle
+        if(!tip.classList.contains("hidden") && tip.textContent === (mark.getAttribute("data-thought") || "")){
+          hideTip();
+        }else{
+          showTipFor(mark);
+        }
+      });
+
+      poemaEl.addEventListener("mouseover", (e) => {
+        const t = e.target;
+        if(!(t instanceof Element)) return;
+        const mark = t.closest(".ato2Mark");
+        if(!mark) return;
+        showTipFor(mark);
+      });
+
+      poemaEl.addEventListener("mouseout", (e) => {
+        const t = e.target;
+        if(!(t instanceof Element)) return;
+        const mark = t.closest(".ato2Mark");
+        if(!mark) return;
+        // não some instantaneamente pra não ficar “piscando”
+        clearTimeout(window.__ato2TipOut);
+        window.__ato2TipOut = setTimeout(() => {
+          hideTip();
+        }, 120);
+      });
+
+      window.addEventListener("scroll", () => hideTip(), {passive:true});
+      window.addEventListener("resize", () => hideTip());
+      document.addEventListener("visibilitychange", () => hideTip());
     }
 
-    function renderAto2UI(dia){
-      const ui = document.getElementById("ato2UI");
-
-      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")){
-        esconderAto2UI(true);
-        return;
-      }
-      if(dia < 31 || dia > 90){
-        esconderAto2UI(true);
-        return;
-      }
-
-      ui.classList.remove("hidden");
-      ui.setAttribute("aria-hidden","false");
-
-      setAto2LinhasProgress(dia);
-      applyAto2Underlines(dia);
-    }
-
+    // ===== ATO 1 pós-typing =====
     function afterPoemTyped(dia){
       const forced = getForcedDay();
       const isTest = (forced !== null);
 
-      // Ato 1
+      // unlock Ato 1
       if(!isTest && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
         const current = getAto1Unlocked();
         if(dia > current) setAto1Unlocked(dia);
       }
+
+      // Ato 1 UI
       renderAto1Palavra(dia);
       if(dia === 30 && getAto1Unlocked() >= 30){
         clearTimeout(window.__ato1FinalTimer);
@@ -1135,8 +1123,9 @@ Ele renova.` }
         }, 480);
       }
 
-      // Ato 2
-      renderAto2UI(dia);
+      // Ato 2 UI
+      setAto2Lines(dia);
+      applyAto2Markup(dia);
     }
 
     function carregarPoema(dia){
@@ -1211,7 +1200,6 @@ Ele renova.` }
         btn.disabled = (DIA_ATUAL <= 1);
         sairModoLista();
 
-        // ✅ FIX: revela o bloco também na intro
         if(deveMostrarIntro(DIA_ATUAL)){
           revelarBloco();
 
@@ -1253,7 +1241,6 @@ Ele renova.` }
         return;
       }
 
-      // ✅ FIX: revela o bloco também na intro
       if(deveMostrarIntro(DIA_ATUAL)){
         revelarBloco();
 
@@ -1292,6 +1279,9 @@ Ele renova.` }
 
     setCornerDates();
     setInterval(setCornerDates, 60000);
+
+    // init Ato 2 (event delegation)
+    setupAto2Interactions();
   </script>
 
 </body>
