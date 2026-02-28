@@ -121,7 +121,139 @@ E amanhã…
 
 eu vou continuar escolhendo você.`;
 
+// ==============================
+// ATO 2 — PENSAMENTOS OCULTOS (31–90)
+// ==============================
+// Formato:
+// 31: [{ word: "perto", thought: "..." }, ...]
+//
+// Regras:
+// - cada item tenta marcar a PRIMEIRA ocorrência de "word" no poema do dia
+// - é propositalmente leve (1 linha), tipo “o que eu não disse”
+const ATO2_THOUGHTS = {
+  31: [
+    { word: "detalhe", thought: "Eu presto atenção em você sem perceber." },
+    { word: "presença", thought: "Eu só quero caber — sem invadir." }
+  ],
+  32: [
+    { word: "paz", thought: "Meu peito desacelera quando te sente por perto." },
+    { word: "silêncio", thought: "Com você, silêncio não é distância." }
+  ],
+  33: [
+    { word: "entre", thought: "É onde eu mais te vejo." },
+    { word: "manso", thought: "Você tira minha armadura sem pedir." }
+  ],
+  34: [
+    { word: "cotidiano", thought: "Eu gosto da sua vida do jeito que ela é." },
+    { word: "comuns", thought: "É onde eu quero morar com você." }
+  ],
+  35: [
+    { word: "mundo", thought: "Eu não quero te puxar pra mim. Só te acompanhar." },
+    { word: "presença", thought: "Eu não sou pressa. Eu sou constância." }
+  ],
+  36: [
+    { word: "agradecer", thought: "Porque você melhora tudo sem tentar." },
+    { word: "calmo", thought: "Você é meu lugar seguro." }
+  ],
+  37: [
+    { word: "treino", thought: "Eu fico ensaiando coragem." },
+    { word: "aparece", thought: "E aí eu perco qualquer controle." }
+  ],
+  38: [
+    { word: "cuidado", thought: "Eu escolho você antes do meu orgulho." },
+    { word: "importante", thought: "Você é mais importante que a minha razão." }
+  ],
+  39: [
+    { word: "casa", thought: "Você virou meu retorno." },
+    { word: "voltar", thought: "Sempre." }
+  ],
+  40: [
+    { word: "verdade", thought: "Eu não quero te viver só como emoção." }
+  ],
+  41: [
+    { word: "inseguranças", thought: "Eu tento não te cansar com elas." },
+    { word: "honesto", thought: "Com você, dá menos medo." }
+  ],
+  42: [
+    { word: "suficiente", thought: "Às vezes eu duvido… mas eu continuo." },
+    { word: "constância", thought: "Isso eu sei fazer." }
+  ],
+  43: [
+    { word: "demais", thought: "E quase sempre é por medo." },
+    { word: "respiro", thought: "Você me devolve pro agora." }
+  ],
+  44: [
+    { word: "fico", thought: "Mesmo quando eu não sei dizer bonito." }
+  ],
+  45: [
+    { word: "abrir", thought: "Eu quero confiar sem me defender." },
+    { word: "direito", thought: "Por você." }
+  ],
+  46: [
+    { word: "íntimo", thought: "Meu pensamento é onde eu mais me escondo." },
+    { word: "dividir", thought: "Mas com você… eu topo." }
+  ],
+  47: [
+    { word: "volto", thought: "Eu volto mesmo." },
+    { word: "metade", thought: "Eu não quero te amar pela metade." }
+  ],
+  48: [
+    { word: "paciente", thought: "Eu gosto de quem eu viro contigo." },
+    { word: "chama", thought: "Você me puxa pra ser melhor." }
+  ],
+  49: [
+    { word: "assusta", thought: "Porque agora é sério." },
+    { word: "prefiro", thought: "Do que viver morno sem você." }
+  ],
+  50: [
+    { word: "presença", thought: "Eu quero ser alguém que fica." },
+    { word: "difícil", thought: "Principalmente." }
+  ],
+  51: [
+    { word: "clareza", thought: "Eu sei o que eu quero: você." },
+    { word: "luz", thought: "Sem queimar. Só iluminar." }
+  ],
+  52: [
+    { word: "acalma", thought: "Porque você parece futuro." }
+  ],
+  53: [
+    { word: "performar", thought: "Eu não preciso provar nada com você." },
+    { word: "simples", thought: "E isso é raro." }
+  ],
+  54: [
+    { word: "diferente", thought: "Foi ficando claro, sem barulho." },
+    { word: "você", thought: "É você." }
+  ],
+  55: [
+    { word: "assenta", thought: "Como se o coração encontrasse chão." }
+  ],
+  56: [
+    { word: "pesado", thought: "Você deixa mais leve só de chegar." }
+  ],
+  57: [
+    { word: "caminho", thought: "Você é direção e casa." }
+  ],
+  58: [
+    { word: "raro", thought: "E eu não quero desperdiçar." }
+  ],
+  59: [
+    { word: "continuidade", thought: "Eu prefiro o que dura." },
+    { word: "constância", thought: "É assim que eu te amo." }
+  ],
+  60: [
+    { word: "sete", thought: "Eu tava tremendo por dentro." },
+    { word: "inesquecível", thought: "Porque foi você." }
+  ]
+};
+
+function getAto2ThoughtsForDay(dia){
+  return ATO2_THOUGHTS[dia] || [];
+}
+
+// ==============================
 // Memórias desbloqueáveis — EDITAR AQUI
+// ==============================
+
 const MEMORIAS = {
   30: `Naquele dia eu decidi.
 
