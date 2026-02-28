@@ -171,73 +171,55 @@ daquele tipo que você tenta esconder e não consegue.
 
 Talvez o filme tenha sido qualquer coisa.
 Mas você… já tava ficando.`,
-  90: `Eu achei que ia te perder naquele dia.
+  90: `Teve um dia que a gente quase se perdeu no jeito de falar.
 
-Não porque você disse que ia embora.
-Mas porque eu me vi sendo exatamente o tipo de pessoa
-que estraga o que é bom.
+Não foi uma briga “grande”.
+Foi daquelas que nascem de cansaço,
+de orgulho,
+de interpretação errada,
+de medo disfarçado.
 
-A gente brigou.
-E não foi feio.
-Foi pior.
-Foi frio.
+Eu lembro do silêncio depois.
+A casa parecia maior.
+O peito parecia menor.
 
-Eu falei coisas tentando me defender.
-Você ficou quieta tentando não piorar.
-E, no fundo, eu sabia:
-eu tava mais preocupado em estar certo
-do que em cuidar da gente.
+Eu fiquei pensando:
+“e se eu estragar isso por não saber conversar direito?”
+E aí veio uma coisa feia de admitir:
+eu tinha medo de estar sendo trocável.
 
-Quando eu fiquei sozinho depois,
-veio aquela sensação que eu odeio:
-a de que eu faço tudo errado.
-De que uma hora você vai cansar.
-De que talvez eu não seja suficiente pra sustentar algo bonito.
+Medo de você cansar.
+Medo de você pensar que não vale.
+Medo de eu não conseguir ser o que você precisa.
 
-Eu quase deixei o orgulho ganhar.
-Quase deixei o silêncio virar distância.
+Quando a gente sentou pra conversar,
+eu não tava tentando vencer.
+Eu tava tentando ficar.
 
-Mas você sentou pra conversar.
+E eu lembro de você me olhando com seriedade…
+mas sem crueldade.
+Como quem diz:
+“eu topo… se você topar de verdade.”
 
-E quando você começou a falar,
-eu vi que você não tava ali pra me atacar.
-Você tava ali pra salvar o que era nosso.
+Foi ali que eu entendi que conexão não é só carinho.
+É coragem.
 
-E isso quebrou alguma coisa em mim.
+Coragem de falar sem atacar.
+De ouvir sem se defender.
+De pedir desculpa sem justificar.
+De dizer “eu tenho medo” sem fazer o outro pagar por isso.
 
-Eu senti medo.
-Medo real.
-Medo de perder você por imaturidade.
-Medo de repetir erros.
-Medo de ser o problema.
+Eu não saí daquela conversa perfeito.
+Mas saí diferente.
 
-E pela primeira vez,
-eu falei sem tentar parecer forte.
+Mais humilde.
+Mais consciente.
+Mais seu.
 
-Eu admiti que eu fico inseguro.
-Que às vezes eu me defendo antes de entender.
-Que eu tenho medo de não ser suficiente
-e acabo agindo como se não precisasse de ninguém.
-
-Eu achei que você ia se afastar quando eu mostrasse isso.
-
-Você não se afastou.
-
-Você segurou minha mão.
-
-E ali eu entendi:
-conexão não é quando a gente não briga.
-É quando a gente se vê no pior momento
-e ainda decide ficar.
-
-Naquele dia,
-eu não senti que a gente quase acabou.
-
-Eu senti que você viu quem eu realmente sou.
-E, mesmo assim,
-escolheu continuar.
-
-E eu escolhi também.`,
+E, principalmente:
+mais disposto a cuidar do que a gente tem
+com palavra, não com guerra.`
+  ,
   120:`Em breve...`,
   150:`Em breve...`,
   180:`Em breve...`,
@@ -247,6 +229,111 @@ E eu escolhi também.`,
   300:`Em breve...`,
   330:`Em breve...`,
 };
+
+// ==============================
+// ATO 2 — “PENSAMENTOS OCULTOS”
+// Cada entrada: { target: "palavra", thought: "pensamento" }
+// A palavra precisa existir no poema do dia (case-sensitive).
+// ==============================
+const ATO2_ANNOTATIONS = {
+  61: [
+    { target: "calma", thought: "Eu fico tranquilo porque é você — e isso muda tudo em mim." },
+    { target: "perto", thought: "Eu queria te encostar sem pedir licença — mas eu respeito teu tempo." }
+  ],
+  62: [
+    { target: "silêncio", thought: "O silêncio contigo não é vazio. É segurança." }
+  ],
+  63: [
+    { target: "entre", thought: "É ali que eu te conheço de verdade: no que você não anuncia." }
+  ],
+  64: [
+    { target: "comum", thought: "O cotidiano contigo me dá vontade de futuro." }
+  ],
+  65: [
+    { target: "caber", thought: "Eu não quero te sufocar. Eu quero ser espaço bom." }
+  ],
+  66: [
+    { target: "grato", thought: "Eu agradeço coisas pequenas porque eu sei o quanto elas viram ‘nós’." }
+  ],
+  67: [
+    { target: "peito", thought: "Eu ensaio firmeza, mas com você eu tremo bonito." }
+  ],
+  68: [
+    { target: "orgulho", thought: "Meu impulso é me defender. Mas eu tô aprendendo a te proteger." }
+  ],
+  69: [
+    { target: "casa", thought: "Casa é onde eu não preciso provar nada." }
+  ],
+  70: [
+    { target: "verdade", thought: "Eu não queria admitir isso tão cedo… mas eu já senti." }
+  ],
+  71: [
+    { target: "honesto", thought: "Eu tenho medo de ser pouco, mas contigo eu tento ser inteiro." }
+  ],
+  72: [
+    { target: "suficiente", thought: "Minha insegurança é antiga. Você não merece pagar por ela." }
+  ],
+  73: [
+    { target: "cenários", thought: "Eu crio tragédias na cabeça pra não ser pego de surpresa." }
+  ],
+  74: [
+    { target: "ficar", thought: "Eu quero aprender a confiar sem apertar." }
+  ],
+  75: [
+    { target: "pensamento", thought: "Eu te deixo entrar onde ninguém entra. Isso é amor." }
+  ],
+  76: [
+    { target: "volto", thought: "Se eu errar o tom… eu volto. Eu não te largo no meio." }
+  ],
+  77: [
+    { target: "inteiro", thought: "Eu não quero te amar com pedaços. Quero te amar por escolha." }
+  ],
+  78: [
+    { target: "medo", thought: "Eu tenho medo de perder e viro duro. Eu tô aprendendo a não virar." }
+  ],
+  79: [
+    { target: "presença", thought: "Eu não sei prometer mundo. Mas eu sei estar." }
+  ],
+  80: [
+    { target: "luz", thought: "Eu não quero te queimar. Eu quero te iluminar e te aquecer." }
+  ],
+  81: [
+    { target: "acalma", thought: "O futuro contigo não me aperta. Ele me encaixa." }
+  ],
+  82: [
+    { target: "simples", thought: "Eu gosto quando eu não preciso ser ‘bom’. Só real." }
+  ],
+  83: [
+    { target: "claro", thought: "Foi ficando claro porque você não confunde meu coração." }
+  ],
+  84: [
+    { target: "assenta", thought: "Depois da certeza, meu coração não corre. Ele pousa." }
+  ],
+  85: [
+    { target: "entra", thought: "Você entra e arruma o quarto dentro de mim sem falar nada." }
+  ],
+  86: [
+    { target: "caminho", thought: "Eu penso em você como direção: eu sempre volto." }
+  ],
+  87: [
+    { target: "raro", thought: "O comum virar bom é raridade. E eu sei disso." }
+  ],
+  88: [
+    { target: "continuidade", thought: "Eu não quero pico. Eu quero linha reta junto." }
+  ],
+  89: [
+    { target: "cansaço", thought: "Eu fico duro quando tô cansado. Mas eu não quero te ferir com isso." },
+    { target: "conversa", thought: "Eu te amo mais quando a gente se escolhe no diálogo." }
+  ],
+  90: [
+    { target: "coragem", thought: "Conexão é coragem: falar sem arma, ouvir sem escudo." },
+    { target: "cuidar", thought: "Eu aprendi que amar também é saber conversar." }
+  ]
+};
+
+function getAto2Anotacoes(dia){
+  return ATO2_ANNOTATIONS[dia] || [];
+}
 
 // ==============================
 // SEUS POEMAS (1–90)
@@ -870,329 +957,319 @@ Quase desajeitado.
 E ainda assim,
 inesquecível.`,
 
-/* ===== 61–90 (Ato 2 — Conexão) ===== */
+/* ===== 61–90 (Ato 2 — Conexão: aprofundando) ===== */
 
-`Eu gosto do jeito que você me puxa pro presente
-sem fazer esforço.
+`Eu gosto quando você fala baixo
+e mesmo assim me atravessa.
 
-Você fala uma coisa simples,
-e de repente o dia fica mais leve.
+Porque eu percebo:
+não é volume.
+É intenção.
 
-Acho que amor é isso também:
-alguém que te devolve pra vida
-sem te cobrar espetáculo.`,
+E a tua intenção comigo
+sempre teve uma calma
+que me desarma.
 
-`Eu tenho vontade de te contar
-o que eu penso quando ninguém vê.
+Eu fico perto
+sem precisar provar nada.`,
 
-Não pra te impressionar.
-Pra te deixar entrar.
+`Tem dias que a gente não tem assunto.
+E ainda assim dá certo.
 
-Porque no fundo,
-a parte mais íntima de mim
-é a que eu escondo com calma.`,
+Eu encosto do teu lado
+e o silêncio vira lugar.
+Vira pausa boa.
 
-`Eu não quero te amar
-como quem segura.
+Eu sempre achei que amor precisava de prova.
+Mas o teu silêncio
+me prova presença.`,
 
-Quero te amar
-como quem acolhe.
+`Eu comecei a entender o “entre”.
 
-Sem medo de perder,
-sem necessidade de controlar.
+Entre eu e você
+tem um espaço que não é distância.
+É cuidado.
 
-Só presença.
-E confiança crescendo devagar.`,
+É a gente tentando acertar o tom.
+É a gente se escolhendo
+sem barulho.`,
 
-`Às vezes eu fico quieto
-porque eu tô aprendendo.
+`O comum contigo
+não me dá tédio.
+Me dá paz.
 
-Aprendendo a não transformar tudo em defesa.
-A não responder com orgulho.
-A não estragar o que é bom por insegurança.
+Me dá vontade de repetir.
+De fazer de novo.
+De construir sem pressa.
 
-E você…
-você é o motivo desse aprendizado.`,
+Porque o comum contigo
+parece futuro.`,
 
-`Eu gosto do seu nome na minha tela.
-Gosto da sua risada do outro lado.
-Gosto da sensação de “tá tudo bem”
-só porque você existe.
+`Eu não quero te puxar.
+Eu não quero te prender.
 
-Tem gente que vira barulho.
-Você vira paz.`,
+Eu só quero caber
+no teu mundo
+sem virar peso.
 
-`Tem coisa que eu não sei explicar
-sem parecer exagero.
+Eu quero ser presença leve.
+Do tipo que soma
+até quando não diz nada.`,
 
-Mas eu sinto.
-E eu guardo.
+`Hoje eu me peguei grato.
+Grato por você existir assim.
 
-E, aos poucos,
-eu vou deixando você tocar nisso
-sem pressa.
+Sem teatro.
+Sem performance.
 
-Porque eu quero que você veja
-o que eu sou de verdade.`,
+Você entra e muda o clima.
+E eu fico pensando
+como eu demorei tanto
+pra entender isso.`,
 
-`Eu te amo de um jeito que não corre.
-De um jeito que observa.
-De um jeito que cuida.
+`Eu ensaio força.
+Eu ensaio tranquilidade.
 
-E talvez seja isso que eu mais gosto:
-a gente não precisa provar nada.
+Mas quando você chega,
+o peito entrega.
 
-A gente só precisa continuar.`,
+Eu fico com vontade de te contar tudo.
+E ao mesmo tempo
+com medo de te assustar com a profundidade.
 
-`Eu já tive medo de falar
-e parecer fraco.
+Aí eu respiro.
+E fico.`,
 
-Mas com você,
-ser honesto não me diminui.
+`Eu tô aprendendo a escolher o cuidado
+antes do impulso.
 
-Me aproxima.
+Porque meu orgulho
+tem uma voz alta.
+E eu não quero que ele mande na nossa história.
 
-E eu tô entendendo que proximidade
-é um tipo de coragem.`,
+Eu prefiro te proteger
+do que ter razão.`,
 
-`Se eu pudesse escolher uma cena pra repetir,
-não seria viagem,
-não seria festa,
-não seria foto bonita.
+`Você tem um jeito de ser casa.
 
-Seria um momento comum,
-qualquer,
-em que você encosta em mim
-e o mundo fica pequeno.`,
+Não pelo lugar.
+Pelo sentimento.
 
-`Eu não quero ser perfeito.
-Quero ser confiável.
+Pelo jeito que meu corpo descansa
+quando você tá perto.
 
-Quero ser o cara
-que não some quando pesa.
-Que não machuca pra se proteger.
-Que não usa silêncio como arma.
+E eu acho isso lindo.
+Porque eu nem sabia que eu precisava.`,
 
+`Eu não falei pra ninguém.
+Mas eu senti uma verdade quieta.
+
+Eu não queria “ver no que dá”.
+Eu queria dar certo.
+
+E quando eu penso em dar certo,
+eu penso em você.`,
+
+`Com você eu consigo ser honesto
+sem virar fraco.
+
+Eu digo “tô mal”
+e não sinto que vou ser diminuído.
+
+Você segura sem esmagar.
+E isso é raro.`,
+
+`Às vezes eu tenho medo de não ser suficiente.
+E esse medo tenta me endurecer.
+
+Mas eu tô aprendendo:
+amor não é estar sempre pronto.
+É estar disposto.
+
+E eu tô disposto por nós.`,
+
+`Eu crio cenários.
+Eu crio finais.
+
+Pra tentar me proteger.
+Pra não doer de surpresa.
+
+Só que aí você me olha
+e eu percebo:
+eu tô lutando contra coisas que nem existem.
+
+E isso cansa.`,
+
+`Eu tô aprendendo a ficar
+sem apertar.
+
+A confiar sem vigiar.
+A amar sem controle.
+
+É difícil.
+Mas é o tipo de difícil
+que constrói.`,
+
+`Você virou meu pensamento.
+Não aquele pensamento invasivo.
+Aquele pensamento bom.
+
+Que aparece no meio do dia e diz:
+“lembra do que importa.”
+
+E você… importa.`,
+
+`Se eu errar o tom,
+me chama de volta.
+
+Eu volto.
+Porque eu não quero te amar com orgulho.
 Eu quero te amar com maturidade.
-Mesmo aprendendo.`,
 
-`Você já percebeu
-como a gente se entende sem falar tudo?
+Eu ainda tô aprendendo, mas eu volto.`,
 
-Tem um “entre nós”
-que explica o que as palavras não alcançam.
+`Eu quero te amar inteiro.
+Sem partes escondidas.
+Sem meia verdade.
 
-E eu gosto disso.
-Porque é real.`,
+Não pra te jogar peso.
+Mas pra não te amar pela superfície.
 
-`Eu tô te amando
-no detalhe.
+Eu quero profundidade com respeito.`,
 
-No jeito que você fica séria.
-No jeito que você se distrai.
-No jeito que você volta pro assunto
-como quem quer ficar.
+`Tem um medo em mim
+que eu escondo com ironia.
 
-Eu tenho vontade de te conhecer
-por dentro.`,
+Medo de perder.
+Medo de ser pouco.
+Medo de ser trocável.
 
-`Às vezes eu me pego pensando:
-“não estraga”.
+E eu não quero que esse medo
+vire arma.
 
-E não é sobre você.
-É sobre mim.
+Eu quero que ele vire conversa.`,
 
-Sobre eu não deixar meus medos
-mandarem no que eu faço.
+`Eu não sei prometer o mundo.
+Mas eu sei prometer presença.
 
-Eu tô aprendendo a escolher você
-sem sabotagem.`,
+Eu sei te ouvir.
+Eu sei sentar do teu lado
+e tentar de novo.
 
-`Eu não preciso te prometer o mundo.
-Eu preciso te dar constância.
+Eu sei ficar quando dá vontade de fugir.`,
 
-Uma presença que não depende do humor.
-Um cuidado que não some no cansaço.
-Uma escolha que não se desfaz no primeiro conflito.
+`Eu não quero ser incêndio.
+Eu não quero ser explosão.
 
-Eu quero ser simples assim:
-eu fico.`,
+Eu quero ser luz.
+Daquelas que não gritam.
+Só ficam.
 
-`Eu tenho um lado meu
-que só aparece quando eu confio.
+E ficam aquecendo o que importa.`,
 
-E eu tô confiando em você.
+`Pensar no futuro contigo
+não me aperta.
+Me acalma.
 
-Aos poucos, eu vou tirando a armadura.
-E você nem pede.
+Porque você não parece ameaça.
+Você parece caminho bom.
 
-Você só fica.
-E isso muda tudo.`,
+E eu gosto de caminhar com você.`,
 
-`Se eu te olhar por muito tempo,
-eu começo a esquecer do resto.
+`Com você eu sou simples.
 
-Não porque o mundo some,
-mas porque você vira prioridade
-de um jeito quieto.
+E não é “pouco”.
+É raro.
 
-E prioridade quieta
-é uma das coisas mais sinceras que existem.`,
+Porque ser simples é descansar.
+E eu descanso quando você tá perto.`,
 
-`Eu gosto quando a gente conversa
-sem medo de parecer demais.
+`Foi ficando claro.
+Não por um evento grande.
 
-Quando a gente fala do que incomoda
-sem virar briga.
-Quando a gente se escuta
-sem precisar vencer.
+Mas por repetição.
+Por detalhe.
+Por presença.
 
-Isso, pra mim,
-é amor adulto.`,
+Você não me confunde.
+Você me esclarece.`,
 
-`Tem dias que eu não tenho frase bonita.
-Tenho só vontade de te ter perto.
+`Depois da certeza,
+eu não corro.
 
-E eu queria que você soubesse:
-isso também é amor.
+Eu assento.
+Eu organizo a casa dentro de mim.
+Eu fico mais homem.
 
-Não o amor que aparece.
-O amor que sustenta.`,
+E eu acho que isso é amor.`,
 
-`Eu tô aprendendo a te amar
-sem pressa de resolver tudo.
+`Você entra.
+E o dia muda.
 
-Tem coisa que amadurece
-no tempo certo.
+Sem você tentar mudar.
+Sem você fazer nada especial.
 
-E eu não quero apressar o que é bom.
-Eu quero cuidar.
-E esperar junto.`,
+Você só entra.
+E eu percebo o quanto eu tava pesado
+antes disso.`,
 
-`Eu tenho saudade
-mesmo quando a gente se viu ontem.
+`Eu penso em você como caminho.
+Como retorno.
+Como direção.
 
-E eu acho isso engraçado,
-porque não é falta.
+É estranho dizer isso,
+mas é verdadeiro:
 
-É vontade.
-É casa chamando.
+mesmo quando eu tô perdido,
+eu sei onde é você.`,
 
-É você vivendo em mim
-com naturalidade.`,
+`O comum virar bom
+é raro.
 
-`Eu gosto do seu silêncio
-quando ele não é distância.
+E comigo virou.
 
-Quando ele é só descanso.
-Quando ele é “tô aqui” sem barulho.
+Porque você tem um jeito de transformar rotina
+em abraço.
 
-A gente tá ficando bom nisso:
-estar junto sem se apertar.`,
+E eu quero mais disso.`,
 
-`Eu queria que você se sentisse segura
-do mesmo jeito que você me acalma.
+`Eu não quero ápice.
+Eu não quero show.
 
-Segura no meu olhar.
-Segura no meu cuidado.
-Segura na minha escolha.
+Eu quero continuidade.
+E a tua presença
+tem uma firmeza mansa.
 
-Porque eu não tô brincando de amar.
-Eu tô construindo.`,
+Eu confio nisso.`,
 
-`Se eu pudesse te dar uma coisa hoje,
-não seria presente.
-Seria espaço.
+`Teve um dia que o cansaço falou mais alto.
+E a gente se estranhou.
 
-Espaço pra você respirar.
-Pra você ser você.
-Pra você não precisar se defender.
+Eu percebi o quanto eu posso ser duro
+quando eu tenho medo.
 
-Eu quero ser descanso,
-não peso.`,
+Mas eu não quero ser esse cara contigo.
 
-`Tem um jeito seu
-de me deixar menos duro.
+Eu quero ser o cara que conversa.
+Que volta.
+Que resolve.
+Que cuida.`,
 
-Como se eu lembrasse
-que eu não preciso lutar o tempo todo.
+`Conexão não é sempre fácil.
+É real.
 
-E eu acho que isso é intimidade:
-alguém que te amolece
-sem te quebrar.`,
+É olhar no olho
+e dizer:
+“eu não tô bem.”
+“eu tô com medo.”
+“eu não quero te perder.”
 
-`Eu ainda tenho inseguranças.
-Eu só não quero que elas virem comando.
+E é ter coragem de ouvir o outro
+sem se defender.
 
-Eu quero que elas virem conversa.
-Virem cuidado.
-Virem maturidade.
+Eu aprendi isso com você.
+E eu quero cuidar do que a gente tem.`
 
-E se eu falhar,
-eu volto.
-Eu aprendo.
-Eu fico.`,
-
-`Eu te amo
-quando você tá bem.
-
-E eu te amo
-quando você tá cansada.
-
-E eu te amo
-quando o dia não ajuda.
-
-Porque amor de verdade
-não escolhe cenário.
-Escolhe pessoa.`,
-
-`Eu gosto de imaginar
-a gente ficando velho
-sem perder a delicadeza.
-
-Com o mesmo jeito de olhar.
-Com a mesma paz de voltar.
-Com a mesma certeza discreta:
-é você.
-
-Eu não quero um amor urgente.
-Eu quero um amor inteiro.`,
-
-`Se eu te escrevo,
-não é pra te prender.
-
-É pra te lembrar
-que existe um lugar em mim
-onde você sempre cabe.
-
-E, quando você quiser,
-pode entrar sem bater.`,
-
-`Às vezes eu sinto vontade
-de pedir desculpa por dentro.
-
-Pelo que eu ainda não sei fazer direito.
-Pelo que eu ainda não sei dizer com calma.
-Pelo que eu ainda tô aprendendo.
-
-Mas eu prefiro te mostrar
-em vez de prometer:
-
-eu tô aqui.`,
-
-`A gente chegou num ponto bonito.
-
-Não é mais sobre convencer.
-É sobre confiar.
-
-Eu não quero te amar com medo.
-Quero te amar com presença.
-
-E se existe uma coisa que eu sei hoje,
-é essa:
-
-você não é só parte da minha vida.
-Você é a parte que dá sentido.`
 ];
 
 // ==============================
@@ -1208,28 +1285,6 @@ Você é a parte que dá sentido.`
 Se você está vendo isso, é porque esse poema ainda não foi escrito no poemas.js.`;
   }
 })();
-
-// ✅ FIX GARANTIDO: força o poema do dia 60 no índice certo (poemas[59])
-poemas[59] = `Coisas grandes
-começam pequenas.
-
-Sem anúncio.
-Sem certeza.
-
-Só dois corações
-tentando parecer tranquilos
-às sete da noite
-num cinema qualquer.
-
-É estranho pensar
-que algo tão importante
-nasceu assim.
-
-Quase silencioso.
-Quase desajeitado.
-
-E ainda assim,
-inesquecível.`;
 
 // ==============================
 // Funções usadas pelo index.html
