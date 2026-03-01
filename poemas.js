@@ -40,6 +40,7 @@ E se o tempo continuar passando como sempre passa…
 
 eu ainda vou estar aqui.`;
 
+
 const CARTA_CAPSULA_365 = `Carta – Cápsula do Tempo
 23/02/2025
 
@@ -171,70 +172,7 @@ daquele tipo que você tenta esconder e não consegue.
 
 Talvez o filme tenha sido qualquer coisa.
 Mas você… já tava ficando.`,
-  90: `Foi um dia que eu não queria perder — e quase perdi por orgulho.
-
-Não foi uma “grande briga”.
-Foi uma daquelas que machucam porque parecem pequenas,
-mas pegam bem no lugar onde a gente é mais frágil.
-
-Eu lembro do depois.
-Do silêncio.
-De eu tentando agir normal,
-mas por dentro já imaginando você cansando de mim.
-
-Eu fiquei com vergonha de admitir
-que o meu medo não era sobre a discussão.
-Era sobre eu me sentir trocável.
-
-Eu me odeio um pouco quando eu viro esse cara:
-o cara que se defende atacando,
-o cara que faz ironia quando tá doendo,
-o cara que prefere parecer forte do que ser honesto.
-
-E aí a gente sentou.
-
-Sem plateia.
-Sem gritaria.
-Sem “quem tá certo”.
-
-Você falou do que sentiu.
-E eu percebi o tamanho do estrago
-que eu consigo fazer quando eu tô com medo.
-
-Eu queria pedir desculpa e, ao mesmo tempo, queria justificar.
-E eu tive que escolher.
-
-Escolhi falar a verdade.
-
-Falei que eu tenho medo de não ser suficiente.
-Falei que eu tenho medo de você cansar.
-Falei que eu tenho medo de eu estragar o que eu mais amo
-só por não saber lidar com a minha cabeça.
-
-Eu não lembro de você me “passando pano”.
-Eu lembro de você me olhando sério…
-
-e ficando.
-
-Ficando do jeito certo:
-me chamando pra perto,
-mas sem aceitar o que machuca.
-
-Foi aí que eu entendi o que é conexão de verdade:
-não é só carinho.
-É coragem.
-
-Coragem de conversar sem arma.
-De ouvir sem escudo.
-De pedir desculpa sem performance.
-De recomeçar sem fingir.
-
-Naquele dia, eu não saí perfeito.
-Mas eu saí mais honesto.
-
-E eu decidi uma coisa:
-eu não quero te amar do jeito que eu aprendi no medo.
-Eu quero te amar do jeito que a gente constrói na conversa.`,
+  90: `Em breve...`,
   120:`Em breve...`,
   150:`Em breve...`,
   180:`Em breve...`,
@@ -246,12 +184,10 @@ Eu quero te amar do jeito que a gente constrói na conversa.`,
 };
 
 // ==============================
-// SEUS POEMAS (1–90)
+// SEUS POEMAS (1–60)
 // ==============================
 
 const poemas = [
-
-/* 1–30 (Ato 1 — Escolha) */
 
 `Te amei ontem.
 
@@ -632,7 +568,7 @@ não é impulso.
 
 É decisão renovada.`,
 
-/* 31–60 (Ato 2 — Conexão) */
+/* ===== 31–60 (Ato 2 — Conexão) ===== */
 
 `Hoje eu não pensei em grandes promessas.
 Pensei no detalhe.
@@ -867,383 +803,7 @@ Quase silencioso.
 Quase desajeitado.
 
 E ainda assim,
-inesquecível.`,
-
-/* 61–90 (Ato 2 — Conexão) — NOVOS */
-
-`Eu tô aprendendo um carinho diferente.
-
-Não é aquele carinho que aperta.
-É o que encosta e fica.
-
-O que olha e entende
-sem precisar cobrar prova.
-
-Eu gosto do jeito que você me deixa menos armado.`,
-
-`Eu percebi que eu te amo
-até nos intervalos.
-
-No “tô chegando”.
-No “chegou bem?”.
-No “me manda quando chegar em casa”.
-
-Amar você mora nessas pequenas confirmações.`,
-
-`Tem hora que eu tenho vontade
-de te contar tudo.
-
-Até as partes feias.
-Até os pensamentos que eu escondo
-porque acho que vão te cansar.
-
-E eu tô começando a confiar
-que você não foge de mim.`,
-
-`Eu queria te fazer leve.
-
-Não como quem resolve tua vida.
-Mas como quem não pesa.
-
-Como quem soma paz.
-Como quem não vira tempestade
-quando o dia já tá difícil.`,
-
-`Às vezes eu te observo
-e penso: “é aqui”.
-
-Não é euforia.
-É encaixe.
-
-É o peito assentando
-como se encontrasse um lugar antigo.`,
-
-`Eu tenho medo de errar
-no jeito de falar.
-
-Porque eu sei que palavra
-marca.
-
-E eu não quero te marcar com dor
-só porque eu não soube respirar antes.`,
-
-`Eu tô treinando um negócio simples:
-te ouvir até o fim.
-
-Sem interromper.
-Sem explicar demais.
-Sem tentar ganhar.
-
-Só entender.
-
-Parece pouco,
-mas muda tudo.`,
-
-`Eu gosto quando a gente ri
-de coisa boba.
-
-Porque ali não tem performance.
-Não tem defesa.
-
-É só a gente
-sendo casa um pro outro
-por alguns segundos.`,
-
-`Eu comecei a achar bonito
-quando você me chama pra realidade.
-
-Quando eu tô viajando em medo,
-você puxa a minha mão
-e me lembra do agora.
-
-Você me dá chão
-sem me prender.`,
-
-`Tem dias que eu não sou bom.
-Eu sou só cansado.
-
-E você ainda assim fica perto.
-
-Não pra passar pano.
-Pra me lembrar
-que amar também é atravessar o comum.`,
-
-`Eu não quero ser intenso.
-Quero ser confiável.
-
-Quero ser o cara
-que você não precisa adivinhar.
-
-O cara que não some no conflito.
-O cara que senta e conversa.`,
-
-`Eu tô tentando te amar
-sem te apertar.
-
-Sem transformar insegurança em cobrança.
-Sem fazer você pagar
-pelas coisas que eu inventei na cabeça.
-
-Isso é maturidade.
-E eu tô tentando de verdade.`,
-
-`Eu tenho um lado meu
-que se assusta com a felicidade.
-
-Como se não fosse durar.
-Como se eu tivesse que me preparar pro pior.
-
-Mas quando você me abraça,
-meu corpo acredita antes da minha mente.`,
-
-`Eu acho que eu sempre quis
-um amor que fosse prova.
-
-E você tá me ensinando
-que amor também é calma.
-
-Que não precisa doer pra ser real.
-
-Que paz também é paixão.`,
-
-`Eu gosto de conversar com você
-quando o mundo tá barulhento.
-
-Porque você não aumenta o barulho.
-Você organiza.
-
-Você me deixa menos confuso.`,
-
-`Eu tenho vergonha
-das minhas inseguranças.
-
-Porque parecem pequenas.
-Porque parecem infantis.
-
-Mas eu tô aprendendo
-que esconder é pior.
-
-Então eu vou tentando falar.`,
-
-`Eu quero ser digno
-do jeito que você confia.
-
-Eu sei que confiança é coisa séria.
-E eu não quero quebrar
-por falta de cuidado.
-
-Eu quero cuidar do que você me entrega.`,
-
-`Eu não sei explicar direito,
-mas tem um “nós”
-que aparece quando a gente tá bem.
-
-Não é só casal.
-É parceria.
-
-É eu olhando pro mundo
-e sabendo que tenho alguém do meu lado.`,
-
-`Tem vezes que eu me pego pensando:
-“como é que eu cheguei aqui?”
-
-E eu lembro:
-a gente chegou.
-
-No detalhe.
-Na conversa.
-No pedido de desculpa.
-No recomeço pequeno.
-
-A gente foi ficando.`,
-
-`Eu queria te prometer
-que eu nunca vou errar.
-
-Mas seria mentira.
-
-Então eu prefiro prometer isso:
-eu vou voltar pra conversa.
-
-Eu vou pedir desculpa.
-Eu vou aprender.
-Eu vou ficar.`,
-
-`Eu tô aprendendo a diferenciar
-medo de intuição.
-
-O medo grita.
-A intuição fala baixo.
-
-E a minha intuição, quando é sobre você,
-sempre diz a mesma coisa:
-
-fica.`,
-
-`Eu tenho uma parte minha
-que ainda acha que vai ser trocada.
-
-Que, se eu vacilar,
-alguém melhor aparece e eu viro passado.
-
-Eu odeio esse pensamento.
-Mas ele existe.
-
-E eu tô tentando não deixar ele mandar em mim.`,
-
-`Hoje eu pensei
-que te amar é também te respeitar
-quando eu tô inseguro.
-
-É não te punir
-por você ser livre.
-
-É não transformar amor em vigilância.
-
-É confiar.`,
-
-`Tem um jeito seu
-de resolver as coisas
-sem humilhar.
-
-E isso me desmonta.
-
-Porque eu cresci achando
-que conflito era guerra.
-
-E com você,
-conflito vira conversa.`,
-
-`Eu tenho medo de te magoar
-quando eu tô mal.
-
-Porque às vezes eu fico ríspido
-pra não parecer frágil.
-
-Mas a verdade é que eu só tô com medo.
-
-E eu não quero que você carregue isso.`,
-
-`Eu fico pensando
-que talvez eu nunca aprendi
-a pedir ajuda.
-
-Eu sempre quis dar conta.
-
-Mas amar você
-tá me ensinando
-que eu posso abaixar a guarda
-sem perder valor.`,
-
-`Tem dia que eu me sinto pequeno.
-E eu começo a me defender antes de ser atacado.
-
-Só que com você
-não tem ataque.
-
-Tem cuidado.
-
-E eu tô aprendendo a aceitar cuidado
-sem achar que é dívida.`,
-
-`Eu não quero que a gente vire
-duas pessoas se ferindo
-pra ver quem aguenta mais.
-
-Eu quero que a gente vire
-duas pessoas conversando
-pra ver quem cuida melhor.
-
-Eu quero esse tipo de amor.`,
-
-`Hoje eu pensei:
-conexão é quando eu posso dizer
-“eu tô com medo”
-e você não me olha com desprezo.
-
-Você me olha com verdade.
-
-E eu fico.
-E eu volto.
-E eu aprendo.`,
-
-`Eu não tenho orgulho
-de como eu sou quando eu tô inseguro.
-
-Eu viro espinho.
-Eu viro defesa.
-Eu viro alguém que eu nem gosto.
-
-Mas eu quero te dizer:
-
-eu tô tentando.
-
-E quando a gente conversa,
-eu volto a ser eu.
-
-O eu que te ama direito.`,
-
-/* Dia 90 (poema) */
-
-`A gente já se entendeu por mensagem.
-Já se entendeu por abraço.
-Mas tem um tipo de entendimento
-que só existe quando a gente senta e fala.
-
-Eu lembro de uma conversa nossa
-que começou difícil.
-
-Eu fui com o peito fechado.
-Você foi com o olhar sério.
-E eu achei que ia dar errado.
-
-Porque eu tava com medo.
-
-Medo de eu não ser suficiente.
-Medo de você cansar de mim.
-Medo de eu ser só mais um
-que você um dia vai superar.
-
-E eu fiz o que eu sempre faço
-quando eu tenho medo:
-eu endureci.
-
-Só que você não entrou na guerra.
-
-Você puxou a verdade.
-
-E eu, pela primeira vez em muito tempo,
-não consegui fingir.
-
-Eu falei que eu me sinto trocável.
-Falei que eu me sinto pequeno.
-Falei que eu tenho vergonha
-do quanto eu preciso de confirmação às vezes.
-
-E você ficou.
-
-Não “passou pano”.
-Ficou do jeito certo:
-me chamando pra perto,
-mas sem aceitar o que machuca.
-
-Foi aí que eu entendi:
-
-conexão é coragem.
-
-Coragem de conversar sem arma.
-Coragem de pedir desculpa sem teatro.
-Coragem de recomeçar sem orgulho.
-
-E eu te juro:
-eu prefiro mil conversas difíceis
-do que um silêncio que afasta.
-
-Porque eu amo você.
-
-E eu não quero te perder
-por falta de maturidade.`
-
+inesquecível.`
 ];
 
 // ==============================
@@ -1260,7 +820,7 @@ Se você está vendo isso, é porque esse poema ainda não foi escrito no poemas
   }
 })();
 
-// ✅ FIX GARANTIDO: força o poema do dia 60 no índice certo (poemas[59])
+// ✅ força o poema do dia 60 no índice certo (poemas[59])
 poemas[59] = `Coisas grandes
 começam pequenas.
 
@@ -1281,78 +841,6 @@ Quase desajeitado.
 
 E ainda assim,
 inesquecível.`;
-
-// ==============================
-// ATO 2 — Anotações (palavra sublinhada + pensamento oculto)
-// 31–90: pelo menos 1 marca por dia
-// ==============================
-const ATO2_ANOTACOES = {
-  31: [{ target: "detalhe", thought: "Eu te amo no pequeno. No que ninguém aplaude." }],
-  32: [{ target: "silêncio", thought: "O teu silêncio comigo não é distância. É lugar." }],
-  33: [{ target: "entre", thought: "O que eu sinto mora justamente no ‘entre’." }],
-  34: [{ target: "cotidiano", thought: "Eu queria morar nos teus dias comuns." }],
-  35: [{ target: "presença", thought: "Eu não quero ser urgência. Quero ser presença." }],
-  36: [{ target: "calmo", thought: "Quando você existe perto, eu viro menos caos." }],
-  37: [{ target: "aparece", thought: "Você aparece e eu perco o controle — e eu gosto." }],
-  38: [{ target: "respirar", thought: "Eu respiro por nós antes de responder." }],
-  39: [{ target: "casa", thought: "Eu gosto de você no formato ‘casa’." }],
-  40: [{ target: "verdade", thought: "Eu percebi: não era fogo. Era verdade." }],
-  41: [{ target: "honesto", thought: "Com você, honestidade não vira fraqueza." }],
-  42: [{ target: "constância", thought: "Eu não sou perfeito. Eu sou constante." }],
-  43: [{ target: "respiro", thought: "Quando você diz ‘fica’ sem dizer, eu respiro." }],
-  44: [{ target: "fico", thought: "Eu sinto muito… e eu fico mesmo assim." }],
-  45: [{ target: "confiar", thought: "Eu tô aprendendo a amar sem apertar." }],
-  46: [{ target: "pensamento", thought: "Eu quero dividir o que eu escondo." }],
-  47: [{ target: "volto", thought: "Se eu errar, eu volto. Eu prefiro voltar." }],
-  48: [{ target: "humano", thought: "Você chama em mim um cara que eu gosto." }],
-  49: [{ target: "assusta", thought: "Você importa num nível que me dá medo — e eu fico." }],
-  50: [{ target: "presença", thought: "Eu não prometo mundo. Eu prometo estar." }],
-  51: [{ target: "luz", thought: "Eu quero te viver como luz, não incêndio." }],
-  52: [{ target: "acalma", thought: "Pensar em nós me acalma de verdade." }],
-  53: [{ target: "simples", thought: "Com você eu não preciso provar nada." }],
-  54: [{ target: "claro", thought: "Foi ficando claro. Sem alarde." }],
-  55: [{ target: "assenta", thought: "Depois da certeza, o peito assenta." }],
-  56: [{ target: "entra", thought: "Você entra e o mundo fica menos pesado." }],
-  57: [{ target: "retorno", thought: "Você virou direção e retorno." }],
-  58: [{ target: "raro", thought: "O comum com você é raro." }],
-  59: [{ target: "continuidade", thought: "Eu não preciso de cena. Eu preciso de continuidade." }],
-  60: [{ target: "inesquecível", thought: "Eu não lembro do filme… eu lembro de você." }],
-
-  61: [{ target: "armado", thought: "Com você eu não preciso ficar pronto pra briga." }],
-  62: [{ target: "confirmações", thought: "Eu te amo no ‘chegou bem?’." }],
-  63: [{ target: "confiar", thought: "Eu tô testando: falar sem medo de ser demais." }],
-  64: [{ target: "leve", thought: "Eu queria ser alívio, não peso." }],
-  65: [{ target: "encaixe", thought: "Não é euforia. É encaixe." }],
-  66: [{ target: "respirar", thought: "Eu não quero te ferir por falta de fôlego." }],
-  67: [{ target: "ouvir", thought: "Eu tô tentando te ouvir até o fim." }],
-  68: [{ target: "performance", thought: "Sem defesa, eu viro verdade." }],
-  69: [{ target: "agora", thought: "Você me traz de volta pro agora." }],
-  70: [{ target: "cansado", thought: "Hoje eu não brilho. Hoje eu só fico." }],
-  71: [{ target: "confiável", thought: "Eu quero ser previsível no cuidado." }],
-  72: [{ target: "cobrança", thought: "Eu não quero te amar apertando." }],
-  73: [{ target: "mente", thought: "Meu corpo acredita antes da cabeça." }],
-  74: [{ target: "calma", thought: "Paz também é paixão." }],
-  75: [{ target: "organiza", thought: "Você organiza o meu barulho." }],
-  76: [{ target: "esconder", thought: "Eu tô cansando de fingir que não sinto." }],
-  77: [{ target: "confiança", thought: "Confiança é coisa séria. Eu não brinco com isso." }],
-  78: [{ target: "parceria", thought: "Não é só amor. É nós." }],
-  79: [{ target: "recomeço", thought: "A gente chega na conversa. Sempre." }],
-  80: [{ target: "prometer", thought: "Eu prometo voltar — não ser perfeito." }],
-  81: [{ target: "intuição", thought: "Minha intuição sempre diz: fica." }],
-  82: [{ target: "trocada", thought: "Meu medo é antigo. Meu amor é maior." }],
-  83: [{ target: "livre", thought: "Amar é não prender." }],
-  84: [{ target: "guerra", thought: "Com você, briga vira conversa." }],
-  85: [{ target: "ríspido", thought: "Às vezes eu viro duro porque tô frágil." }],
-  86: [{ target: "ajuda", thought: "Eu tô aprendendo a não carregar tudo sozinho." }],
-  87: [{ target: "dívida", thought: "Cuidado não é dívida. É amor." }],
-  88: [{ target: "machucar", thought: "Eu quero ser solução, não ferida." }],
-  89: [{ target: "coragem", thought: "Conexão é coragem — de ficar na conversa." }],
-  90: [{ target: "maturidade", thought: "Eu prefiro conversa difícil do que silêncio que afasta." }],
-};
-
-function getAto2Anotacoes(dia){
-  return ATO2_ANOTACOES[dia] || [];
-}
 
 // ==============================
 // Funções usadas pelo index.html
