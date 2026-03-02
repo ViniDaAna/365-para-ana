@@ -184,7 +184,7 @@ Mas você… já tava ficando.`,
 };
 
 // ==============================
-// SEUS POEMAS (1–60)
+// SEUS POEMAS (1–75)
 // ==============================
 
 const poemas = [
@@ -803,42 +803,134 @@ Quase silencioso.
 Quase desajeitado.
 
 E ainda assim,
-inesquecível.`
+inesquecível.`,
+
+/* ===== 61–75 (continuação Ato 2) ===== */
+
+`Hoje eu entendi que amar você
+não é intensidade descontrolada.
+
+É lucidez.
+
+É saber exatamente o que eu sinto
+e ainda assim escolher ficar.
+
+Sem dúvida.
+Sem fuga.`,
+
+`Eu já confundi amor com medo de perder.
+Com urgência.
+Com necessidade.
+
+Mas o que eu sinto por você
+é tranquilo demais
+pra ser desespero.
+
+É escolha consciente.`,
+
+`Você não me completa.
+
+Você me expande.
+
+Eu continuo inteiro sozinho.
+Mas com você
+eu sou maior.`,
+
+`Eu gosto da forma como a gente conversa
+sem precisar se defender.
+
+Como se o mundo pudesse ser difícil,
+mas aqui dentro
+não fosse.`,
+
+`Eu não quero te prender.
+
+Quero que você fique
+porque quer.
+
+E toda vez que você fica,
+eu sinto que o amor é ainda mais real.`,
+
+`Hoje eu pensei:
+
+se um dia tudo der errado,
+eu ainda vou ser grato.
+
+Porque viver você
+já valeu a coragem.`,
+
+`Você já percebeu
+que a gente quase nunca grita?
+
+Que quando algo dói
+a gente tenta entender
+antes de ferir?
+
+Isso é raro.
+Isso é cuidado.`,
+
+`Eu não preciso que você seja perfeita.
+
+Preciso que seja sincera.
+
+E você é.
+Mesmo quando é difícil.`,
+
+`Eu te amo nos dias bons.
+Mas gosto ainda mais
+de como a gente atravessa os ruins.
+
+Ali eu vejo
+quem nós somos de verdade.`,
+
+`Se amar é enxergar falhas
+e ainda assim permanecer,
+
+então eu te amo
+com os olhos bem abertos.`,
+
+`Você me ensina
+que maturidade não é frieza.
+
+É sentir tudo
+sem deixar que o orgulho decida.`,
+
+`Eu não tenho mais medo
+de dizer que preciso de você.
+
+Não como dependência.
+Mas como parceria.`,
+
+`Às vezes eu paro
+e só observo você existindo.
+
+E penso:
+“Que sorte a minha
+de dividir o mundo com ela.”`,
+
+`O amor deixou de ser incêndio.
+
+Virou lareira.
+
+Não queima descontrolado.
+Mas aquece constante.`,
+
+`Se alguém me perguntar
+o que mudou em mim,
+
+eu vou responder:
+
+aprendi a amar
+sem me abandonar.
+
+E isso
+foi você quem me ensinou.`
 ];
 
 
-// ✅ GARANTIA: Dia 59 e Dia 60 SEMPRE existem (mesmo que você mexa no array depois)
-poemas[58] = poemas[58] || `Eu não precisava de um dia perfeito.
-
-Eu precisava de um dia real.
-Um dia comum,
-onde você existe sem tentar.
-
-É aí que eu entendo:
-não é sobre intensidade.
-
-É sobre presença.`;
-
-poemas[59] = poemas[59] || `Coisas grandes
-começam pequenas.
-
-Sem anúncio.
-Sem certeza.
-
-Só dois corações
-tentando parecer tranquilos
-às sete da noite
-num cinema qualquer.
-
-É estranho pensar
-que algo tão importante
-nasceu assim.
-
-Quase silencioso.
-Quase desajeitado.
-
-E ainda assim,
-inesquecível.`;
+// ✅ proteção (não altera sua ordem; só evita “buraco” caso algo seja removido sem querer)
+poemas[58] = poemas[58] || poemas[57] || "Em breve...";
+poemas[59] = poemas[59] || poemas[58] || "Em breve...";
 
 // ==============================
 // Completa 365 (placeholders)
