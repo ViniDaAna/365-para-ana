@@ -9,7 +9,9 @@
   --auraT: 0;                 /* 0 → 1 (JS seta) */
   --auraMin: 0.10;
   --auraMax: 0.28;
-  --auraColor: rgba(212,175,55,1);
+
+  /* Cor da aura por ATO (RGB separado pra controlar alpha) */
+  --auraRGB: 212,175,55;      /* default ouro */
   --auraOpacity: calc(var(--auraMin) + (var(--auraT) * (var(--auraMax) - var(--auraMin))));
 
   --panel: rgba(20,20,22,0.86);
@@ -53,10 +55,10 @@ body::before{
   pointer-events:none;
   background:
     radial-gradient(620px 420px at 50% 18%,
-      rgba(212,175,55, var(--auraOpacity)),
+      rgba(var(--auraRGB), var(--auraOpacity)),
       transparent 65%),
     radial-gradient(520px 420px at 20% 78%,
-      rgba(212,175,55, calc(var(--auraOpacity) * 0.55)),
+      rgba(var(--auraRGB), calc(var(--auraOpacity) * 0.55)),
       transparent 70%);
   filter: blur(18px);
   opacity:1;
@@ -76,41 +78,50 @@ body::after{
 
 /* Ato theming */
 body[data-ato="1"]{
-  --auraColor: rgba(212,175,55,1);
+  --auraRGB: 212,175,55;         /* ouro */
   --auraMin: 0.10;
   --auraMax: 0.28;
   --line: rgba(212,175,55,0.35);
 }
-/* Ato 2 — AZUL */
+
 body[data-ato="2"]{
-  --auraColor: rgba(70,120,210,1);
+  /* azul (Conexão) */
+  --auraRGB: 70,130,210;
   --auraMin: 0.08;
   --auraMax: 0.24;
-  --line: rgba(241,233,220,0.20);
+  --line: rgba(120,170,255,0.30);
 }
-/* Ato 3 — Fogo (ok) */
+
 body[data-ato="3"]{
-  --auraColor: rgba(170,40,60,1);
+  /* fogo (bordô) */
+  --auraRGB: 170,40,60;
   --auraMin: 0.06;
   --auraMax: 0.22;
+  --line: rgba(170,40,60,0.28);
 }
-/* Ato 4 — MAIS AZUL (diferente do Ato 2) */
+
 body[data-ato="4"]{
-  --auraColor: rgba(40,90,180,1);
+  /* outro azul (Crescimento) – mais frio/diferente do Ato 2 */
+  --auraRGB: 85,155,235;
   --auraMin: 0.05;
   --auraMax: 0.20;
+  --line: rgba(150,200,255,0.26);
 }
-/* Ato 5 — MARROM FERROSO */
+
 body[data-ato="5"]{
-  --auraColor: rgba(120,85,60,1);
+  /* marrom ferroso (Raiz) */
+  --auraRGB: 120,80,60;
   --auraMin: 0.04;
   --auraMax: 0.18;
+  --line: rgba(170,125,95,0.24);
 }
-/* Ato 6 — Dourado (ok) */
+
 body[data-ato="6"]{
-  --auraColor: rgba(212,175,55,1);
+  /* recomeço (ouro de volta) */
+  --auraRGB: 212,175,55;
   --auraMin: 0.06;
   --auraMax: 0.22;
+  --line: rgba(212,175,55,0.30);
 }
 
 /* Containers */
@@ -241,12 +252,6 @@ button:disabled{
   padding: 8px 12px;
   border-radius: 12px;
   font-size: 15px;
-}
-
-/* ✅ Centralizar o botão "Entrar" só no login */
-#login button{
-  display:block;
-  margin: 0 auto;
 }
 
 /* Block text */
