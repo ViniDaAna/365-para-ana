@@ -189,6 +189,8 @@ Mas você… já tava ficando.`,
 
 const poemas = [
 
+/* ===== 1–30 (Ato 1 — Escolha) ===== */
+
 `Te amei ontem.
 
 Nos dias em que a gente ainda estava aprendendo a ser dois.
@@ -805,7 +807,7 @@ Quase desajeitado.
 E ainda assim,
 inesquecível.`,
 
-/* ===== 61–75 (continuação Ato 2) ===== */
+/* ===== 61–75 (Ato 2 — Clareza emocional) ===== */
 
 `Hoje eu entendi que amar você
 não é intensidade descontrolada.
@@ -926,7 +928,7 @@ sem me abandonar.
 E isso
 foi você quem me ensinou.`,
 
-/* ===== 76–89 (continuação Ato 2) ===== */
+/* ===== 76–89 (Ato 2 — Estabilidade íntima) ===== */
 
 `Eu gosto do jeito que a gente já se entende
 antes mesmo das palavras se organizarem.
@@ -1159,11 +1161,6 @@ um ao lado do outro.
 E talvez essa seja
 a forma mais bonita de amar.`
 ];
-
-
-// ✅ proteção (não altera sua ordem; só evita “buraco” caso algo seja removido sem querer)
-poemas[58] = poemas[58] || poemas[57] || "Em breve...";
-poemas[59] = poemas[59] || poemas[58] || "Em breve...";
 
 // ==============================
 // Completa 365 (placeholders)
