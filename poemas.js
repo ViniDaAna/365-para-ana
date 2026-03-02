@@ -806,6 +806,40 @@ E ainda assim,
 inesquecível.`
 ];
 
+
+// ✅ GARANTIA: Dia 59 e Dia 60 SEMPRE existem (mesmo que você mexa no array depois)
+poemas[58] = poemas[58] || `Eu não precisava de um dia perfeito.
+
+Eu precisava de um dia real.
+Um dia comum,
+onde você existe sem tentar.
+
+É aí que eu entendo:
+não é sobre intensidade.
+
+É sobre presença.`;
+
+poemas[59] = poemas[59] || `Coisas grandes
+começam pequenas.
+
+Sem anúncio.
+Sem certeza.
+
+Só dois corações
+tentando parecer tranquilos
+às sete da noite
+num cinema qualquer.
+
+É estranho pensar
+que algo tão importante
+nasceu assim.
+
+Quase silencioso.
+Quase desajeitado.
+
+E ainda assim,
+inesquecível.`;
+
 // ==============================
 // Completa 365 (placeholders)
 // ==============================
