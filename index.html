@@ -401,7 +401,6 @@ Ele renova.` }
 
     // ===== ATO 2 — progresso das linhas =====
     function setAto2Progress(dia){
-      // só faz sentido no Ato 2
       if(getAto(dia) !== 2){
         document.documentElement.style.setProperty("--ato2Gap", "44px");
         return;
@@ -1034,6 +1033,7 @@ Ele renova.` }
       linhas.setAttribute("aria-hidden","true");
       box.classList.add("hidden");
       box.setAttribute("aria-hidden","true");
+      box.classList.remove("show");
       if(!silencioso) box.textContent = "";
     }
 
@@ -1053,55 +1053,117 @@ Ele renova.` }
         const idx = lower.indexOf(w);
         if(idx !== -1) return {word: text.slice(idx, idx + w.length), idx};
       }
-      // fallback: primeira palavra “ok”
       const m = text.match(/[A-Za-zÀ-ÿ]{5,}/);
       if(m) return {word: m[0], idx: m.indexOf};
       return null;
     }
 
+    function showAto2Thought(text){
+      const box = document.getElementById("ato2ThoughtBox");
+      if(!text) return;
+
+      box.textContent = text;
+      box.classList.remove("hidden");
+      box.setAttribute("aria-hidden","false");
+      box.classList.remove("show");
+      void box.offsetWidth;
+      box.classList.add("show");
+    }
+
+    function hideAto2Thought(){
+      const box = document.getElementById("ato2ThoughtBox");
+      if(box.classList.contains("hidden")) return;
+      box.classList.remove("show");
+      clearTimeout(window.__ato2ThoughtTimer);
+      window.__ato2ThoughtTimer = setTimeout(() => {
+        box.classList.add("hidden");
+        box.setAttribute("aria-hidden","true");
+        box.textContent = "";
+      }, 180);
+    }
+
+    function installAto2OutsideClose(){
+      if(window.__ato2OutsideInstalled) return;
+      window.__ato2OutsideInstalled = true;
+
+      document.addEventListener("pointerdown", (e) => {
+        const box = document.getElementById("ato2ThoughtBox");
+        if(box.classList.contains("hidden")) return;
+
+        const u = document.querySelector(".ato2U");
+        const clickedInsideBox = box.contains(e.target);
+        const clickedUnderline = u && u.contains(e.target);
+
+        if(!clickedInsideBox && !clickedUnderline){
+          hideAto2Thought();
+        }
+      }, {passive:true});
+
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "Escape") hideAto2Thought();
+      });
+    }
+
     function applyAto2Underline(dia, rawText){
       const poemaEl = document.getElementById("poema");
-      const box = document.getElementById("ato2ThoughtBox");
 
       if(getAto(dia) !== 2) return;
-
-      // não mexe em prefácio/fora do normal
+      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")) return;
       if(!rawText || !rawText.trim()) return;
+
+      installAto2OutsideClose();
 
       const target = pickUnderlineTarget(rawText);
       if(!target) return;
 
       const thoughtIdx = Math.max(0, Math.min(ATO2_PENSAMENTOS.length - 1, (dia - 31)));
       const thought = ATO2_PENSAMENTOS[thoughtIdx] || "eu fico.";
+
       const before = escapeHtml(rawText.slice(0, target.idx));
       const word = escapeHtml(target.word);
       const after = escapeHtml(rawText.slice(target.idx + target.word.length));
 
-      poemaEl.innerHTML = `${before}<span class="ato2U" data-thought="${escapeHtml(thought)}">${word}</span>${after}`;
+      poemaEl.innerHTML = `${before}<span class="ato2U" role="button" tabindex="0" aria-label="Revelar pensamento" data-thought="${escapeHtml(thought)}">${word}</span>${after}`;
 
-      // clique na palavra sublinhada
       const u = poemaEl.querySelector(".ato2U");
-      if(u){
-        u.addEventListener("click", (e) => {
+      if(!u) return;
+
+      const openFor = (ms) => {
+        const t = u.getAttribute("data-thought") || "";
+        showAto2Thought(t);
+        clearTimeout(window.__ato2ThoughtTimer);
+        window.__ato2ThoughtTimer = setTimeout(() => hideAto2Thought(), ms);
+      };
+
+      // Desktop: hover “sussurra”, mas não prende
+      u.addEventListener("pointerenter", () => {
+        // se já estiver aberto por clique, não mexe
+        const box = document.getElementById("ato2ThoughtBox");
+        if(!box.classList.contains("hidden")) return;
+        openFor(1200);
+      });
+
+      u.addEventListener("pointerleave", () => {
+        // fecha suave (a não ser que tenha sido aberto por clique e ainda esteja no timer)
+        const box = document.getElementById("ato2ThoughtBox");
+        if(box.classList.contains("hidden")) return;
+        // deixa o timer cuidar, mas fecha mais rápido ao sair
+        clearTimeout(window.__ato2ThoughtTimer);
+        window.__ato2ThoughtTimer = setTimeout(() => hideAto2Thought(), 450);
+      });
+
+      // Mobile/Click: revelação “de verdade”
+      u.addEventListener("click", (e) => {
+        e.preventDefault();
+        openFor(4200);
+      }, {passive:false});
+
+      u.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
           e.preventDefault();
-          const t = u.getAttribute("data-thought") || "";
-          box.textContent = t;
-          box.classList.remove("hidden");
-          box.setAttribute("aria-hidden","false");
-          box.classList.remove("show");
-          void box.offsetWidth;
-          box.classList.add("show");
-          // esconde depois
-          clearTimeout(window.__ato2ThoughtTimer);
-          window.__ato2ThoughtTimer = setTimeout(() => {
-            box.classList.remove("show");
-            setTimeout(() => {
-              box.classList.add("hidden");
-              box.setAttribute("aria-hidden","true");
-            }, 220);
-          }, 4200);
-        }, {passive:false});
-      }
+          openFor(4200);
+        }
+      });
     }
 
     function renderAto2UI(dia){
