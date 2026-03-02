@@ -184,7 +184,7 @@ Mas você… já tava ficando.`,
 };
 
 // ==============================
-// SEUS POEMAS (1–75)
+// SEUS POEMAS (1–89)
 // ==============================
 
 const poemas = [
@@ -924,7 +924,240 @@ aprendi a amar
 sem me abandonar.
 
 E isso
-foi você quem me ensinou.`
+foi você quem me ensinou.`,
+
+/* ===== 76–89 (continuação Ato 2) ===== */
+
+`Eu gosto do jeito que a gente já se entende
+antes mesmo das palavras se organizarem.
+
+Quando você suspira diferente,
+eu percebo.
+Quando eu fico quieto demais,
+você percebe.
+
+Não é invasão.
+É atenção construída.
+
+É o tipo de proximidade
+que nasce da convivência
+e cresce da escolha diária.
+
+Nem tudo precisa ser resolvido na hora.
+Às vezes só precisa de presença.
+De ficar.
+De não ir embora quando fica difícil.
+
+E a gente tem ficado.`,
+
+`Tem dias que a gente não fala sobre amor.
+
+Não tem declaração longa,
+não tem intensidade dramática.
+
+Tem rotina.
+
+Tem você mandando mensagem perguntando se eu almocei.
+Tem eu lembrando de algo que você comentou dias atrás.
+Tem cuidado escondido nas pequenas coisas.
+
+E eu descobri que talvez seja isso
+o amor amadurecendo:
+
+ele não precisa mais provar que existe.
+Ele só existe.
+
+Silencioso.
+Constante.
+Presente.`,
+
+`Eu já não sinto aquela ansiedade
+de ter que ser perfeito para você.
+
+Nem de competir com o mundo.
+
+Eu posso falhar.
+Posso errar o tom.
+Posso estar cansado.
+
+E você ainda está aqui.
+
+Essa liberdade
+é uma das formas mais puras de intimidade.
+
+Não preciso performar.
+Posso ser.
+
+E você escolhe ficar mesmo assim.`,
+
+`O nosso amor não grita.
+
+Ele respira.
+
+Tem ritmo próprio.
+Tem pausa.
+Tem espaço.
+
+Não é incêndio descontrolado.
+É chama que sabe queimar sem destruir.
+
+Eu gosto disso.
+Gosto da calma que veio depois da intensidade.
+
+Porque agora não é impulso.
+É decisão.`,
+
+`Você virou a pessoa
+que eu procuro automaticamente
+quando algo acontece.
+
+Boa notícia? É você.
+Dia ruim? É você.
+Conquista pequena? É você.
+
+Não por dependência.
+Mas por pertencimento.
+
+Dividir a vida com alguém
+é um dos gestos mais íntimos que existem.
+
+E eu divido com você
+porque confio.`,
+
+`A gente não deixa as coisas acumularem.
+
+A gente conversa.
+Às vezes com medo.
+Às vezes com insegurança.
+
+Mas conversa.
+
+Isso mudou tudo.
+
+Porque amor não é ausência de conflito.
+É a coragem de atravessá-lo juntos.
+
+E toda vez que a gente resolve algo
+sem se machucar de propósito,
+eu sinto que estamos construindo algo raro.`,
+
+`Intimidade não é só toque.
+
+É saber o que te irrita
+e evitar.
+
+É conhecer seus medos
+e não usar contra você.
+
+É guardar suas vulnerabilidades
+como se fossem minhas.
+
+Existe uma nudez
+que não tem nada a ver com corpo.
+
+E você já me viu
+nesse nível.
+
+E ficou.`,
+
+`Se um dia o mundo ficar pesado demais,
+eu sei exatamente onde descansar.
+
+No seu abraço demorado.
+No seu silêncio acolhedor.
+Na sua forma simples de dizer
+“vai ficar tudo bem”.
+
+Talvez não fique.
+Mas quando você diz,
+eu acredito.
+
+Porque estabilidade não é promessa de facilidade.
+É promessa de companhia.`,
+
+`Eu já não tenho medo
+de imaginar você no meu futuro.
+
+Não como fantasia distante.
+Mas como possibilidade real.
+
+Não porque eu controle o amanhã.
+Mas porque eu confio no que estamos construindo hoje.
+
+E se o futuro for consequência do presente,
+então ele tem boas chances de ser bonito.`,
+
+`Você não me salva do mundo.
+
+Você me fortalece para enfrentá-lo.
+
+Existe uma diferença enorme nisso.
+
+Eu não me sinto menor ao seu lado.
+Eu me sinto mais firme.
+
+Como se amar você
+tivesse me ensinado
+a ficar de pé com mais segurança.`,
+
+`O que a gente tem
+não é mágico.
+
+É intencional.
+
+É construído em conversa difícil.
+Em pedido de desculpa.
+Em ajuste fino.
+
+E isso é ainda mais bonito
+do que qualquer história perfeita.
+
+Porque o que é perfeito não dura.
+Mas o que é construído
+se sustenta.`,
+
+`Eu amo o jeito que você me olha
+quando acha que eu não estou vendo.
+
+Tem cuidado ali.
+Tem escolha ali.
+Tem algo que vai além da paixão.
+
+E toda vez que eu percebo esse olhar,
+eu faço uma escolha silenciosa de volta:
+
+continuar.`,
+
+`Estabilidade não é monotonia.
+
+É liberdade sem medo.
+
+É poder sair com amigos
+e ainda assim querer voltar para você.
+
+É não vigiar.
+É confiar.
+
+É saber que o amor não está em risco
+a cada ausência pequena.
+
+Isso é maturidade.
+Isso é paz.`,
+
+`Hoje eu pensei que,
+se tudo continuar exatamente assim,
+já está bom.
+
+Sem exageros.
+Sem drama.
+Sem necessidade de espetáculo.
+
+Só dois adultos
+escolhendo ficar
+um ao lado do outro.
+
+E talvez essa seja
+a forma mais bonita de amar.`
 ];
 
 
