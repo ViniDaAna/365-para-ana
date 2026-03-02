@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260301_1" />
+  <link rel="stylesheet" href="style.css?v=20260302_1" />
 </head>
 
 <body>
@@ -194,7 +194,7 @@
   <!-- Overlay de fade final (Dia 365) -->
   <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
 
-  <script src="poemas.js?v=20260301_1"></script>
+  <script src="poemas.js?v=20260302_1"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -210,70 +210,6 @@
       "Eu","te","escolho","todos","os","dias,","mesmo","quando","o","mundo","pesa","e","medo","grita,",
       "porque","amar","você","é","decisão","firme:","transformar","incerteza","em","casa,","silêncio",
       "em","abrigo,","futuro","em","promessa."
-    ];
-
-    // ===== ATO 2 — pensamentos “ocultos” (31–90) =====
-    const ATO2_PENSAMENTOS = [
-      "eu fico quando não tem cena.",
-      "meu coração aprende teu ritmo.",
-      "eu prefiro calma com você.",
-      "não precisa provar nada aqui.",
-      "eu te escolho no detalhe.",
-      "a tua presença me reorganiza.",
-      "é no simples que eu sinto verdade.",
-      "eu tô aqui sem pressa.",
-      "eu gosto do teu silêncio.",
-      "quando você chega, eu descanso.",
-      "eu queria te guardar com cuidado.",
-      "eu me abro devagar — por nós.",
-      "se eu fechar, me chama.",
-      "eu aprendo a confiar em você.",
-      "às vezes eu tenho medo, mas fico.",
-      "eu tento ser gentil comigo também.",
-      "eu não quero te perder por bobagem.",
-      "eu volto pro que importa.",
-      "você é meu lugar seguro.",
-      "eu amo quando a gente se entende.",
-      "eu te escuto com o peito.",
-      "eu escolho não fugir.",
-      "eu sinto mais do que falo.",
-      "eu quero te amar direito.",
-      "eu te vejo mesmo quando você não nota.",
-      "o comum contigo é raro.",
-      "eu gosto da gente sem barulho.",
-      "se doer, eu sento e converso.",
-      "eu não preciso ganhar — preciso ficar.",
-      "eu sou teu. com calma.",
-      "a gente se escolhe de novo.",
-      "minha verdade fica mais simples com você.",
-      "eu tenho vontade de te proteger.",
-      "quando eu te olho, eu volto pra mim.",
-      "eu tô aprendendo a ser leve contigo.",
-      "se eu falhar, eu reparo.",
-      "eu te quero perto, mas livre.",
-      "me desculpa quando eu me fecho.",
-      "eu te amo no cotidiano.",
-      "eu fico no depois da conversa.",
-      "eu escolho presença.",
-      "você me deixa mais humano.",
-      "eu respiro melhor com você.",
-      "eu me sinto em casa contigo.",
-      "eu te prometo honestidade.",
-      "a gente merece paz.",
-      "eu prefiro a verdade ao orgulho.",
-      "quando a gente resolve, eu amo mais.",
-      "eu não quero te machucar.",
-      "eu fico — e aprendo.",
-      "eu tô aqui por inteiro.",
-      "eu te vejo. eu te escuto.",
-      "obrigado por não desistir.",
-      "eu volto pro nós.",
-      "eu te escolho no fim do dia.",
-      "eu aprendo a conversar melhor.",
-      "você é meu futuro calmo.",
-      "eu gosto do nosso jeito.",
-      "eu não corro mais.",
-      "eu fico. sempre."
     ];
 
     const INTRO_ATOS = {
@@ -407,7 +343,7 @@ Ele renova.` }
       }
       const start = 31, end = 90;
       const denom = Math.max(1, (end - start));
-      const t = Math.max(0, Math.min(1, (dia - start) / denom)); // 0..1
+      const t = Math.max(0, Math.min(1, (dia - start) / denom));
       const gap = 44 - (34 * t); // 44px -> 10px
       document.documentElement.style.setProperty("--ato2Gap", `${gap.toFixed(2)}px`);
     }
@@ -1025,16 +961,17 @@ Ele renova.` }
       }, 1100);
     }
 
-    // ===== ATO 2 — UI (linhas + palavra sublinhada) =====
+    // ===== ATO 2 — UI (linhas + palavra sublinhada + pensamento coerente) =====
     function esconderAto2UI(silencioso=false){
       const linhas = document.getElementById("ato2Linhas");
       const box = document.getElementById("ato2ThoughtBox");
       linhas.classList.add("hidden");
       linhas.setAttribute("aria-hidden","true");
       box.classList.add("hidden");
-      box.setAttribute("aria-hidden","true");
       box.classList.remove("show");
+      box.setAttribute("aria-hidden","true");
       if(!silencioso) box.textContent = "";
+      cleanupAto2Closer();
     }
 
     function escapeHtml(s){
@@ -1046,124 +983,174 @@ Ele renova.` }
         .replaceAll("'","&#039;");
     }
 
+    // Escolhe uma palavra-chave real do poema (com idx certo)
     function pickUnderlineTarget(text){
-      const candidates = ["você","perto","fica","ficar","silêncio","calma","verdade","presença","casa","luz","honesto","confiança","volto","cuidar"];
-      const lower = text.toLowerCase();
-      for(const w of candidates){
-        const idx = lower.indexOf(w);
-        if(idx !== -1) return {word: text.slice(idx, idx + w.length), idx};
+      const t = String(text || "");
+      const lower = t.toLowerCase();
+
+      const candidates = [
+        "presença","verdade","silêncio","calma","paz","casa","cuidado","confiança","honesto","honestidade",
+        "futuro","conversar","orgulho","perto","voltar","ficar","fica","leve","luz","simples","cotidiano",
+        "detalhe","respirar","manso","seguro","aprender"
+      ];
+
+      function findWord(w){
+        const re = new RegExp(`\\b${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+        const m = t.match(re);
+        if(m && typeof m.index === "number") return {word: t.slice(m.index, m.index + m[0].length), idx: m.index};
+        return null;
       }
-      const m = text.match(/[A-Za-zÀ-ÿ]{5,}/);
-      if(m) return {word: m[0], idx: m.indexOf};
+
+      for(const w of candidates){
+        const found = findWord(w);
+        if(found) return found;
+      }
+
+      // fallback: pega uma palavra "boa" (>=5 letras) que não seja stopword
+      const stop = new Set(["quando","porque","ainda","mesmo","sobre","entre","depois","antes","agora","assim","isso","aquilo","muito","pouco","tudo","nunca","sempre","também","apenas","pra","para","com","sem","que","uma","um","e","o","a","os","as","no","na","nos","nas","do","da","dos","das","eu","você","voce"]);
+      const rx = /[A-Za-zÀ-ÿ]{5,}/g;
+      let best = null;
+
+      for(const m of t.matchAll(rx)){
+        const w = (m[0] || "").toLowerCase();
+        if(stop.has(w)) continue;
+        // prefere palavras mais longas e com "cara de tema"
+        const score = m[0].length + (["ção","dade","mente"].some(suf => w.endsWith(suf)) ? 2 : 0);
+        if(!best || score > best.score){
+          best = {word: m[0], idx: m.index, score};
+        }
+      }
+
+      if(best && typeof best.idx === "number") return {word: best.word, idx: best.idx};
       return null;
     }
 
-    function showAto2Thought(text){
-      const box = document.getElementById("ato2ThoughtBox");
-      if(!text) return;
+    // Frase bonita e coerente baseada na palavra-chave/tema do poema
+    function buildAto2ThoughtFromKeyword(keywordRaw, poemRaw){
+      const k = (keywordRaw || "").toLowerCase();
+      const poem = (poemRaw || "").toLowerCase();
 
+      const map = [
+        {keys:["presença","presenca"], out:"presença é quando eu fico — mesmo sem barulho."},
+        {keys:["verdade"], out:"verdade é isso: não fazer cena… só ficar."},
+        {keys:["silêncio","silencio"], out:"no teu silêncio eu não me perco — eu descanso."},
+        {keys:["calma","paz"], out:"com você, calma não é intervalo — é destino."},
+        {keys:["casa"], out:"casa é quando o peito para de se defender."},
+        {keys:["cuidado"], out:"cuidado é te escolher no detalhe, sem pressa."},
+        {keys:["confiança","confianca"], out:"confiança é deixar a mão aberta — e ainda assim ficar."},
+        {keys:["honesto","honestidade"], out:"eu quero te amar do jeito mais honesto que eu tiver."},
+        {keys:["futuro"], out:"pensar em futuro contigo me dá silêncio bom por dentro."},
+        {keys:["conversar"], out:"se doer, eu volto pra conversa. eu volto pra nós."},
+        {keys:["orgulho"], out:"eu prefiro nós ao meu orgulho."},
+        {keys:["perto"], out:"perto é onde eu fico mais simples."},
+        {keys:["voltar"], out:"eu sempre volto pro que importa."},
+        {keys:["ficar","fica"], out:"eu fico quando não tem plateia."},
+        {keys:["leve"], out:"eu tô aprendendo a ser leve contigo — sem fugir de nada."},
+        {keys:["luz"], out:"eu não quero incêndio. eu quero luz."},
+        {keys:["simples","cotidiano"], out:"o simples contigo vira raro."},
+        {keys:["detalhe"], out:"é no detalhe que eu percebo: eu tô aqui."},
+        {keys:["respirar"], out:"quando você aparece, eu respiro melhor."},
+        {keys:["seguro"], out:"você me deixa seguro do jeito mais calmo."},
+        {keys:["aprender"], out:"eu aprendo a te amar melhor — um dia de cada vez."},
+      ];
+
+      for(const row of map){
+        if(row.keys.some(x => k.includes(x))) return row.out;
+      }
+
+      // fallback sem ficar genérico demais
+      if(poem.includes("não") && (poem.includes("promessa") || poem.includes("prometer"))){
+        return "eu não prometo alto. eu provo no dia comum.";
+      }
+      if(poem.includes("silêncio") || poem.includes("silencio")){
+        return "eu gosto quando o silêncio não vira distância.";
+      }
+      return "eu fico — do jeito mais calmo que eu sei.";
+    }
+
+    // controle de fechar ao clicar fora / ESC
+    function cleanupAto2Closer(){
+      if(window.__ato2Closer){
+        document.removeEventListener("pointerdown", window.__ato2Closer, true);
+        document.removeEventListener("keydown", window.__ato2Esc, true);
+        window.__ato2Closer = null;
+        window.__ato2Esc = null;
+      }
+    }
+
+    function openAto2Thought(text){
+      const box = document.getElementById("ato2ThoughtBox");
       box.textContent = text;
       box.classList.remove("hidden");
       box.setAttribute("aria-hidden","false");
       box.classList.remove("show");
       void box.offsetWidth;
       box.classList.add("show");
+
+      clearTimeout(window.__ato2ThoughtTimer);
+      window.__ato2ThoughtTimer = setTimeout(() => closeAto2Thought(), 5200);
+
+      cleanupAto2Closer();
+
+      window.__ato2Closer = (e) => {
+        const poemaEl = document.getElementById("poema");
+        const u = poemaEl.querySelector(".ato2U");
+        if(!box.classList.contains("hidden")){
+          if(box.contains(e.target)) return;
+          if(u && u.contains(e.target)) return;
+          closeAto2Thought();
+        }
+      };
+
+      window.__ato2Esc = (e) => {
+        if(e.key === "Escape") closeAto2Thought();
+      };
+
+      document.addEventListener("pointerdown", window.__ato2Closer, true);
+      document.addEventListener("keydown", window.__ato2Esc, true);
     }
 
-    function hideAto2Thought(){
+    function closeAto2Thought(){
       const box = document.getElementById("ato2ThoughtBox");
       if(box.classList.contains("hidden")) return;
+
       box.classList.remove("show");
       clearTimeout(window.__ato2ThoughtTimer);
-      window.__ato2ThoughtTimer = setTimeout(() => {
+
+      setTimeout(() => {
         box.classList.add("hidden");
         box.setAttribute("aria-hidden","true");
         box.textContent = "";
+        cleanupAto2Closer();
       }, 180);
-    }
-
-    function installAto2OutsideClose(){
-      if(window.__ato2OutsideInstalled) return;
-      window.__ato2OutsideInstalled = true;
-
-      document.addEventListener("pointerdown", (e) => {
-        const box = document.getElementById("ato2ThoughtBox");
-        if(box.classList.contains("hidden")) return;
-
-        const u = document.querySelector(".ato2U");
-        const clickedInsideBox = box.contains(e.target);
-        const clickedUnderline = u && u.contains(e.target);
-
-        if(!clickedInsideBox && !clickedUnderline){
-          hideAto2Thought();
-        }
-      }, {passive:true});
-
-      document.addEventListener("keydown", (e) => {
-        if(e.key === "Escape") hideAto2Thought();
-      });
     }
 
     function applyAto2Underline(dia, rawText){
       const poemaEl = document.getElementById("poema");
-
       if(getAto(dia) !== 2) return;
-      if(document.body.classList.contains("modo-arquivo") || document.body.classList.contains("capsula-mode") || document.body.classList.contains("memoria-mode")) return;
       if(!rawText || !rawText.trim()) return;
-
-      installAto2OutsideClose();
 
       const target = pickUnderlineTarget(rawText);
       if(!target) return;
-
-      const thoughtIdx = Math.max(0, Math.min(ATO2_PENSAMENTOS.length - 1, (dia - 31)));
-      const thought = ATO2_PENSAMENTOS[thoughtIdx] || "eu fico.";
 
       const before = escapeHtml(rawText.slice(0, target.idx));
       const word = escapeHtml(target.word);
       const after = escapeHtml(rawText.slice(target.idx + target.word.length));
 
-      poemaEl.innerHTML = `${before}<span class="ato2U" role="button" tabindex="0" aria-label="Revelar pensamento" data-thought="${escapeHtml(thought)}">${word}</span>${after}`;
+      // pensamento condizente com a palavra/tema
+      const thought = buildAto2ThoughtFromKeyword(target.word, rawText);
+
+      poemaEl.innerHTML = `${before}<span class="ato2U" data-thought="${escapeHtml(thought)}">${word}</span>${after}`;
 
       const u = poemaEl.querySelector(".ato2U");
-      if(!u) return;
-
-      const openFor = (ms) => {
-        const t = u.getAttribute("data-thought") || "";
-        showAto2Thought(t);
-        clearTimeout(window.__ato2ThoughtTimer);
-        window.__ato2ThoughtTimer = setTimeout(() => hideAto2Thought(), ms);
-      };
-
-      // Desktop: hover “sussurra”, mas não prende
-      u.addEventListener("pointerenter", () => {
-        // se já estiver aberto por clique, não mexe
-        const box = document.getElementById("ato2ThoughtBox");
-        if(!box.classList.contains("hidden")) return;
-        openFor(1200);
-      });
-
-      u.addEventListener("pointerleave", () => {
-        // fecha suave (a não ser que tenha sido aberto por clique e ainda esteja no timer)
-        const box = document.getElementById("ato2ThoughtBox");
-        if(box.classList.contains("hidden")) return;
-        // deixa o timer cuidar, mas fecha mais rápido ao sair
-        clearTimeout(window.__ato2ThoughtTimer);
-        window.__ato2ThoughtTimer = setTimeout(() => hideAto2Thought(), 450);
-      });
-
-      // Mobile/Click: revelação “de verdade”
-      u.addEventListener("click", (e) => {
-        e.preventDefault();
-        openFor(4200);
-      }, {passive:false});
-
-      u.addEventListener("keydown", (e) => {
-        if(e.key === "Enter" || e.key === " "){
+      if(u){
+        u.addEventListener("click", (e) => {
           e.preventDefault();
-          openFor(4200);
-        }
-      });
+          e.stopPropagation();
+          const t = u.getAttribute("data-thought") || "";
+          openAto2Thought(t);
+        }, {passive:false});
+      }
     }
 
     function renderAto2UI(dia){
@@ -1184,13 +1171,11 @@ Ele renova.` }
       const forced = getForcedDay();
       const isTest = (forced !== null);
 
-      // Ato 1 unlock
       if(!isTest && dia === DIA_ATUAL && dia >= 1 && dia <= 30){
         const current = getAto1Unlocked();
         if(dia > current) setAto1Unlocked(dia);
       }
 
-      // Ato 1 UI
       renderAto1Palavra(dia);
       if(dia === 30 && getAto1Unlocked() >= 30){
         clearTimeout(window.__ato1FinalTimer);
@@ -1199,7 +1184,6 @@ Ele renova.` }
         }, 480);
       }
 
-      // Ato 2 UI + underline
       renderAto2UI(dia);
       applyAto2Underline(dia, rawText);
     }
@@ -1262,11 +1246,9 @@ Ele renova.` }
       const forced = getForcedDay();
       showModoTeste(forced);
 
-      // ✅ MODO TESTE
       if(forced !== null){
         DIA_ATUAL = forced;
 
-        // simula unlock Ato 1 só no seu navegador
         if(DIA_ATUAL >= 1 && DIA_ATUAL <= 30){
           const cur = getAto1Unlocked();
           if(DIA_ATUAL > cur) setAto1Unlocked(DIA_ATUAL);
@@ -1298,7 +1280,6 @@ Ele renova.` }
         return;
       }
 
-      // ✅ MODO NORMAL
       const d = diffDias();
       DIA_ATUAL = d + 1;
 
