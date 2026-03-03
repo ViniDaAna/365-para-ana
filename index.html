@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260303_1" />
+  <link rel="stylesheet" href="style.css?v=20260303_2" />
 </head>
 
 <body>
@@ -33,6 +33,9 @@
 
     <div id="fraseContexto" class="meta" style="margin-top:4px;"></div>
     <div id="modoTeste" class="meta hidden" style="margin-top:6px; opacity:.9;"></div>
+
+    <!-- ✅ aviso automático quando detectar placeholder cedo -->
+    <div id="avisoPoema" class="meta hidden" style="margin-top:8px; opacity:.95;"></div>
 
     <h2 id="tituloTopo" class="title"></h2>
     <div class="thin-line"></div>
@@ -194,7 +197,7 @@
   <!-- Overlay de fade final (Dia 365) -->
   <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
 
-  <script src="poemas.js?v=20260303_1"></script>
+  <script src="poemas.js?v=20260303_2"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -287,6 +290,42 @@ Ele renova.` }
       el.classList.remove("hidden");
       el.textContent = `Modo teste ativo: Dia ${dia}. (URL: ?day=${dia})`;
     }
+
+    function showAvisoPoema(text){
+      const el = document.getElementById("avisoPoema");
+      if(!text){
+        el.classList.add("hidden");
+        el.textContent = "";
+        return;
+      }
+      el.classList.remove("hidden");
+      el.textContent = text;
+    }
+
+    // ✅ verificador: detecta primeiro placeholder (se tiver)
+    function detectarPrimeiroPlaceholder(){
+      try{
+        if(typeof poemas === "undefined" || !Array.isArray(poemas)) return null;
+        const idx = poemas.findIndex(p => (p || "").includes("(Em branco por enquanto)"));
+        if(idx === -1) return null;
+        return idx + 1; // dia
+      }catch(e){
+        return null;
+      }
+    }
+
+    // helper de debug (pra você usar no console quando quiser)
+    window.debugPoema = function(dia){
+      try{
+        const t = (typeof getPoemaDoDia === "function") ? getPoemaDoDia(dia) : "";
+        const a = getAto(dia);
+        console.log("debugPoema:", {dia, ato:a, texto_inicio: String(t).slice(0, 80), placeholder: String(t).includes("(Em branco por enquanto)")});
+        return t;
+      }catch(e){
+        console.warn("debugPoema erro:", e);
+        return null;
+      }
+    };
 
     function getDataInicio(){
       const iso = localStorage.getItem(START_OVERRIDE_KEY);
@@ -983,7 +1022,6 @@ Ele renova.` }
         .replaceAll("'","&#039;");
     }
 
-    // Escolhe uma palavra-chave real do poema (com idx certo)
     function pickUnderlineTarget(text){
       const t = String(text || "");
 
@@ -1005,7 +1043,6 @@ Ele renova.` }
         if(found) return found;
       }
 
-      // fallback: pega uma palavra "boa" (>=5 letras) que não seja stopword
       const stop = new Set(["quando","porque","ainda","mesmo","sobre","entre","depois","antes","agora","assim","isso","aquilo","muito","pouco","tudo","nunca","sempre","também","apenas","pra","para","com","sem","que","uma","um","e","o","a","os","as","no","na","nos","nas","do","da","dos","das","eu","você","voce"]);
       const rx = /[A-Za-zÀ-ÿ]{5,}/g;
       let best = null;
@@ -1023,7 +1060,6 @@ Ele renova.` }
       return null;
     }
 
-    // Frase bonita e coerente baseada na palavra-chave/tema do poema
     function buildAto2ThoughtFromKeyword(keywordRaw, poemRaw){
       const k = (keywordRaw || "").toLowerCase();
       const poem = (poemRaw || "").toLowerCase();
@@ -1065,7 +1101,6 @@ Ele renova.` }
       return "eu fico — do jeito mais calmo que eu sei.";
     }
 
-    // controle de fechar ao clicar fora / ESC
     function cleanupAto2Closer(){
       if(window.__ato2Closer){
         document.removeEventListener("pointerdown", window.__ato2Closer, true);
@@ -1241,6 +1276,15 @@ Ele renova.` }
     function carregarHoje(){
       const forced = getForcedDay();
       showModoTeste(forced);
+
+      // ✅ aviso automático (uma vez por load)
+      const firstPH = detectarPrimeiroPlaceholder();
+      if(firstPH && firstPH <= 120){
+        showAvisoPoema(`Aviso: encontrei placeholder a partir do Dia ${firstPH}. (isso geralmente é desalinhamento de poemas no poemas.js)`);
+        console.warn("Projeto365: primeiro placeholder no Dia", firstPH);
+      } else {
+        showAvisoPoema("");
+      }
 
       if(forced !== null){
         DIA_ATUAL = forced;
