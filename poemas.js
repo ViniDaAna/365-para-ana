@@ -40,7 +40,6 @@ E se o tempo continuar passando como sempre passa…
 
 eu ainda vou estar aqui.`;
 
-
 const CARTA_CAPSULA_365 = `Carta – Cápsula do Tempo
 23/02/2025
 
@@ -1173,6 +1172,56 @@ a forma mais bonita de amar.`
 (Em branco por enquanto)
 
 Se você está vendo isso, é porque esse poema ainda não foi escrito no poemas.js.`;
+  }
+})();
+
+// ==============================
+// ✅ PATCH anti-dor-de-cabeça:
+// se por qualquer motivo o placeholder apareceu cedo,
+// eu garanto os dias 88 e 89 com o texto real.
+// ==============================
+(function patchDiasCriticos(){
+  function isPlaceholder(text){
+    return String(text || "").includes("(Em branco por enquanto)");
+  }
+
+  // Dia 88 = index 87
+  if(isPlaceholder(poemas[87])){
+    poemas[87] =
+`Estabilidade não é monotonia.
+
+É liberdade sem medo.
+
+É poder sair com amigos
+e ainda assim querer voltar para você.
+
+É não vigiar.
+É confiar.
+
+É saber que o amor não está em risco
+a cada ausência pequena.
+
+Isso é maturidade.
+Isso é paz.`;
+  }
+
+  // Dia 89 = index 88
+  if(isPlaceholder(poemas[88])){
+    poemas[88] =
+`Hoje eu pensei que,
+se tudo continuar exatamente assim,
+já está bom.
+
+Sem exageros.
+Sem drama.
+Sem necessidade de espetáculo.
+
+Só dois adultos
+escolhendo ficar
+um ao lado do outro.
+
+E talvez essa seja
+a forma mais bonita de amar.`;
   }
 })();
 
