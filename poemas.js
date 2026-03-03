@@ -40,6 +40,7 @@ E se o tempo continuar passando como sempre passa…
 
 eu ainda vou estar aqui.`;
 
+
 const CARTA_CAPSULA_365 = `Carta – Cápsula do Tempo
 23/02/2025
 
@@ -171,7 +172,75 @@ daquele tipo que você tenta esconder e não consegue.
 
 Talvez o filme tenha sido qualquer coisa.
 Mas você… já tava ficando.`,
-  90: `Em breve...`,
+  90: `Eu lembro daquela noite.
+
+A gente tinha discutido.
+Não foi grito.
+Mas foi pesado.
+
+Palavras atravessadas.
+Silêncios longos demais.
+Aquela sensação incômoda
+de que talvez algo tivesse quebrado.
+
+Eu deitei com a cabeça cheia.
+Orgulho misturado com medo.
+Medo misturado com saudade.
+
+E pela primeira vez
+não era a ideia de “estar certo”
+que me incomodava.
+
+Era a possibilidade de te perder.
+
+Eu pensei em como seria
+acordar e não ter sua mensagem.
+Não ter seu bom dia.
+Não ter você.
+
+E aquilo doeu mais
+do que qualquer argumento.
+
+Naquela madrugada
+eu entendi uma coisa:
+
+amar não é nunca brigar.
+É decidir que a briga
+não é maior que o que a gente construiu.
+
+No dia seguinte,
+quando a gente conversou —
+de verdade —
+sem ataque,
+sem defesa,
+só verdade —
+
+eu senti algo diferente.
+
+Não era só alívio.
+Era maturidade.
+
+Você poderia ter ido.
+Eu poderia ter me fechado.
+
+Mas nós ficamos.
+
+E ali eu percebi
+que o nosso amor
+não depende de dias perfeitos.
+
+Ele depende da nossa escolha.
+
+E desde aquela noite,
+toda vez que algo ameaça nos afastar,
+eu lembro de como a gente voltou.
+
+E isso me acalma.
+
+Porque eu sei
+que se for preciso,
+
+a gente escolhe de novo.`,
   120:`Em breve...`,
   150:`Em breve...`,
   180:`Em breve...`,
@@ -183,7 +252,7 @@ Mas você… já tava ficando.`,
 };
 
 // ==============================
-// SEUS POEMAS (1–89)
+// SEUS POEMAS (1–90)
 // ==============================
 
 const poemas = [
@@ -927,7 +996,7 @@ sem me abandonar.
 E isso
 foi você quem me ensinou.`,
 
-/* ===== 76–89 (Ato 2 — Estabilidade íntima) ===== */
+/* ===== 76–90 (Ato 2 — Estabilidade íntima) ===== */
 
 `Eu gosto do jeito que a gente já se entende
 antes mesmo das palavras se organizarem.
@@ -1158,7 +1227,36 @@ escolhendo ficar
 um ao lado do outro.
 
 E talvez essa seja
-a forma mais bonita de amar.`
+a forma mais bonita de amar.`,
+
+`Nem todo quase
+vira fim.
+
+Às vezes vira pausa.
+Às vezes vira aprendizado.
+
+Naquela noite
+eu senti a distância tentar nascer.
+
+Mas senti algo maior também:
+a vontade de não deixar.
+
+Não foi sobre ganhar discussão.
+Foi sobre não perder você.
+
+E quando o dia clareou
+e a gente escolheu conversar
+em vez de se afastar,
+
+eu entendi uma coisa simples:
+
+o que a gente tem
+não desiste na primeira rachadura.
+
+A gente escolhe consertar.
+
+E isso
+muda tudo.`
 ];
 
 // ==============================
@@ -1172,56 +1270,6 @@ a forma mais bonita de amar.`
 (Em branco por enquanto)
 
 Se você está vendo isso, é porque esse poema ainda não foi escrito no poemas.js.`;
-  }
-})();
-
-// ==============================
-// ✅ PATCH anti-dor-de-cabeça:
-// se por qualquer motivo o placeholder apareceu cedo,
-// eu garanto os dias 88 e 89 com o texto real.
-// ==============================
-(function patchDiasCriticos(){
-  function isPlaceholder(text){
-    return String(text || "").includes("(Em branco por enquanto)");
-  }
-
-  // Dia 88 = index 87
-  if(isPlaceholder(poemas[87])){
-    poemas[87] =
-`Estabilidade não é monotonia.
-
-É liberdade sem medo.
-
-É poder sair com amigos
-e ainda assim querer voltar para você.
-
-É não vigiar.
-É confiar.
-
-É saber que o amor não está em risco
-a cada ausência pequena.
-
-Isso é maturidade.
-Isso é paz.`;
-  }
-
-  // Dia 89 = index 88
-  if(isPlaceholder(poemas[88])){
-    poemas[88] =
-`Hoje eu pensei que,
-se tudo continuar exatamente assim,
-já está bom.
-
-Sem exageros.
-Sem drama.
-Sem necessidade de espetáculo.
-
-Só dois adultos
-escolhendo ficar
-um ao lado do outro.
-
-E talvez essa seja
-a forma mais bonita de amar.`;
   }
 })();
 
