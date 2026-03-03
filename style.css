@@ -21,6 +21,7 @@
   --line: rgba(212,175,55,0.35);
   --line2: rgba(241,233,220,0.14);
 
+  /* ACCENT (antes era sempre dourado; agora cada ATO pode trocar) */
   --gold: #d4af37;
   --goldSoft: rgba(212,175,55,0.75);
 
@@ -76,12 +77,18 @@ body::after{
   z-index:0;
 }
 
-/* Ato theming */
+/* =========================
+   ATO THEMING (agora troca também o "gold" do site)
+   ========================= */
+
 body[data-ato="1"]{
   --auraRGB: 212,175,55;         /* ouro */
   --auraMin: 0.10;
   --auraMax: 0.28;
   --line: rgba(212,175,55,0.35);
+
+  --gold: #d4af37;
+  --goldSoft: rgba(212,175,55,0.75);
 }
 
 body[data-ato="2"]{
@@ -90,6 +97,10 @@ body[data-ato="2"]{
   --auraMin: 0.08;
   --auraMax: 0.24;
   --line: rgba(120,170,255,0.30);
+
+  /* importantíssimo: o site também fica "azul" (título, tags, etc.) */
+  --gold: rgb(120,170,255);
+  --goldSoft: rgba(120,170,255,0.78);
 }
 
 body[data-ato="3"]{
@@ -98,6 +109,9 @@ body[data-ato="3"]{
   --auraMin: 0.06;
   --auraMax: 0.22;
   --line: rgba(170,40,60,0.28);
+
+  --gold: rgb(170,40,60);
+  --goldSoft: rgba(170,40,60,0.78);
 }
 
 body[data-ato="4"]{
@@ -106,6 +120,9 @@ body[data-ato="4"]{
   --auraMin: 0.05;
   --auraMax: 0.20;
   --line: rgba(150,200,255,0.26);
+
+  --gold: rgb(150,200,255);
+  --goldSoft: rgba(150,200,255,0.74);
 }
 
 body[data-ato="5"]{
@@ -114,6 +131,9 @@ body[data-ato="5"]{
   --auraMin: 0.04;
   --auraMax: 0.18;
   --line: rgba(170,125,95,0.24);
+
+  --gold: rgb(170,125,95);
+  --goldSoft: rgba(170,125,95,0.70);
 }
 
 body[data-ato="6"]{
@@ -122,6 +142,9 @@ body[data-ato="6"]{
   --auraMin: 0.06;
   --auraMax: 0.22;
   --line: rgba(212,175,55,0.30);
+
+  --gold: #d4af37;
+  --goldSoft: rgba(212,175,55,0.78);
 }
 
 /* Containers */
@@ -254,6 +277,15 @@ button:disabled{
   font-size: 15px;
 }
 
+/* ✅ FIX: botão "Entrar" sempre centralizado (fallbacks) */
+#btnEntrar,
+#btnLogin,
+#entrar,
+button[data-role="entrar"]{
+  display:block;
+  margin: 0 auto;
+}
+
 /* Block text */
 #blocoTexto{
   margin: 18px auto 12px auto;
@@ -333,9 +365,9 @@ button:disabled{
   display:inline-block;
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(212,175,55,0.22);
-  color: rgba(212,175,55,0.86);
-  background: rgba(212,175,55,0.06);
+  border: 1px solid rgba(var(--auraRGB), 0.22);
+  color: rgba(var(--auraRGB), 0.98);
+  background: rgba(var(--auraRGB), 0.08);
   letter-spacing: 0.4px;
   font-size: 13px;
   margin-bottom: 10px;
@@ -441,9 +473,9 @@ body.modo-arquivo #blocoTexto{
   font-size: 14px;
 }
 .rangeBtn.active{
-  border-color: rgba(212,175,55,0.35);
-  background: rgba(212,175,55,0.08);
-  color: rgba(212,175,55,0.92);
+  border-color: rgba(var(--auraRGB), 0.35);
+  background: rgba(var(--auraRGB), 0.10);
+  color: rgba(var(--auraRGB), 0.98);
 }
 
 .arquivoLista{
@@ -472,7 +504,7 @@ body.modo-arquivo #blocoTexto{
 
 .arquivoDia{
   min-width: 78px;
-  color: rgba(212,175,55,0.88);
+  color: rgba(var(--auraRGB), 0.92);
   letter-spacing: 0.3px;
   font-size: 15px;
 }
@@ -497,15 +529,15 @@ body.modo-arquivo #blocoTexto{
   width: min(50ch, 100%);
   padding: 12px 14px;
   border-radius: 18px;
-  border: 1px solid rgba(212,175,55,0.18);
-  background: rgba(212,175,55,0.06);
+  border: 1px solid rgba(var(--auraRGB), 0.18);
+  background: rgba(var(--auraRGB), 0.06);
   text-align:center;
 }
 
 .ato1Label{
   font-size: 12px;
   letter-spacing: 0.45px;
-  color: rgba(212,175,55,0.92);
+  color: rgba(var(--auraRGB), 0.98);
   margin-bottom: 8px;
 }
 
@@ -520,7 +552,7 @@ body.modo-arquivo #blocoTexto{
   font-size: 22px;
   color: rgba(241,233,220,0.92);
   letter-spacing: 0.3px;
-  border-bottom: 1px solid rgba(212,175,55,0.45);
+  border-bottom: 1px solid rgba(var(--auraRGB), 0.45);
   padding-bottom: 2px;
 }
 
@@ -559,11 +591,11 @@ body.modo-arquivo #blocoTexto{
 }
 
 .ato1Montagem.assemble{
-  background: rgba(212,175,55,0.06);
-  border-color: rgba(212,175,55,0.18);
+  background: rgba(var(--auraRGB), 0.08);
+  border-color: rgba(var(--auraRGB), 0.20);
 }
 .ato1Montagem.assemble .ato1Word{
-  color: rgba(212,175,55,0.92);
+  color: rgba(var(--auraRGB), 0.98);
 }
 
 /* =========================
@@ -650,15 +682,15 @@ body[data-ato="2"] .ato2Thought{
   width: min(56ch, 100%);
   padding: 14px 14px 12px 14px;
   border-radius: 18px;
-  border: 1px solid rgba(212,175,55,0.18);
-  background: rgba(212,175,55,0.06);
+  border: 1px solid rgba(var(--auraRGB), 0.18);
+  background: rgba(var(--auraRGB), 0.06);
   text-align:center;
 }
 
 .capsulaTitle{
   font-size: 18px;
   letter-spacing: 0.3px;
-  color: rgba(212,175,55,0.92);
+  color: rgba(var(--auraRGB), 0.98);
   margin-bottom: 4px;
 }
 .capsulaMeta{
@@ -727,7 +759,7 @@ body[data-ato="2"] .ato2Thought{
 
 .notebookCover{
   height: 18px;
-  background: linear-gradient(90deg, rgba(212,175,55,0.25), rgba(255,255,255,0.06), rgba(212,175,55,0.12));
+  background: linear-gradient(90deg, rgba(var(--auraRGB),0.25), rgba(255,255,255,0.06), rgba(var(--auraRGB),0.12));
 }
 
 .notebookPaper{
@@ -745,7 +777,7 @@ body[data-ato="2"] .ato2Thought{
 }
 
 .capsulaPaperTitle{
-  color: rgba(212,175,55,0.92);
+  color: rgba(var(--auraRGB),0.98);
   letter-spacing:0.35px;
   font-size: 18px;
 }
@@ -780,12 +812,12 @@ body[data-ato="2"] .ato2Thought{
 .capsulaLine{
   width: 120px;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(212,175,55,0.35), transparent);
+  background: linear-gradient(to right, transparent, rgba(var(--auraRGB),0.35), transparent);
   margin: 0 auto 12px auto;
 }
 
 .capsulaDecidi{
-  color: rgba(212,175,55,0.92);
+  color: rgba(var(--auraRGB),0.98);
   letter-spacing:0.35px;
   font-size: 14px;
   margin-bottom: 12px;
@@ -794,8 +826,8 @@ body[data-ato="2"] .ato2Thought{
 .btnEscolherDeNovo{
   padding: 11px 16px;
   border-radius: 16px;
-  border: 1px solid rgba(212,175,55,0.26);
-  background: rgba(212,175,55,0.08);
+  border: 1px solid rgba(var(--auraRGB),0.26);
+  background: rgba(var(--auraRGB),0.10);
   color: rgba(241,233,220,0.92);
 }
 
@@ -851,7 +883,7 @@ body[data-ato="2"] .ato2Thought{
 }
 
 .memoriaPaperTitle{
-  color: rgba(212,175,55,0.92);
+  color: rgba(var(--auraRGB),0.98);
   letter-spacing:0.35px;
   font-size: 18px;
 }
@@ -899,7 +931,7 @@ body[data-ato="2"] .ato2Thought{
    ACESSIBILIDADE / POLIMENTO
    ========================= */
 ::selection{
-  background: rgba(212,175,55,0.20);
+  background: rgba(var(--auraRGB), 0.22);
   color: rgba(241,233,220,0.95);
 }
 
