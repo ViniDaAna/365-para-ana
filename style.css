@@ -14,10 +14,6 @@
   --auraRGB: 212,175,55;      /* default ouro */
   --auraOpacity: calc(var(--auraMin) + (var(--auraT) * (var(--auraMax) - var(--auraMin))));
 
-  /* Accent do ATO (derivado do RGB do ato) */
-  --accent: rgba(var(--auraRGB), 0.92);
-  --accentSoft: rgba(var(--auraRGB), 0.22);
-
   --panel: rgba(20,20,22,0.86);
   --text: #f1e9dc;
   --muted: rgba(241,233,220,0.65);
@@ -27,6 +23,9 @@
 
   --gold: #d4af37;
   --goldSoft: rgba(212,175,55,0.75);
+
+  /* ✅ acento visual por ato (título/realce) */
+  --accent: #d4af37;
 
   --radius: 18px;
   --shadow: 0 14px 50px rgba(0,0,0,0.55);
@@ -86,6 +85,7 @@ body[data-ato="1"]{
   --auraMin: 0.10;
   --auraMax: 0.28;
   --line: rgba(212,175,55,0.35);
+  --accent: #d4af37;
 }
 
 body[data-ato="2"]{
@@ -94,6 +94,7 @@ body[data-ato="2"]{
   --auraMin: 0.08;
   --auraMax: 0.24;
   --line: rgba(120,170,255,0.30);
+  --accent: #7fb2ff;
 }
 
 body[data-ato="3"]{
@@ -102,14 +103,16 @@ body[data-ato="3"]{
   --auraMin: 0.06;
   --auraMax: 0.22;
   --line: rgba(170,40,60,0.28);
+  --accent: #c2465a;
 }
 
 body[data-ato="4"]{
-  /* outro azul (Crescimento) – mais frio/diferente do Ato 2 */
+  /* outro azul (Crescimento) */
   --auraRGB: 85,155,235;
   --auraMin: 0.05;
   --auraMax: 0.20;
   --line: rgba(150,200,255,0.26);
+  --accent: #94c7ff;
 }
 
 body[data-ato="5"]{
@@ -118,6 +121,7 @@ body[data-ato="5"]{
   --auraMin: 0.04;
   --auraMax: 0.18;
   --line: rgba(170,125,95,0.24);
+  --accent: #c89a7b;
 }
 
 body[data-ato="6"]{
@@ -126,6 +130,7 @@ body[data-ato="6"]{
   --auraMin: 0.06;
   --auraMax: 0.22;
   --line: rgba(212,175,55,0.30);
+  --accent: #d4af37;
 }
 
 /* Containers */
@@ -161,7 +166,7 @@ body[data-ato="6"]{
   text-align:center;
   font-weight:500;
   letter-spacing: 0.6px;
-  color: var(--accent);              /* ✅ agora muda por ato */
+  color: var(--accent); /* ✅ agora muda por ato */
   font-size: 34px;
 }
 
@@ -343,9 +348,9 @@ button:disabled{
   display:inline-block;
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(var(--auraRGB), 0.28);      /* ✅ */
-  color: rgba(var(--auraRGB), 0.92);                 /* ✅ */
-  background: rgba(var(--auraRGB), 0.08);            /* ✅ */
+  border: 1px solid rgba(212,175,55,0.22);
+  color: rgba(212,175,55,0.86);
+  background: rgba(212,175,55,0.06);
   letter-spacing: 0.4px;
   font-size: 13px;
   margin-bottom: 10px;
@@ -451,9 +456,9 @@ body.modo-arquivo #blocoTexto{
   font-size: 14px;
 }
 .rangeBtn.active{
-  border-color: rgba(var(--auraRGB), 0.38);       /* ✅ */
-  background: rgba(var(--auraRGB), 0.10);         /* ✅ */
-  color: rgba(var(--auraRGB), 0.95);              /* ✅ */
+  border-color: rgba(212,175,55,0.35);
+  background: rgba(212,175,55,0.08);
+  color: rgba(212,175,55,0.92);
 }
 
 .arquivoLista{
@@ -482,7 +487,7 @@ body.modo-arquivo #blocoTexto{
 
 .arquivoDia{
   min-width: 78px;
-  color: rgba(var(--auraRGB), 0.90);     /* ✅ */
+  color: rgba(212,175,55,0.88);
   letter-spacing: 0.3px;
   font-size: 15px;
 }
@@ -507,15 +512,15 @@ body.modo-arquivo #blocoTexto{
   width: min(50ch, 100%);
   padding: 12px 14px;
   border-radius: 18px;
-  border: 1px solid rgba(var(--auraRGB), 0.22);    /* ✅ */
-  background: rgba(var(--auraRGB), 0.08);          /* ✅ */
+  border: 1px solid rgba(212,175,55,0.18);
+  background: rgba(212,175,55,0.06);
   text-align:center;
 }
 
 .ato1Label{
   font-size: 12px;
   letter-spacing: 0.45px;
-  color: rgba(var(--auraRGB), 0.94);               /* ✅ */
+  color: rgba(212,175,55,0.92);
   margin-bottom: 8px;
 }
 
@@ -530,7 +535,7 @@ body.modo-arquivo #blocoTexto{
   font-size: 22px;
   color: rgba(241,233,220,0.92);
   letter-spacing: 0.3px;
-  border-bottom: 1px solid rgba(var(--auraRGB), 0.55); /* ✅ */
+  border-bottom: 1px solid rgba(212,175,55,0.45);
   padding-bottom: 2px;
 }
 
@@ -569,11 +574,11 @@ body.modo-arquivo #blocoTexto{
 }
 
 .ato1Montagem.assemble{
-  background: rgba(var(--auraRGB), 0.08);          /* ✅ */
-  border-color: rgba(var(--auraRGB), 0.22);        /* ✅ */
+  background: rgba(212,175,55,0.06);
+  border-color: rgba(212,175,55,0.18);
 }
 .ato1Montagem.assemble .ato1Word{
-  color: rgba(var(--auraRGB), 0.95);               /* ✅ */
+  color: rgba(212,175,55,0.92);
 }
 
 /* =========================
