@@ -1277,11 +1277,15 @@ Ele renova.` }
       const forced = getForcedDay();
       showModoTeste(forced);
 
-      // ✅ aviso automático (uma vez por load)
-      const firstPH = detectarPrimeiroPlaceholder();
-      if(firstPH && firstPH <= 120){
-        showAvisoPoema(`Aviso: encontrei placeholder a partir do Dia ${firstPH}. (isso geralmente é desalinhamento de poemas no poemas.js)`);
-        console.warn("Projeto365: primeiro placeholder no Dia", firstPH);
+      // ✅ aviso do placeholder: APENAS no modo teste (?day=)
+      if(forced !== null){
+        const firstPH = detectarPrimeiroPlaceholder();
+        if(firstPH && firstPH <= 120){
+          showAvisoPoema(`Aviso: encontrei placeholder a partir do Dia ${firstPH}. (isso geralmente é desalinhamento de poemas no poemas.js)`);
+          console.warn("Projeto365: primeiro placeholder no Dia", firstPH);
+        } else {
+          showAvisoPoema("");
+        }
       } else {
         showAvisoPoema("");
       }
