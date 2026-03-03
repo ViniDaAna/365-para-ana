@@ -1274,6 +1274,45 @@ Se você está vendo isso, é porque esse poema ainda não foi escrito no poemas
 })();
 
 // ==============================
+// HOTFIX — garantir Dias 89 e 90
+// (caso alguma versão publicada esteja com o array curto)
+// ==============================
+(function hotfixDias89e90(){
+  // Dia 89 -> index 88
+  poemas[88] = `Estabilidade não é monotonia.
+
+É liberdade sem medo.
+
+É poder sair com amigos
+e ainda assim querer voltar para você.
+
+É não vigiar.
+É confiar.
+
+É saber que o amor não está em risco
+a cada ausência pequena.
+
+Isso é maturidade.
+Isso é paz.`;
+
+  // Dia 90 -> index 89
+  poemas[89] = `Hoje eu pensei que,
+se tudo continuar exatamente assim,
+já está bom.
+
+Sem exageros.
+Sem drama.
+Sem necessidade de espetáculo.
+
+Só dois adultos
+escolhendo ficar
+um ao lado do outro.
+
+E talvez essa seja
+a forma mais bonita de amar.`;
+})();
+
+// ==============================
 // Funções usadas pelo index.html
 // ==============================
 
