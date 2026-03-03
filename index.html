@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260302_1" />
+  <link rel="stylesheet" href="style.css?v=20260303_1" />
 </head>
 
 <body>
@@ -194,7 +194,7 @@
   <!-- Overlay de fade final (Dia 365) -->
   <div id="fadeOverlay" class="fadeOverlay" aria-hidden="true"></div>
 
-  <script src="poemas.js?v=20260302_1"></script>
+  <script src="poemas.js?v=20260303_1"></script>
 
   <script>
     const senhaCorreta = "10022024";
@@ -986,7 +986,6 @@ Ele renova.` }
     // Escolhe uma palavra-chave real do poema (com idx certo)
     function pickUnderlineTarget(text){
       const t = String(text || "");
-      const lower = t.toLowerCase();
 
       const candidates = [
         "presença","verdade","silêncio","calma","paz","casa","cuidado","confiança","honesto","honestidade",
@@ -1014,7 +1013,6 @@ Ele renova.` }
       for(const m of t.matchAll(rx)){
         const w = (m[0] || "").toLowerCase();
         if(stop.has(w)) continue;
-        // prefere palavras mais longas e com "cara de tema"
         const score = m[0].length + (["ção","dade","mente"].some(suf => w.endsWith(suf)) ? 2 : 0);
         if(!best || score > best.score){
           best = {word: m[0], idx: m.index, score};
@@ -1058,7 +1056,6 @@ Ele renova.` }
         if(row.keys.some(x => k.includes(x))) return row.out;
       }
 
-      // fallback sem ficar genérico demais
       if(poem.includes("não") && (poem.includes("promessa") || poem.includes("prometer"))){
         return "eu não prometo alto. eu provo no dia comum.";
       }
@@ -1137,7 +1134,6 @@ Ele renova.` }
       const word = escapeHtml(target.word);
       const after = escapeHtml(rawText.slice(target.idx + target.word.length));
 
-      // pensamento condizente com a palavra/tema
       const thought = buildAto2ThoughtFromKeyword(target.word, rawText);
 
       poemaEl.innerHTML = `${before}<span class="ato2U" data-thought="${escapeHtml(thought)}">${word}</span>${after}`;
