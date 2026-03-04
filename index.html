@@ -7,7 +7,7 @@
 
   <link rel="icon" href="data:," />
   <!-- cache-buster -->
-  <link rel="stylesheet" href="style.css?v=20260303_2" />
+  <link rel="stylesheet" href="style.css?v=20260304_ato3" />
 </head>
 
 <body>
@@ -1157,6 +1157,89 @@ Ele renova.` }
       }, 180);
     }
 
+/* =====================================================
+   ATO 3 — FOGO (91–150)
+===================================================== */
+
+function pickAto3Thought(keyword){
+
+const map = {
+"desejo":"amar você também é desejar você.",
+"perto":"quando você chega perto o mundo fica menor.",
+"pele":"tem algo na sua pele que acende tudo aqui.",
+"olhar":"seu olhar às vezes me desmonta.",
+"fogo":"eu tento parecer calmo… mas por dentro pega fogo.",
+"respirar":"tem horas que eu esqueço de respirar direito perto de você.",
+"silêncio":"o silêncio entre nós também é intensidade.",
+"corpo":"às vezes eu sinto você antes mesmo de tocar."
+};
+
+for(const k in map){
+if(keyword.includes(k)) return map[k];
+}
+
+const fallback = [
+"às vezes o que eu sinto por você passa do que cabe em silêncio.",
+"tem algo em você que acende tudo aqui dentro.",
+"eu tento parecer calmo… mas por dentro pega fogo.",
+"tem coisas que eu sinto por você que nem poesia explica."
+];
+
+return fallback[Math.floor(Math.random()*fallback.length)];
+}
+
+function applyAto3Underline(dia, rawText){
+
+if(getAto(dia)!==3) return;
+
+const poemaEl = document.getElementById("poema");
+
+const target = pickUnderlineTarget(rawText);
+if(!target) return;
+
+const before = escapeHtml(rawText.slice(0,target.idx));
+const word = escapeHtml(target.word);
+const after = escapeHtml(rawText.slice(target.idx + target.word.length));
+
+const thought = pickAto3Thought(target.word.toLowerCase());
+
+poemaEl.innerHTML =
+`${before}<span class="ato3U" data-thought="${escapeHtml(thought)}">${word}</span>${after}`;
+
+const u = poemaEl.querySelector(".ato3U");
+
+if(u){
+u.addEventListener("click",(e)=>{
+e.stopPropagation();
+openAto3Thought(u.getAttribute("data-thought"));
+});
+}
+
+}
+
+function openAto3Thought(text){
+
+const box = document.getElementById("ato2ThoughtBox");
+
+box.textContent = text;
+
+box.classList.remove("hidden");
+box.classList.remove("show");
+
+void box.offsetWidth;
+
+box.classList.add("show");
+
+clearTimeout(window.__ato3Timer);
+
+window.__ato3Timer=setTimeout(()=>{
+box.classList.remove("show");
+setTimeout(()=>{
+box.classList.add("hidden");
+},200);
+},5200);
+
+}
     function applyAto2Underline(dia, rawText){
       const poemaEl = document.getElementById("poema");
       if(getAto(dia) !== 2) return;
@@ -1217,6 +1300,7 @@ Ele renova.` }
 
       renderAto2UI(dia);
       applyAto2Underline(dia, rawText);
+      applyAto3Underline(dia, rawText);
     }
 
     function carregarPoema(dia){
